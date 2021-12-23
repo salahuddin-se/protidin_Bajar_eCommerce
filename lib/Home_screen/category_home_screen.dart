@@ -969,7 +969,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
 
                             Container(
-                              height: height*0.25,
+                              height: height*0.24,
                               width: width,
                               child: ListView.builder(
                                 shrinkWrap: true,
@@ -997,7 +997,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.end,
                                         children: [
-                                          sized10,
+                                          //sized10,
+                                          SizedBox(height: 15,),
                                           Expanded(child: Image.network(imagePath+categoryData[index].banner)),
                                           sized10,
                                           Padding(
@@ -1026,7 +1027,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        sized10,
+                                        //sized10,
+                                        SizedBox(height: 15,),
                                         Expanded(child: Image.network(imagePath+categoryData[index].banner)),
                                         sized10,
                                         Padding(
@@ -1261,12 +1263,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             /////////////////////////////////////////////////////////
 
 
-
-                            //SizedBox(height: 50,),
-
-
-
-
                             SizedBox(height: 35,),
 
 
@@ -1443,7 +1439,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                         ),
                         sized20,
                         Container(
-                          height: height*0.2,
+                          height: height*0.22,
                           width: width,
                           child: ListView.builder(
                             shrinkWrap: true,
@@ -1457,20 +1453,19 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                     getGroceryProductsAfterTap(groceryData[index].links.products);
                                   });
                                 },
-                                child:valueOne.toString()!=index.toString()?Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
+                                child:valueOne.toString()!=index.toString()?Container(
                                   child: Container(
-                                    //height: height * 0.2,
-                                      height: height * 0.2,
-                                      width: width*0.35,
-                                      margin: EdgeInsets.symmetric(vertical: 5.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10.0),
+                                    height: height * 0.2,
+                                    width: width*0.35,
+                                    margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      //color: Colors.grey.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10.0),
 
-                                      ),
-                                      child: Column(
+                                    ),
+                                    child: Column(
                                         children: [
+                                          //SizedBox(height: 15,),
                                           Container(
                                             height: height*0.15,
                                             width: width*0.30,
@@ -1490,7 +1485,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                             textAlign: TextAlign.center,
                                           ),
                                         ],
-                                      )
+                                      ),
                                   ),
                                 ):Padding(
                                   padding: const EdgeInsets.only(left: 5.0),
@@ -1500,7 +1495,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                       width: width*0.35,
                                       margin: EdgeInsets.symmetric(vertical: 5.0),
                                       decoration: BoxDecoration(
-                                        color: Colors.red,
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.circular(10.0),
 
                                       ),
@@ -1510,7 +1505,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                             height: height*0.15,
                                             width: width*0.30,
                                             decoration: BoxDecoration(
-                                                color: Color(0xFFF0E6F2),
+                                                //color: Colors.grey.withOpacity(0.2),
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
@@ -1879,7 +1874,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                       width: width*0.35,
                                       margin: EdgeInsets.symmetric(vertical: 5.0),
                                       decoration: BoxDecoration(
-                                        color: Colors.red,
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.circular(10.0),
 
                                       ),
@@ -1889,7 +1884,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                             height: height*0.15,
                                             width: width*0.30,
                                             decoration: BoxDecoration(
-                                                color: Color(0xFFF0E6F2),
+                                                //color: Color(0xFFF0E6F2),
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
@@ -2231,7 +2226,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                       width: width*0.35,
                                       margin: EdgeInsets.symmetric(vertical: 5.0),
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        //color: Colors.white,
                                         borderRadius: BorderRadius.circular(10.0),
 
                                       ),
@@ -2266,7 +2261,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                       width: width*0.35,
                                       margin: EdgeInsets.symmetric(vertical: 5.0),
                                       decoration: BoxDecoration(
-                                        color: Colors.red,
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.circular(10.0),
 
                                       ),
@@ -2276,7 +2271,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                             height: height*0.15,
                                             width: width*0.30,
                                             decoration: BoxDecoration(
-                                                color: Color(0xFFF0E6F2),
+                                                //color: Color(0xFFF0E6F2),
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
@@ -2609,7 +2604,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                         width: width*0.35,
                                         margin: EdgeInsets.symmetric(vertical: 5.0),
                                         decoration: BoxDecoration(
-                                          color: Colors.white,
+                                          //color: Colors.white,
                                           borderRadius: BorderRadius.circular(10.0),
 
                                         ),
@@ -2644,7 +2639,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                         width: width*0.35,
                                         margin: EdgeInsets.symmetric(vertical: 5.0),
                                         decoration: BoxDecoration(
-                                          color: Colors.red,
+                                          color: Colors.white,
                                           borderRadius: BorderRadius.circular(10.0),
 
                                         ),
@@ -2654,7 +2649,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               height: height*0.15,
                                               width: width*0.30,
                                               decoration: BoxDecoration(
-                                                  color: Color(0xFFF0E6F2),
+                                                  //color: Color(0xFFF0E6F2),
                                                   borderRadius: BorderRadius.circular(15.0)
                                               ),
                                               child: Center(
