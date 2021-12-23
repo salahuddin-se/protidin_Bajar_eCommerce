@@ -976,14 +976,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: categoryData.length,
                                 itemBuilder: (_,index){
-                                  return value.toString()!=index.toString()?GestureDetector(
+                                  if (value.toString()!=index.toString()) {
+                                    return GestureDetector(
                                     onTap: (){
                                       setState(() {
                                         value=index.toString();
                                         log(categoryData[index].links.products);
                                         getProductsAfterTap(categoryData[index].links.products);
                                       });
-
                                     },
                                     child: Container(
 
@@ -999,7 +999,20 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                         children: [
                                           //sized10,
                                           SizedBox(height: 15,),
-                                          Expanded(child: Image.network(imagePath+categoryData[index].banner)),
+
+
+
+                                          Expanded(
+
+                                              child: Image.network(imagePath+categoryData[index].largeBanner)
+
+                                          ),
+
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+
+
                                           sized10,
                                           Padding(
                                             padding: const EdgeInsets.fromLTRB(2,2,0,5,),
@@ -1015,7 +1028,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                         ],
                                       ),
                                     ),
-                                  ):Container(
+                                  );
+                                  } else {
+                                    return Container(
 
                                     width: width*0.35,
                                     margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
@@ -1029,7 +1044,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                       children: [
                                         //sized10,
                                         SizedBox(height: 15,),
-                                        Expanded(child: Image.network(imagePath+categoryData[index].banner)),
+                                        Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
                                         sized10,
                                         Padding(
                                           padding: const EdgeInsets.fromLTRB(2,2,0,5,),
@@ -1045,6 +1060,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                       ],
                                     ),
                                   );
+                                  }
                                 },
                               ),
                             ),
@@ -1468,13 +1484,18 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           //SizedBox(height: 15,),
                                           Container(
                                             height: height*0.15,
+                                            //width: width*0.30,
                                             width: width*0.30,
                                             decoration: BoxDecoration(
                                                 color: Color(0xFFF0E6F2),
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
-                                              child:Image.network(imagePath+groceryData[index].banner,
+                                              child:Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                                child: Image.network(
+                                                  imagePath+groceryData[index].mobileBanner,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -1509,7 +1530,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
-                                              child:Image.network(imagePath+groceryData[index].banner,
+                                              child:Image.network(imagePath+groceryData[index].mobileBanner,
                                               ),
                                             ),
                                           ),
@@ -1853,7 +1874,10 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
-                                              child:Image.network(imagePath+fruitBeverageData[index].banner,
+                                              child:Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                                child: Image.network(imagePath+fruitBeverageData[index].mobileBanner,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -1888,7 +1912,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
-                                              child:Image.network(imagePath+fruitBeverageData[index].banner,
+                                              child:Image.network(imagePath+fruitBeverageData[index].mobileBanner,
                                               ),
                                             ),
                                           ),
@@ -2158,7 +2182,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                               ),
                               Text(
                                 "VIEW ALL",
-                                style: TextStyle(color: Color(0xFF515151), fontSize: 14, fontWeight: FontWeight.w400),
+                                style: TextStyle(color:
+                                Color(0xFF515151), fontSize: 13, fontWeight: FontWeight.w400),
                               ),
                             ],
                           ),
@@ -2240,7 +2265,10 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
-                                              child:Image.network(imagePath+babyMotherData[index].banner,
+                                              child:Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                                child: Image.network(imagePath+babyMotherData[index].mobileBanner,
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -2275,7 +2303,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
-                                              child:Image.network(imagePath+babyMotherData[index].banner,
+                                              child:Image.network(imagePath+babyMotherData[index].mobileBanner,
                                               ),
                                             ),
                                           ),
@@ -2618,7 +2646,10 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                   borderRadius: BorderRadius.circular(15.0)
                                               ),
                                               child: Center(
-                                                child:Image.network(imagePath+fruitsVegitableData[index].banner,
+                                                child:Padding(
+                                                  padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                                  child: Image.network(imagePath+fruitsVegitableData[index].mobileBanner,
+                                                  ),
                                                 ),
                                               ),
                                             ),
@@ -2653,7 +2684,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                   borderRadius: BorderRadius.circular(15.0)
                                               ),
                                               child: Center(
-                                                child:Image.network(imagePath+fruitsVegitableData[index].banner,
+                                                child:Image.network(imagePath+fruitsVegitableData[index].mobileBanner,
                                                 ),
                                               ),
                                             ),
@@ -2878,15 +2909,18 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   sized20,
 
 
-
                   Container(
                     decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
                       image: DecorationImage(image: AssetImage("assets/img_72.png"), fit: BoxFit.cover),
                       color: Colors.white,
                     ),
                     height: 130,
                     width: MediaQuery.of(context).size.width / 1.1,
-                    child: Image.asset("assets/img_73.png"),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                      child: Image.asset("assets/img_73.png"),
+                    ),
                   ),
 
                   SizedBox(
@@ -2961,6 +2995,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 ]),
               ))),
     );
+
   }
+
 }
 
