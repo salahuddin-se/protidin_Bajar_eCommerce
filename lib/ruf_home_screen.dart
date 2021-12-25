@@ -1,4 +1,3 @@
-/*
 import 'dart:convert';
 import 'dart:developer';
 import 'package:customer_ui/HomePage/grocer_offer/grocery_offer_page.dart';
@@ -18,6 +17,7 @@ import 'package:customer_ui/dataModel/chocolate_sweet_data_model.dart';
 import 'package:customer_ui/dataModel/details_model.dart';
 import 'package:customer_ui/dataModel/groceryTopDeals.dart';
 import 'package:customer_ui/dataModel/grocery_data_model.dart';
+import 'package:customer_ui/dataModel/one_ninetynine_data_model.dart';
 import 'package:customer_ui/dataModel/topdeals.dart';
 //import 'package:customer_ui/dataModel/category_data_model.dart';
 import 'package:flutter/material.dart';
@@ -28,22 +28,41 @@ import '../HomePage/item_widget.dart';
 import '../HomePage/offer_widget.dart';
 import '../test_demo.dart';
 
-class CategoryHomeScreen extends StatefulWidget {
+class CategoryHomeScreenRuf extends StatefulWidget {
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<CategoryHomeScreen> {
+class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
+  var value;
+  var valueOne;
+  var valueTwo;
+  var valueThree;
+  var valueFour;
 
+  @override
+  void initState(){
+    // TODO: implement initState
+    getfruitsVegitable();
+    getbabyMother();
+    getFrouitsBeverage();
+    getBreadBiscuit();
+    getchocolateSweets();
+    getGrocery();
+    getHouseholdData();
+    getStationaryData();
+    gettoyGiftData();
+    getpersonalCarteData();
+    getCategory();
+    getOneTo99Data();
+
+  }
   ///
   var categoryData=[];
-  var groceryData=[];
-
-
   Future<void> getCategory() async {
     log("comes");
-    String productURl = "https://test.protidin.com.bd/api/v2/categories/top";
+    String productURl = "https://test.protidin.com.bd/api/v2/categories/home";
 
     final response = await get(Uri.parse(productURl), headers: {"Accept": "application/json"});
 
@@ -52,8 +71,10 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     if(dataMap["success"]==true){
       log("data valid");
 
+      //
       var categoryDataModel=CategoryDataModel.fromJson(dataMap);
       categoryData=categoryDataModel.data;
+      await getProductsAfterTap(categoryDataModel.data[0].links.products);
       setState(() {
 
       });
@@ -67,182 +88,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   }
 
-  var value;
-  var valueOne;
-  var valueTwo;
-  var valueThree;
-  var valueFour;
-
-  @override
-  void initState(){
-    // TODO: implement initState
-    //autoData=await getData();
-    getfruitsVegitable();
-    getbabyMother();
-    getFrouitsBeverage();
-    getBiscuitSweets();
-    getBreadBiscuit();
-    getGroceryTopDeals();
-    getGrocery();
-    getTopDeals();
-    getCategory();
-
-  }
-  ///
-
-
-  ///
-  var topDeals=[];
-
-  Future<void> getTopDeals() async {
-    log("comes2");
-    String topURl = "https://test.protidin.com.bd/api/v2/products/brand/3";
-
-    final response2 = await get(Uri.parse(topURl), headers: {"Accept": "application/json"});
-
-    var topDealsdataMap=jsonDecode(response2.body);
-
-    if(topDealsdataMap["success"]==true){
-      log("data valid2");
-
-      var topCategoryDataModel=TopDeals.fromJson(topDealsdataMap);
-      topDeals=topCategoryDataModel.data;
-      setState(() {
-
-      });
-      log("data length ${topDeals.length}");
-
-    }else{
-      log("data invalid");
-    }
-
-    // log("after decode $dataMap");
-
-  }
-
-  var grocery=[];
-
-  Future<void> getGrocery() async {
-    log("grocery data calling");
-    String groceryURl = "https://test.protidin.com.bd/api/v2/sub-categories/4";
-
-    final response3 = await get(Uri.parse(groceryURl), headers: {"Accept": "application/json"});
-
-    var groceryDataMap=jsonDecode(response3.body);
-
-
-    if(groceryDataMap["success"]==true){
-      log("data valid");
-
-      var categoryDataModel=CategoryDataModel.fromJson(groceryDataMap);
-      groceryData=categoryDataModel.data;
-      setState(() {
-
-      });
-      log("grocery data length ${groceryData.length}");
-
-    }else{
-      log("data invalid");
-    }
-
-    // log("after decode $dataMap");
-
-  }
-
-  var groceryTopDeals=[];
-
-  Future<void> getGroceryTopDeals() async {
-    log("comes4");
-    String groceryTopDealsURl = "https://test.protidin.com.bd/api/v2/products/brand/1";
-
-    final response4 = await get(Uri.parse(groceryTopDealsURl), headers: {"Accept": "application/json"});
-
-    var groceryTopDealsDataMap=jsonDecode(response4.body);
-
-    if(groceryTopDealsDataMap["success"]==true){
-      log("data valid4");
-
-      var groceryDataModel=GroceryTopDeals .fromJson(groceryTopDealsDataMap);
-      groceryTopDeals=groceryDataModel.data;
-      setState(() {
-
-      });
-      log("data length ${groceryTopDeals.length}");
-
-    }else{
-      log("data invalid");
-    }
-
-    // log("after decode $dataMap");
-
-  }
-
-  ///
-
-  ///
-  var breadBiscuits=[];
-
-  Future<void> getBreadBiscuit() async {
-    log("comes5");
-    String breadBiscuitsURl = "https://test.protidin.com.bd/api/v2/products/category/41";
-
-    final response5 = await get(Uri.parse(breadBiscuitsURl), headers: {"Accept": "application/json"});
-
-    var breadDataMap=jsonDecode(response5.body);
-
-    if(breadDataMap["success"]==true){
-      log("data valid5");
-
-      var breadDataModel= BreadBiscuit.fromJson(breadDataMap);
-      breadBiscuits=breadDataModel.data;
-      setState(() {
-
-      });
-      log("data length ${breadBiscuits.length}");
-
-    }else{
-      log("data invalid");
-    }
-
-    // log("after decode $dataMap");
-
-  }
-
-  ///
-
-  ///
-  List<BuiscitData> biscuitSweets=[];
-
-  Future<void> getBiscuitSweets() async {
-    log("comes6");
-    String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
-
-    final response6 = await get(Uri.parse(biscuitSweetsURl), headers: {"Accept": "application/json"});
-
-    var biscuitSweetsDataMap=jsonDecode(response6.body);
-
-    if(biscuitSweetsDataMap["success"]==true){
-      log("data valid6");
-
-      var biscuitSweetsDataModel= BiacuitSweets.fromJson(biscuitSweetsDataMap);
-      biscuitSweets=biscuitSweetsDataModel.data;
-      setState(() {
-
-      });
-      log("data length ${biscuitSweets.length}");
-
-    }else{
-      log("data invalid");
-    }
-
-    // log("after decode $dataMap");
-
-  }
-
 
   List<BuiscitData> categoryProducts=[];
-  var groceryProducts=[];
-
   Future<void> getProductsAfterTap(link) async {
     log("calling 2");
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
@@ -269,12 +116,372 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   }
 
-  ///
 
-  List<Details> detailsProducts=[];
+  var breadBiscuitData=[];
+  Future<void> getBreadBiscuit() async {
+    log("grocery data calling");
+    String breadBiscuitURl = "https://test.protidin.com.bd/api/v2/sub-categories/11";
+
+    final responseb = await get(Uri.parse(breadBiscuitURl), headers: {"Accept": "application/json"});
+
+    var breadBiscuitDataMap=jsonDecode(responseb.body);
 
 
+    if(breadBiscuitDataMap["success"]==true){
+      log("data valid");
 
+      var breadBiscuitDataModel=CategoryDataModel.fromJson(breadBiscuitDataMap);
+      breadBiscuitData=breadBiscuitDataModel.data;
+      await getBreadBiscuitProductsAfterTap(breadBiscuitDataModel.data[0].links.products);
+      setState(() {
+
+      });
+      log("grocery data length ${breadBiscuitData.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  var breadBiscuitProducts=[];
+  Future<void> getBreadBiscuitProductsAfterTap(link2) async {
+    log("calling after tap");
+    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
+
+    final responsebp = await get(Uri.parse(link2), headers: {"Accept": "application/json"});
+
+    var breadBiscuitItemDataMap=jsonDecode(responsebp.body);
+
+    if(breadBiscuitItemDataMap["success"]==true){
+      //log("category data after tap $biscuitSweetsDataMap");
+
+      setState(() {
+        var breadBiscuitProductsData= BiacuitSweets.fromJson(breadBiscuitItemDataMap);
+        breadBiscuitProducts=breadBiscuitProductsData.data;
+      });
+      log("after tap grocery data length ${breadBiscuitProducts.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+
+  var chocolateSweetsData=[];
+  Future<void> getchocolateSweets() async {
+    log("grocery data calling");
+    String chocolateSweetsURl = "https://test.protidin.com.bd/api/v2/sub-categories/46";
+
+    final responscs = await get(Uri.parse(chocolateSweetsURl), headers: {"Accept": "application/json"});
+
+    var chocolateSweetsDataMap=jsonDecode(responscs.body);
+
+
+    if(chocolateSweetsDataMap["success"]==true){
+      log("data valid");
+
+      var chocolateSweetsDataModel=CategoryDataModel.fromJson(chocolateSweetsDataMap);
+      chocolateSweetsData=chocolateSweetsDataModel.data;
+      await getChocolateSweetsProductsAfterTap(chocolateSweetsDataModel.data[0].links.products);
+      setState(() {
+
+      });
+      log("grocery data length ${chocolateSweetsData.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  var chocolateSweetsProducts=[];
+  Future<void> getChocolateSweetsProductsAfterTap(link2) async {
+    log("calling after tap");
+    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
+
+    final responsecsa = await get(Uri.parse(link2), headers: {"Accept": "application/json"});
+
+    var chocolateSweetsItemDataMap=jsonDecode(responsecsa.body);
+
+    if(chocolateSweetsItemDataMap["success"]==true){
+      //log("category data after tap $biscuitSweetsDataMap");
+
+      setState(() {
+        var chocolateSweetsProductsData= BiacuitSweets.fromJson(chocolateSweetsItemDataMap);
+        chocolateSweetsProducts=chocolateSweetsProductsData.data;
+      });
+      log("after tap grocery data length ${chocolateSweetsProducts.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  var householdData=[];
+  Future<void> getHouseholdData() async {
+    log("grocery data calling");
+    String chocolateSweetsURl = "https://test.protidin.com.bd/api/v2/sub-categories/13";
+
+    final responsh = await get(Uri.parse(chocolateSweetsURl), headers: {"Accept": "application/json"});
+
+    var householdDataMap=jsonDecode(responsh.body);
+
+
+    if(householdDataMap["success"]==true){
+      log("data valid");
+
+      var householdDataModel=CategoryDataModel.fromJson(householdDataMap);
+      householdData=householdDataModel.data;
+      await gethouseholProductsAfterTap(householdDataModel.data[0].links.products);
+      setState(() {
+
+      });
+      log("grocery data length ${householdData.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  var householdProducts=[];
+  Future<void> gethouseholProductsAfterTap(link2) async {
+    log("calling after tap");
+    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
+
+    final responsecsa = await get(Uri.parse(link2), headers: {"Accept": "application/json"});
+
+    var householdProductsItemDataMap=jsonDecode(responsecsa.body);
+
+    if(householdProductsItemDataMap["success"]==true){
+      //log("category data after tap $biscuitSweetsDataMap");
+
+      setState(() {
+        var householdProductsData= BiacuitSweets.fromJson(householdProductsItemDataMap);
+        householdProducts=householdProductsData.data;
+      });
+      log("after tap grocery data length ${householdProducts.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+
+  var personalCarteData=[];
+  Future<void> getpersonalCarteData() async {
+    log("grocery data calling");
+    String personalCarteURl = "https://test.protidin.com.bd/api/v2/sub-categories/10";
+
+    final responsp = await get(Uri.parse(personalCarteURl), headers: {"Accept": "application/json"});
+
+    var personalCarteDataMap=jsonDecode(responsp.body);
+
+
+    if(personalCarteDataMap["success"]==true){
+      log("data valid");
+
+      var personalCarteDataModel=CategoryDataModel.fromJson(personalCarteDataMap);
+      personalCarteData=personalCarteDataModel.data;
+      await getpersonalCarteAfterTap(personalCarteDataModel.data[0].links.products);
+      setState(() {
+
+      });
+      log("grocery data length ${personalCarteData.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  var personalCarteProducts=[];
+  Future<void> getpersonalCarteAfterTap(link2) async {
+    log("calling after tap");
+    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
+
+    final responsecsap = await get(Uri.parse(link2), headers: {"Accept": "application/json"});
+
+    var personalCarteProductsItemDataMap=jsonDecode(responsecsap.body);
+
+    if(personalCarteProductsItemDataMap["success"]==true){
+      //log("category data after tap $biscuitSweetsDataMap");
+
+      setState(() {
+        var personalCarteProductsData= BiacuitSweets.fromJson(personalCarteProductsItemDataMap);
+        personalCarteProducts=personalCarteProductsData.data;
+      });
+      log("after tap grocery data length ${personalCarteProducts.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+
+  var stationaryData=[];
+  Future<void> getStationaryData() async {
+    log("grocery data calling");
+    String stationaryURl = "https://test.protidin.com.bd/api/v2/sub-categories/199";
+
+    final responst = await get(Uri.parse(stationaryURl), headers: {"Accept": "application/json"});
+
+    var stationaryDataMap=jsonDecode(responst.body);
+
+
+    if(stationaryDataMap["success"]==true){
+      log("data valid");
+
+      var stationaryDataModel=CategoryDataModel.fromJson(stationaryDataMap);
+      stationaryData=stationaryDataModel.data;
+      await getpstationaryAfterTap(stationaryDataModel.data[0].links.products);
+      setState(() {
+
+      });
+      log("grocery data length ${stationaryData.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  var stationaryProducts=[];
+  Future<void> getpstationaryAfterTap(link2) async {
+    log("calling after tap");
+    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
+
+    final responsestp = await get(Uri.parse(link2), headers: {"Accept": "application/json"});
+
+    var stationaryProductsItemDataMap=jsonDecode(responsestp.body);
+
+    if(stationaryProductsItemDataMap["success"]==true){
+      //log("category data after tap $biscuitSweetsDataMap");
+
+      setState(() {
+        var personalCarteProductsData= BiacuitSweets.fromJson(stationaryProductsItemDataMap);
+        stationaryProducts=personalCarteProductsData.data;
+      });
+      log("after tap grocery data length ${stationaryProducts.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+
+  var toyGiftData=[];
+  Future<void> gettoyGiftData() async {
+    log("grocery data calling");
+    String toyGiftURl = "https://test.protidin.com.bd/api/v2/sub-categories/14";
+
+    final responstg = await get(Uri.parse(toyGiftURl), headers: {"Accept": "application/json"});
+
+    var toyGiftDataMap=jsonDecode(responstg.body);
+
+
+    if(toyGiftDataMap["success"]==true){
+      log("data valid");
+
+      var toyGiftDataModel=CategoryDataModel.fromJson(toyGiftDataMap);
+      toyGiftData=toyGiftDataModel.data;
+      await  gettoyGiftAfterTap(toyGiftDataModel.data[0].links.products);
+      setState(() {
+
+      });
+      log("grocery data length ${toyGiftData.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  var toyGiftProducts=[];
+  Future<void> gettoyGiftAfterTap(link2) async {
+    log("calling after tap");
+    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
+
+    final responsestgp = await get(Uri.parse(link2), headers: {"Accept": "application/json"});
+
+    var  gettoyGiftAfterTapProductsItemDataMap=jsonDecode(responsestgp.body);
+
+    if( gettoyGiftAfterTapProductsItemDataMap["success"]==true){
+      //log("category data after tap $biscuitSweetsDataMap");
+
+      setState(() {
+        var  gettoyGiftProductsData= BiacuitSweets.fromJson( gettoyGiftAfterTapProductsItemDataMap);
+        toyGiftProducts=gettoyGiftProductsData.data;
+      });
+      log("after tap grocery data length ${toyGiftProducts.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  var groceryData=[];
+  Future<void> getGrocery() async {
+    log("grocery data calling");
+    String groceryURl = "https://test.protidin.com.bd/api/v2/sub-categories/4";
+
+    final response3 = await get(Uri.parse(groceryURl), headers: {"Accept": "application/json"});
+
+    var groceryDataMap=jsonDecode(response3.body);
+
+
+    if(groceryDataMap["success"]==true){
+      log("data valid");
+
+      var categoryDataModel=CategoryDataModel.fromJson(groceryDataMap);
+      groceryData=categoryDataModel.data;
+      await getGroceryProductsAfterTap(categoryDataModel.data[0].links.products);
+      setState(() {
+
+      });
+      log("grocery data length ${groceryData.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+
+  var groceryProducts=[];
   Future<void> getGroceryProductsAfterTap(link2) async {
     log("calling after tap");
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
@@ -302,7 +509,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
 
   var fruitBeverageData=[];
-
   Future<void> getFrouitsBeverage() async {
     log(" froitsBeverage calling ");
     String froitsBeverageURl = "https://test.protidin.com.bd/api/v2/sub-categories/7";
@@ -314,6 +520,10 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     if(froitsBeverageItemDataMap["success"]==true){
       //log("category data after tap $biscuitSweetsDataMap");
       var froitsBeverageData= CategoryDataModel.fromJson(froitsBeverageItemDataMap);
+
+
+      await getfruitsBeverageDataAfterTap(froitsBeverageData.data[0].links.products);
+
       fruitBeverageData=froitsBeverageData.data;
       setState(() {
 
@@ -328,10 +538,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   }
 
-  ///
 
   var fruitBeverageDataAfterTap=[];
-
   Future<void> getfruitsBeverageDataAfterTap(link2) async {
     log("frouits and beverage after calling");
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
@@ -359,7 +567,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
 
   var babyMotherData=[];
-
   Future<void> getbabyMother() async {
     log(" babyMother calling ");
     String babyMotherURl = "https://test.protidin.com.bd/api/v2/sub-categories/8";
@@ -370,8 +577,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
     if(babyMotherItemDataMap["success"]==true){
       //log("category data after tap $biscuitSweetsDataMap");
-      var froitsBeverageData= CategoryDataModel.fromJson(babyMotherItemDataMap);
-      babyMotherData=froitsBeverageData.data;
+      var babyMotherDataModel= CategoryDataModel.fromJson(babyMotherItemDataMap);
+      babyMotherData=babyMotherDataModel.data;
+      await getbabyMotherDataAfterTap(babyMotherDataModel.data[0].links.products);
       setState(() {
 
       });
@@ -387,7 +595,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
 
   var babyMotherDataAfterTap=[];
-
   Future<void> getbabyMotherDataAfterTap(link2) async {
     log("baby and mother after calling");
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
@@ -413,8 +620,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   }
 
-  var fruitsVegitableData=[];
 
+  var fruitsVegitableData=[];
   Future<void> getfruitsVegitable() async {
     log(" fruit and vegetable calling ");
     String fruitsVegitableURl = "https://test.protidin.com.bd/api/v2/sub-categories/9";
@@ -427,6 +634,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       //log("category data after tap $biscuitSweetsDataMap");
       var froitsBeverageData= CategoryDataModel.fromJson(fruitsVegitableDataMap);
       fruitsVegitableData=froitsBeverageData.data;
+      await getfrouitsVegitableDataAfterTap(froitsBeverageData.data[0].links.products);
       setState(() {
 
       });
@@ -442,7 +650,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
 
   var fruitsVegAfterTap=[];
-
   Future<void> getfrouitsVegitableDataAfterTap(link2) async {
     log("baby and mother after calling");
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
@@ -459,6 +666,52 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
         fruitsVegAfterTap=fruitVegitable.data;
       });
       log("after tap grocery data length ${fruitsVegAfterTap.length}");
+
+    }else{
+      log("data invalid");
+    }
+
+    // log("after decode $dataMap");
+
+  }
+
+  List<OneToNinentyNineDataModel> oneTwoNinentyNineData=[];
+  Future<void> getOneTo99Data() async {
+    log("1 to 99 data");
+
+    final response10 = await get(Uri.parse("https://test.protidin.com.bd/api/v2/products/category/4"), headers: {"Accept": "application/json"});
+
+    var fruitVegitableItemDataMap=jsonDecode(response10.body);
+
+    if(fruitVegitableItemDataMap["success"]==true){
+      //log("category data after tap $biscuitSweetsDataMap");
+
+      setState(() {
+        var onToNinetyNine= BiacuitSweets.fromJson(fruitVegitableItemDataMap);
+
+        //oneTwoNinentyNineData=onToNinetyNine.data;
+
+        for(var i=0; i<onToNinetyNine.data.length;i++){
+          if(int.parse(onToNinetyNine.data[i].basePrice.substring(1))<=99){
+
+            log("price between 1-99: ${onToNinetyNine.data[i].basePrice}");
+
+            oneTwoNinentyNineData.add(OneToNinentyNineDataModel(
+              name: onToNinetyNine.data[i].name,
+              basePrice: onToNinetyNine.data[i].basePrice,
+              disCountPrice: onToNinetyNine.data[i].baseDiscountedPrice,
+              image: onToNinetyNine.data[i].thumbnailImage,
+              id: onToNinetyNine.data[i].id,
+              discount: onToNinetyNine.data[i].discount,
+              unit: onToNinetyNine.data[i].unit,
+            ));
+
+          }else{
+           // log("price not between 1-99: ${onToNinetyNine.data[i].basePrice}");
+          }
+        }
+      });
+      //log("1-99 data length ${oneTwoNinentyNineData.length}");
 
     }else{
       log("data invalid");
@@ -780,7 +1033,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                     height: 5,
                   ),
 
-                  ///
+                  // top banner
                   Container(
                     //width: 320.0,
                     width: MediaQuery.of(context).size.width / 1,
@@ -840,12 +1093,11 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                     ),
                   ),
 
-                  ///
-
                   SizedBox(
                     height: 20,
                   ),
 
+                  // Offer For you
                   SizedBox(
                     width: MediaQuery.of(context).size.width / 1.1,
                     child: Row(
@@ -872,10 +1124,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                       ],
                     ),
                   ),
-                  //sized10,
-
                   SizedBox(height: 15,),
-
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0),
                     child: SingleChildScrollView(
@@ -933,12 +1182,13 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                     ),
                   ),
 
+
                   SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
 
 
-
+                  // shop by category
                   Container(
                     ///height: height,
                     width: MediaQuery.of(context).size.width/1,
@@ -977,20 +1227,66 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: categoryData.length,
                                 itemBuilder: (_,index){
-                                  return value.toString()!=index.toString()?GestureDetector(
-                                    onTap: (){
-                                      setState(() {
-                                        value=index.toString();
-                                        log(categoryData[index].links.products);
-                                        getProductsAfterTap(categoryData[index].links.products);
-                                      });
-                                    },
-                                    child: Container(
+                                  if (value.toString()!=index.toString()) {
+                                    return GestureDetector(
+                                      onTap: (){
+                                        setState(() {
+                                          value=index.toString();
+                                          log(categoryData[index].links.products);
+                                          getProductsAfterTap(categoryData[index].links.products);
+                                        });
+                                      },
+                                      child: Container(
+
+                                        width: width*0.35,
+                                        margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(5.0),
+
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            //sized10,
+                                            SizedBox(height: 15,),
+
+
+
+                                            Expanded(
+
+                                                child: Image.network(imagePath+categoryData[index].largeBanner)
+
+                                            ),
+
+
+                                            ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+
+
+                                            sized10,
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(2,2,0,5,),
+                                              child: Container(
+                                                //height: MediaQuery.of(context).size.height/20,
+                                                height: MediaQuery.of(context).size.height/14,
+                                                child: Text(
+                                                  categoryData[index].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    return Container(
 
                                       width: width*0.35,
                                       margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
                                       decoration: BoxDecoration(
-                                        color: Colors.grey.withOpacity(0.2),
+                                        color: Colors.white,
                                         borderRadius: BorderRadius.circular(5.0),
 
                                       ),
@@ -1014,37 +1310,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           )
                                         ],
                                       ),
-                                    ),
-                                  ):Container(
-
-                                    width: width*0.35,
-                                    margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(5.0),
-
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        //sized10,
-                                        SizedBox(height: 15,),
-                                        Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
-                                        sized10,
-                                        Padding(
-                                          padding: const EdgeInsets.fromLTRB(2,2,0,5,),
-                                          child: Container(
-                                            //height: MediaQuery.of(context).size.height/20,
-                                            height: MediaQuery.of(context).size.height/14,
-                                            child: Text(
-                                              categoryData[index].name,
-                                              style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  );
+                                    );
+                                  }
                                 },
                               ),
                             ),
@@ -1274,12 +1541,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   ),
 
 
-                  ///
-
-
-
-                  sized20,
-                  SizedBox(height: 5,),
+                  SizedBox(height: 30,),
+                  //1-99 store
                   Container(
                     width: MediaQuery.of(context).size.width/1,
                     //margin: EdgeInsets.symmetric(horizontal: 5.0),
@@ -1376,11 +1639,10 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 10,),
-                  sized20,
 
 
-
+                  SizedBox(height: 30,),
+                  //bread biscuit & snacks
                   Container(
                     width: MediaQuery.of(context).size.width/1,
                     decoration: BoxDecoration(
@@ -1398,7 +1660,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Grocery",
+                                "Bread Biscuits & Snacks",
                                 style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
                               ),
                               Text(
@@ -1408,6 +1670,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             ],
                           ),
                         ),
+
 
                         sized20,
 
@@ -1444,13 +1707,13 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                           child: ListView.builder(
                             shrinkWrap: true,
                             scrollDirection: Axis.horizontal,
-                            itemCount: groceryData.length,
+                            itemCount: breadBiscuitData.length,
                             itemBuilder: (_,index){
                               return GestureDetector(
                                 onTap: (){
                                   setState(() {
                                     valueOne=index.toString();
-                                    getGroceryProductsAfterTap(groceryData[index].links.products);
+                                    getBreadBiscuitProductsAfterTap(breadBiscuitData[index].links.products);
                                   });
                                 },
                                 child:valueOne.toString()!=index.toString()?Container(
@@ -1478,14 +1741,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                             child:Padding(
                                               padding: const EdgeInsets.fromLTRB(5,0,5,0),
                                               child: Image.network(
-                                                imagePath+groceryData[index].mobileBanner,
+                                                imagePath+breadBiscuitData[index].mobileBanner,
                                               ),
                                             ),
                                           ),
                                         ),
                                         sized5,
                                         Text(
-                                          groceryData[index].name,
+                                          breadBiscuitData[index].name,
                                           style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
                                           textAlign: TextAlign.center,
                                         ),
@@ -1514,13 +1777,13 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
-                                              child:Image.network(imagePath+groceryData[index].mobileBanner,
+                                              child:Image.network(imagePath+breadBiscuitData[index].mobileBanner,
                                               ),
                                             ),
                                           ),
                                           sized5,
                                           Text(
-                                            groceryData[index].name,
+                                            breadBiscuitData[index].name,
                                             style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
                                             textAlign: TextAlign.center,
                                           ),
@@ -1554,7 +1817,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             child: ListView.builder(
                                 shrinkWrap:true,
                                 scrollDirection: Axis.horizontal,
-                                itemCount: groceryProducts.length,
+                                itemCount: breadBiscuitProducts.length,
                                 itemBuilder: (_,index){
                                   return Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
@@ -1596,7 +1859,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
 
                                           Container(
-                                            child: Image.network(imagePath+groceryProducts[index].thumbnailImage),
+                                            child: Image.network(imagePath+breadBiscuitProducts[index].thumbnailImage),
                                             height: MediaQuery.of(context).size.height/8,
                                             width: MediaQuery.of(context).size.width/2.34,
                                           ),
@@ -1610,7 +1873,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               child: Padding(
                                                 padding: const EdgeInsets.fromLTRB(5,5,5,0),
                                                 child: Text(
-                                                  groceryProducts[index].name,
+                                                  breadBiscuitProducts[index].name,
                                                   style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
                                                   textAlign: TextAlign.center,
 
@@ -1646,12 +1909,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                       height: 20,
                                                       width: 22,
                                                     ),
-                                                    Text(groceryProducts[index].basePrice.toString(),style: TextStyle(
+                                                    Text(breadBiscuitProducts[index].basePrice.toString(),style: TextStyle(
                                                         color: Color(0xFF515151),
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w700)
                                                     ),
-                                                    Text(groceryProducts[index].baseDiscountedPrice.toString(),
+                                                    Text(breadBiscuitProducts[index].baseDiscountedPrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
                                                             fontSize: 12,
@@ -1734,8 +1997,365 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                     ),
                   ),
 
-                  sized20,
-                  SizedBox(height: 5,),
+
+                  SizedBox(height: 30,),
+                  //chocolate & sweets
+                  Container(
+                    width: MediaQuery.of(context).size.width/1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+
+                        SizedBox(height: 25,),
+
+                        Container(
+                          width: MediaQuery.of(context).size.width/1.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Chocolate & Sweets",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                              ),
+                              Text(
+                                "VIEW ALL",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        sized20,
+
+                        Stack(
+                            children: [
+                              Image.asset("assets/posterone.png"),
+                              Positioned(
+                                bottom: 10,
+                                left: 10,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Shop for daily needs",
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Container(
+                                        height: 15,
+                                        width: 15,
+                                        child: Image.asset("assets/v.png"),
+
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]
+                        ),
+                        sized20,
+                        Container(
+                          height: height*0.22,
+                          width: width,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:chocolateSweetsData.length,
+                            itemBuilder: (_,index){
+                              return GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    valueOne=index.toString();
+                                    getChocolateSweetsProductsAfterTap(chocolateSweetsData[index].links.products);
+                                  });
+                                },
+                                child:valueOne.toString()!=index.toString()?Container(
+                                  child: Container(
+                                    height: height * 0.2,
+                                    width: width*0.35,
+                                    margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      //color: Colors.grey.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10.0),
+
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        //SizedBox(height: 15,),
+                                        Container(
+                                          height: height*0.15,
+                                          //width: width*0.30,
+                                          width: width*0.30,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFF0E6F2),
+                                              borderRadius: BorderRadius.circular(15.0)
+                                          ),
+                                          child: Center(
+                                            child:Padding(
+                                              padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                              child: Image.network(
+                                                imagePath+chocolateSweetsData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        sized5,
+                                        Text(
+                                          chocolateSweetsData[index].name,
+                                          style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ):Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    //height: height * 0.2,
+                                      height: height * 0.2,
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height*0.15,
+                                            width: width*0.30,
+                                            decoration: BoxDecoration(
+                                              //color: Colors.grey.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(15.0)
+                                            ),
+                                            child: Center(
+                                              child:Image.network(imagePath+chocolateSweetsData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                          sized5,
+                                          Text(
+                                            chocolateSweetsData[index].name,
+                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: 5,),
+                        //sized20,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Grocery- Top Deals",
+                              style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                            ),
+                          ),
+                        ),
+                        sized20,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15,0,8,0),
+                          child: Container(
+                            height: height*0.31,
+                            width: width,
+                            child: ListView.builder(
+                                shrinkWrap:true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: chocolateSweetsProducts.length,
+                                itemBuilder: (_,index){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF1EDF2),
+                                          borderRadius: BorderRadius.circular(15.0)
+                                      ),
+                                      //height: MediaQuery.of(context).size.height/3.2,
+                                      width: MediaQuery.of(context).size.width/2.34,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width/5,
+                                              height: MediaQuery.of(context).size.height/45,
+                                              margin: EdgeInsets.only(top: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(4.0),
+                                                    bottomRight: Radius.circular(4.0)
+                                                ),
+
+                                              ),
+                                              //
+
+                                              child: Center(
+                                                child: Text(
+                                                  "15% OFF",
+                                                  style: TextStyle(color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            child: Image.network(imagePath+chocolateSweetsProducts[index].thumbnailImage),
+                                            height: MediaQuery.of(context).size.height/8,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                          ),
+
+
+                                          FittedBox(
+                                            child: Container(
+                                              ///height: height! * 0.08,
+                                              width: MediaQuery.of(context).size.width/2.36,
+                                              height: MediaQuery.of(context).size.height/20,
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,5,5,0),
+                                                child: Text(
+                                                  chocolateSweetsProducts[index].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
+                                                  textAlign: TextAlign.center,
+
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Center(
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height/38,
+                                              child: Text(
+                                                "5 lit",
+                                                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Center(
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height/32,
+                                                width: MediaQuery.of(context).size.width/2.34,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Image.asset("assets/p.png"),
+                                                      height: 20,
+                                                      width: 22,
+                                                    ),
+                                                    Text(chocolateSweetsProducts[index].basePrice.toString(),style: TextStyle(
+                                                        color: Color(0xFF515151),
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w700)
+                                                    ),
+                                                    Text(chocolateSweetsProducts[index].baseDiscountedPrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)
+                                                    ),
+                                                    Container(
+                                                      height: 25,
+                                                      width: 25,
+                                                      decoration: BoxDecoration(
+
+                                                          color: kPrimaryColor,shape: BoxShape.circle),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.shopping_cart_rounded,
+                                                          color: Colors.white,
+
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            //height: height! * 0.03,
+                                            height: MediaQuery.of(context).size.height/26,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen[100],
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(10.0),
+                                                    bottomRight: Radius.circular(10.0))
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+
+
+                                                  Container(
+                                                    child: Image.asset("assets/img_42.png"),
+                                                    height: 17,
+                                                    width: 15,
+                                                  ),
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 2),
+                                                    child: Text(
+                                                      "  Earning +৳18",
+                                                      style: TextStyle(fontSize: 12,
+                                                          color: Colors.green,
+                                                          fontWeight: FontWeight.w600),
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 35,),
+                      ],
+                    ),
+                  ),
+
+                  //big sale banner
+                  SizedBox(height: 30,),
                   InkWell(
 
                     onTap: () {
@@ -1761,8 +2381,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                       child: Image.asset("assets/img_62.png"),
                     ),
                   ),
-                  sized20,
 
+                  SizedBox(height: 30,),
+                  //dairy & beverage
                   Container(
                     width: MediaQuery.of(context).size.width/1,
                     decoration: BoxDecoration(
@@ -1778,7 +2399,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text(
-                                "Beverages",
+                                "Dairy & Beverages",
                                 style: TextStyle(color: Color(0xFF515151), fontSize: 22,fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
                               ),
                               Text(
@@ -2117,423 +2738,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   ),
 
 
-                  //sized20,
-                  SizedBox(height: 25,),
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage("assets/img_65.png"), fit: BoxFit.cover),
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          spreadRadius: 5, //spread radius
-                          blurRadius: 5, // blur radius
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    height: 420,
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    child: Image.asset("assets/img_66.png"),
-                  ),
-
-                  SizedBox(
-                    height: 7,
-                  ),
-
-                  ///
-                  sized20,
-
-                  Container(
-                    width: MediaQuery.of(context).size.width/1,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: Colors.white,
-                    ),
-                    child: Column(
-                      children: [
-
-                        SizedBox(height: 25,),
-                        Container(
-                          width: MediaQuery.of(context).size.width/1.1,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Baby and kids",
-                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
-                              ),
-                              Text(
-                                "VIEW ALL",
-                                style: TextStyle(color:
-                                Color(0xFF515151), fontSize: 13, fontWeight: FontWeight.w400),
-                              ),
-                            ],
-                          ),
-                        ),
-
-
-                        sized20,
-
-                        Stack(
-                          children: [
-                            Image.asset("assets/postertwo.png"),
-                            Positioned(
-                              bottom: 10,
-                              left: 10,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Sip it up",
-                                    style: TextStyle(color: Colors.white, fontSize:16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 15),
-                                    child: Container(
-                                      height: 15,
-                                      width: 15,
-                                      child: Image.asset("assets/v.png"),
-                                    ),
-                                  ),
-
-                                  /*Icon(
-                          Icons.arrow_right,
-                          color: Colors.white,
-                          size: block * 6,
-                        )*/
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        sized20,
-                        Container(
-                          height: height*0.2,
-                          width: width,
-                          //width: width*0.4,
-                          //height: height * 0.2,
-                          //width: width*0.35,
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            scrollDirection: Axis.horizontal,
-                            itemCount: babyMotherData.length,
-                            itemBuilder: (_,index){
-                              return GestureDetector(
-                                onTap: (){
-                                  setState(() {
-                                    valueThree=index.toString();
-                                    getbabyMotherDataAfterTap(babyMotherData[index].links.products);
-                                  });
-                                },
-                                child: valueThree.toString()!=index.toString()?Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
-                                  child: Container(
-                                    //height: height * 0.2,
-                                      height: height * 0.2,
-                                      width: width*0.35,
-                                      margin: EdgeInsets.symmetric(vertical: 5.0),
-                                      decoration: BoxDecoration(
-                                        //color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10.0),
-
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: height*0.15,
-                                            width: width*0.30,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFFF0E6F2),
-                                                borderRadius: BorderRadius.circular(15.0)
-                                            ),
-                                            child: Center(
-                                              child:Padding(
-                                                padding: const EdgeInsets.fromLTRB(5,0,5,0),
-                                                child: Image.network(imagePath+babyMotherData[index].mobileBanner,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          sized5,
-                                          Text(
-                                            babyMotherData[index].name,
-                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      )
-                                  ),
-                                ):Padding(
-                                  padding: const EdgeInsets.only(left: 5.0),
-                                  child: Container(
-                                    //height: height * 0.2,
-                                      height: height * 0.2,
-                                      width: width*0.35,
-                                      margin: EdgeInsets.symmetric(vertical: 5.0),
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10.0),
-
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            height: height*0.15,
-                                            width: width*0.30,
-                                            decoration: BoxDecoration(
-                                              //color: Color(0xFFF0E6F2),
-                                                borderRadius: BorderRadius.circular(15.0)
-                                            ),
-                                            child: Center(
-                                              child:Image.network(imagePath+babyMotherData[index].mobileBanner,
-                                              ),
-                                            ),
-                                          ),
-                                          sized5,
-                                          Text(
-                                            babyMotherData[index].name,
-                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ],
-                                      )
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        sized5,
-                        Padding(
-                          padding: const EdgeInsets.only(left: 15.0),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Grocery- Top Deals",
-                              style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
-                            ),
-                          ),
-                        ),
-                        sized20,
-                        //SizedBox(height: 5,),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(15,0,8,0),
-                          child: Container(
-                            height: height*0.31,
-                            width: width,
-                            child: ListView.builder(
-                                shrinkWrap:true,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: babyMotherDataAfterTap.length,
-                                itemBuilder: (_,index){
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFF1EDF2),
-                                          borderRadius: BorderRadius.circular(15.0)
-                                      ),
-                                      //height: MediaQuery.of(context).size.height/3.2,
-                                      width: MediaQuery.of(context).size.width/2.34,
-                                      child: Column(
-                                        children: [
-                                          Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Container(
-                                              width: MediaQuery.of(context).size.width/5,
-                                              height: MediaQuery.of(context).size.height/45,
-                                              margin: EdgeInsets.only(top: 10),
-                                              decoration: BoxDecoration(
-                                                color: Colors.green,
-                                                borderRadius: BorderRadius.only(
-                                                    topRight: Radius.circular(4.0),
-                                                    bottomRight: Radius.circular(4.0)
-                                                ),
-
-                                              ),
-                                              //
-
-                                              child: Center(
-                                                child: Text(
-                                                  "15% OFF",
-                                                  style: TextStyle(color: Colors.white,
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w500),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-
-
-                                          Container(
-                                            child: Image.network(imagePath+babyMotherDataAfterTap[index].thumbnailImage),
-                                            height: MediaQuery.of(context).size.height/8,
-                                            width: MediaQuery.of(context).size.width/2.34,
-                                          ),
-
-
-                                          FittedBox(
-                                            child: Container(
-                                              ///height: height! * 0.08,
-                                              width: MediaQuery.of(context).size.width/2.36,
-                                              height: MediaQuery.of(context).size.height/20,
-                                              child: Padding(
-                                                padding: const EdgeInsets.fromLTRB(5,5,5,0),
-                                                child: Text(
-                                                  babyMotherDataAfterTap[index].name,
-                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
-                                                  textAlign: TextAlign.center,
-
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-
-
-
-                                          Center(
-                                            child: Container(
-                                              height: MediaQuery.of(context).size.height/38,
-                                              child: Text(
-                                                "5 lit",
-                                                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
-                                              ),
-                                            ),
-                                          ),
-
-
-                                          Padding(
-                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                            child: Center(
-                                              child: Container(
-                                                height: MediaQuery.of(context).size.height/32,
-                                                width: MediaQuery.of(context).size.width/2.34,
-                                                child: Row(
-                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                  children: [
-
-                                                    Container(
-                                                      child: Image.asset("assets/p.png"),
-                                                      height: 20,
-                                                      width: 22,
-                                                    ),
-                                                    Text(babyMotherDataAfterTap[index].basePrice.toString(),style: TextStyle(
-                                                        color: Color(0xFF515151),
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w700)
-                                                    ),
-                                                    Text(babyMotherDataAfterTap[index].baseDiscountedPrice.toString(),
-                                                        style: TextStyle(
-                                                            color: Color(0xFFA299A8),
-                                                            fontSize: 12,
-                                                            fontWeight: FontWeight.w400,
-                                                            decoration: TextDecoration.lineThrough)
-                                                    ),
-                                                    Container(
-                                                      height: 25,
-                                                      width: 25,
-                                                      decoration: BoxDecoration(
-
-                                                          color: kPrimaryColor,shape: BoxShape.circle),
-                                                      child: Center(
-                                                        child: Icon(
-                                                          Icons.shopping_cart_rounded,
-                                                          color: Colors.white,
-
-                                                        ),
-                                                      ),
-                                                    )
-
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-
-
-                                          Container(
-                                            //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/26,
-                                            width: MediaQuery.of(context).size.width/2.34,
-                                            decoration: BoxDecoration(
-                                                color: Colors.lightGreen[100],
-                                                borderRadius: BorderRadius.only(
-                                                    bottomLeft: Radius.circular(10.0),
-                                                    bottomRight: Radius.circular(10.0))
-                                            ),
-                                            child: Padding(
-                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-
-
-                                                  Container(
-                                                    child: Image.asset("assets/img_42.png"),
-                                                    height: 17,
-                                                    width: 15,
-                                                  ),
-
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(top: 2),
-                                                    child: Text(
-                                                      "  Earning +৳18",
-                                                      style: TextStyle(fontSize: 12,
-                                                          color: Colors.green,
-                                                          fontWeight: FontWeight.w600),
-
-                                                    ),
-                                                  ),
-
-                                                ],
-                                              ),
-                                            ),
-                                          )
-
-
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(height: 35,),
-
-                      ],
-                    ),
-                  ),
-
-                  //sized20,
-
-                  SizedBox(height: 20,),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(image: AssetImage("assets/img_69.png"), fit: BoxFit.cover),//69
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          spreadRadius: 5, //spread radius
-                          blurRadius: 5, // blur radius
-                          offset: Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    height: 190,
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    child: Image.asset("assets/img_70.png"),
-                  ),
-
-                  sized20,
-
+                  SizedBox(height: 30,),
+                  //fruits
                   Container(
                     width: MediaQuery.of(context).size.width/1,
                     decoration: BoxDecoration(
@@ -2890,7 +3096,2232 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   ),
 
 
-                  sized20,
+                  SizedBox(height: 30,),
+                  //combo offer banner
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage("assets/img_69.png"), fit: BoxFit.cover),//69
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.15),
+                          spreadRadius: 5, //spread radius
+                          blurRadius: 5, // blur radius
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    height: 190,
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    child: Image.asset("assets/img_70.png"),
+                  ),
+
+
+                  SizedBox(height: 30,),
+                  //grocery
+                  Container(
+                    width: MediaQuery.of(context).size.width/1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+
+                        SizedBox(height: 25,),
+
+                        Container(
+                          width: MediaQuery.of(context).size.width/1.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Grocery",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                              ),
+                              Text(
+                                "VIEW ALL",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        sized20,
+
+                        Stack(
+                            children: [
+                              Image.asset("assets/posterone.png"),
+                              Positioned(
+                                bottom: 10,
+                                left: 10,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Shop for daily needs",
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Container(
+                                        height: 15,
+                                        width: 15,
+                                        child: Image.asset("assets/v.png"),
+
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]
+                        ),
+                        sized20,
+                        Container(
+                          height: height*0.22,
+                          width: width,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: groceryData.length,
+                            itemBuilder: (_,index){
+                              return GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    valueOne=index.toString();
+                                    getGroceryProductsAfterTap(groceryData[index].links.products);
+                                  });
+                                },
+                                child:valueOne.toString()!=index.toString()?Container(
+                                  child: Container(
+                                    height: height * 0.2,
+                                    width: width*0.35,
+                                    margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      //color: Colors.grey.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10.0),
+
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        //SizedBox(height: 15,),
+                                        Container(
+                                          height: height*0.15,
+                                          //width: width*0.30,
+                                          width: width*0.30,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFF0E6F2),
+                                              borderRadius: BorderRadius.circular(15.0)
+                                          ),
+                                          child: Center(
+                                            child:Padding(
+                                              padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                              child: Image.network(
+                                                imagePath+groceryData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        sized5,
+                                        Text(
+                                          groceryData[index].name,
+                                          style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ):Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    //height: height * 0.2,
+                                      height: height * 0.2,
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height*0.15,
+                                            width: width*0.30,
+                                            decoration: BoxDecoration(
+                                              //color: Colors.grey.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(15.0)
+                                            ),
+                                            child: Center(
+                                              child:Image.network(imagePath+groceryData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                          sized5,
+                                          Text(
+                                            groceryData[index].name,
+                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: 5,),
+                        //sized20,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Grocery- Top Deals",
+                              style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                            ),
+                          ),
+                        ),
+                        sized20,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15,0,8,0),
+                          child: Container(
+                            height: height*0.31,
+                            width: width,
+                            child: ListView.builder(
+                                shrinkWrap:true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: groceryProducts.length,
+                                itemBuilder: (_,index){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF1EDF2),
+                                          borderRadius: BorderRadius.circular(15.0)
+                                      ),
+                                      //height: MediaQuery.of(context).size.height/3.2,
+                                      width: MediaQuery.of(context).size.width/2.34,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width/5,
+                                              height: MediaQuery.of(context).size.height/45,
+                                              margin: EdgeInsets.only(top: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(4.0),
+                                                    bottomRight: Radius.circular(4.0)
+                                                ),
+
+                                              ),
+                                              //
+
+                                              child: Center(
+                                                child: Text(
+                                                  "15% OFF",
+                                                  style: TextStyle(color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            child: Image.network(imagePath+groceryProducts[index].thumbnailImage),
+                                            height: MediaQuery.of(context).size.height/8,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                          ),
+
+
+                                          FittedBox(
+                                            child: Container(
+                                              ///height: height! * 0.08,
+                                              width: MediaQuery.of(context).size.width/2.36,
+                                              height: MediaQuery.of(context).size.height/20,
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,5,5,0),
+                                                child: Text(
+                                                  groceryProducts[index].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
+                                                  textAlign: TextAlign.center,
+
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Center(
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height/38,
+                                              child: Text(
+                                                "5 lit",
+                                                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Center(
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height/32,
+                                                width: MediaQuery.of(context).size.width/2.34,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Image.asset("assets/p.png"),
+                                                      height: 20,
+                                                      width: 22,
+                                                    ),
+                                                    Text(groceryProducts[index].basePrice.toString(),style: TextStyle(
+                                                        color: Color(0xFF515151),
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w700)
+                                                    ),
+                                                    Text(groceryProducts[index].baseDiscountedPrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)
+                                                    ),
+                                                    Container(
+                                                      height: 25,
+                                                      width: 25,
+                                                      decoration: BoxDecoration(
+
+                                                          color: kPrimaryColor,shape: BoxShape.circle),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.shopping_cart_rounded,
+                                                          color: Colors.white,
+
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            //height: height! * 0.03,
+                                            height: MediaQuery.of(context).size.height/26,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen[100],
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(10.0),
+                                                    bottomRight: Radius.circular(10.0))
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+
+
+                                                  Container(
+                                                    child: Image.asset("assets/img_42.png"),
+                                                    height: 17,
+                                                    width: 15,
+                                                  ),
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 2),
+                                                    child: Text(
+                                                      "  Earning +৳18",
+                                                      style: TextStyle(fontSize: 12,
+                                                          color: Colors.green,
+                                                          fontWeight: FontWeight.w600),
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 35,),
+                      ],
+                    ),
+                  ),
+
+
+                  SizedBox(height: 30,),
+                  //household
+                  Container(
+                    width: MediaQuery.of(context).size.width/1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+
+                        SizedBox(height: 25,),
+
+                        Container(
+                          width: MediaQuery.of(context).size.width/1.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Household",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                              ),
+                              Text(
+                                "VIEW ALL",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        sized20,
+
+                        Stack(
+                            children: [
+                              Image.asset("assets/posterone.png"),
+                              Positioned(
+                                bottom: 10,
+                                left: 10,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Shop for daily needs",
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Container(
+                                        height: 15,
+                                        width: 15,
+                                        child: Image.asset("assets/v.png"),
+
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]
+                        ),
+                        sized20,
+                        Container(
+                          height: height*0.22,
+                          width: width,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:householdData.length,
+                            itemBuilder: (_,index){
+                              return GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    valueOne=index.toString();
+                                    gethouseholProductsAfterTap(householdData[index].links.products);
+                                  });
+                                },
+                                child:valueOne.toString()!=index.toString()?Container(
+                                  child: Container(
+                                    height: height * 0.2,
+                                    width: width*0.35,
+                                    margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      //color: Colors.grey.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10.0),
+
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        //SizedBox(height: 15,),
+                                        Container(
+                                          height: height*0.15,
+                                          //width: width*0.30,
+                                          width: width*0.30,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFF0E6F2),
+                                              borderRadius: BorderRadius.circular(15.0)
+                                          ),
+                                          child: Center(
+                                            child:Padding(
+                                              padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                              child: Image.network(
+                                                imagePath+householdData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        sized5,
+                                        Text(
+                                          householdData[index].name,
+                                          style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ):Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    //height: height * 0.2,
+                                      height: height * 0.2,
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height*0.15,
+                                            width: width*0.30,
+                                            decoration: BoxDecoration(
+                                              //color: Colors.grey.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(15.0)
+                                            ),
+                                            child: Center(
+                                              child:Image.network(imagePath+householdData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                          sized5,
+                                          Text(
+                                            householdData[index].name,
+                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: 5,),
+                        //sized20,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Grocery- Top Deals",
+                              style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                            ),
+                          ),
+                        ),
+                        sized20,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15,0,8,0),
+                          child: Container(
+                            height: height*0.31,
+                            width: width,
+                            child: ListView.builder(
+                                shrinkWrap:true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: chocolateSweetsProducts.length,
+                                itemBuilder: (_,index){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF1EDF2),
+                                          borderRadius: BorderRadius.circular(15.0)
+                                      ),
+                                      //height: MediaQuery.of(context).size.height/3.2,
+                                      width: MediaQuery.of(context).size.width/2.34,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width/5,
+                                              height: MediaQuery.of(context).size.height/45,
+                                              margin: EdgeInsets.only(top: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(4.0),
+                                                    bottomRight: Radius.circular(4.0)
+                                                ),
+
+                                              ),
+                                              //
+
+                                              child: Center(
+                                                child: Text(
+                                                  "15% OFF",
+                                                  style: TextStyle(color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            child: Image.network(imagePath+householdProducts[index].thumbnailImage),
+                                            height: MediaQuery.of(context).size.height/8,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                          ),
+
+
+                                          FittedBox(
+                                            child: Container(
+                                              ///height: height! * 0.08,
+                                              width: MediaQuery.of(context).size.width/2.36,
+                                              height: MediaQuery.of(context).size.height/20,
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,5,5,0),
+                                                child: Text(
+                                                  householdProducts[index].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
+                                                  textAlign: TextAlign.center,
+
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Center(
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height/38,
+                                              child: Text(
+                                                "5 lit",
+                                                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Center(
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height/32,
+                                                width: MediaQuery.of(context).size.width/2.34,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Image.asset("assets/p.png"),
+                                                      height: 20,
+                                                      width: 22,
+                                                    ),
+                                                    Text(householdProducts[index].basePrice.toString(),style: TextStyle(
+                                                        color: Color(0xFF515151),
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w700)
+                                                    ),
+                                                    Text(householdProducts[index].baseDiscountedPrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)
+                                                    ),
+                                                    Container(
+                                                      height: 25,
+                                                      width: 25,
+                                                      decoration: BoxDecoration(
+
+                                                          color: kPrimaryColor,shape: BoxShape.circle),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.shopping_cart_rounded,
+                                                          color: Colors.white,
+
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            //height: height! * 0.03,
+                                            height: MediaQuery.of(context).size.height/26,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen[100],
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(10.0),
+                                                    bottomRight: Radius.circular(10.0))
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+
+
+                                                  Container(
+                                                    child: Image.asset("assets/img_42.png"),
+                                                    height: 17,
+                                                    width: 15,
+                                                  ),
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 2),
+                                                    child: Text(
+                                                      "  Earning +৳18",
+                                                      style: TextStyle(fontSize: 12,
+                                                          color: Colors.green,
+                                                          fontWeight: FontWeight.w600),
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 35,),
+                      ],
+                    ),
+                  ),
+
+
+                  SizedBox(height: 30,),
+                  //mega deal banner
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(image: AssetImage("assets/img_65.png"), fit: BoxFit.cover),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.15),
+                          spreadRadius: 5, //spread radius
+                          blurRadius: 5, // blur radius
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    height: 420,
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    child: Image.asset("assets/img_66.png"),
+                  ),
+
+
+                  SizedBox(height: 30,),
+                  //mother & baby
+                  Container(
+                    width: MediaQuery.of(context).size.width/1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+
+                        SizedBox(height: 25,),
+                        Container(
+                          width: MediaQuery.of(context).size.width/1.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Mothers & Baby ",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                              ),
+                              Text(
+                                "VIEW ALL",
+                                style: TextStyle(color:
+                                Color(0xFF515151), fontSize: 13, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        sized20,
+
+                        Stack(
+                          children: [
+                            Image.asset("assets/postertwo.png"),
+                            Positioned(
+                              bottom: 10,
+                              left: 10,
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Sip it up",
+                                    style: TextStyle(color: Colors.white, fontSize:16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                                  ),
+
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: Container(
+                                      height: 15,
+                                      width: 15,
+                                      child: Image.asset("assets/v.png"),
+                                    ),
+                                  ),
+
+                                  /*Icon(
+                          Icons.arrow_right,
+                          color: Colors.white,
+                          size: block * 6,
+                        )*/
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                        sized20,
+                        Container(
+                          height: height*0.2,
+                          width: width,
+                          //width: width*0.4,
+                          //height: height * 0.2,
+                          //width: width*0.35,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: babyMotherData.length,
+                            itemBuilder: (_,index){
+                              return GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    valueThree=index.toString();
+                                    getbabyMotherDataAfterTap(babyMotherData[index].links.products);
+                                  });
+                                },
+                                child: valueThree.toString()!=index.toString()?Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    //height: height * 0.2,
+                                      height: height * 0.2,
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        //color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height*0.15,
+                                            width: width*0.30,
+                                            decoration: BoxDecoration(
+                                                color: Color(0xFFF0E6F2),
+                                                borderRadius: BorderRadius.circular(15.0)
+                                            ),
+                                            child: Center(
+                                              child:Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                                child: Image.network(imagePath+babyMotherData[index].mobileBanner,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          sized5,
+                                          Text(
+                                            babyMotherData[index].name,
+                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ):Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    //height: height * 0.2,
+                                      height: height * 0.2,
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height*0.15,
+                                            width: width*0.30,
+                                            decoration: BoxDecoration(
+                                              //color: Color(0xFFF0E6F2),
+                                                borderRadius: BorderRadius.circular(15.0)
+                                            ),
+                                            child: Center(
+                                              child:Image.network(imagePath+babyMotherData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                          sized5,
+                                          Text(
+                                            babyMotherData[index].name,
+                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        sized5,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Grocery- Top Deals",
+                              style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                            ),
+                          ),
+                        ),
+                        sized20,
+                        //SizedBox(height: 5,),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15,0,8,0),
+                          child: Container(
+                            height: height*0.31,
+                            width: width,
+                            child: ListView.builder(
+                                shrinkWrap:true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: babyMotherDataAfterTap.length,
+                                itemBuilder: (_,index){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF1EDF2),
+                                          borderRadius: BorderRadius.circular(15.0)
+                                      ),
+                                      //height: MediaQuery.of(context).size.height/3.2,
+                                      width: MediaQuery.of(context).size.width/2.34,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width/5,
+                                              height: MediaQuery.of(context).size.height/45,
+                                              margin: EdgeInsets.only(top: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(4.0),
+                                                    bottomRight: Radius.circular(4.0)
+                                                ),
+
+                                              ),
+                                              //
+
+                                              child: Center(
+                                                child: Text(
+                                                  "15% OFF",
+                                                  style: TextStyle(color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            child: Image.network(imagePath+babyMotherDataAfterTap[index].thumbnailImage),
+                                            height: MediaQuery.of(context).size.height/8,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                          ),
+
+
+                                          FittedBox(
+                                            child: Container(
+                                              ///height: height! * 0.08,
+                                              width: MediaQuery.of(context).size.width/2.36,
+                                              height: MediaQuery.of(context).size.height/20,
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,5,5,0),
+                                                child: Text(
+                                                  babyMotherDataAfterTap[index].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
+                                                  textAlign: TextAlign.center,
+
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+
+                                          Center(
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height/38,
+                                              child: Text(
+                                                "5 lit",
+                                                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Center(
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height/32,
+                                                width: MediaQuery.of(context).size.width/2.34,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Image.asset("assets/p.png"),
+                                                      height: 20,
+                                                      width: 22,
+                                                    ),
+                                                    Text(babyMotherDataAfterTap[index].basePrice.toString(),style: TextStyle(
+                                                        color: Color(0xFF515151),
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w700)
+                                                    ),
+                                                    Text(babyMotherDataAfterTap[index].baseDiscountedPrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)
+                                                    ),
+                                                    Container(
+                                                      height: 25,
+                                                      width: 25,
+                                                      decoration: BoxDecoration(
+
+                                                          color: kPrimaryColor,shape: BoxShape.circle),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.shopping_cart_rounded,
+                                                          color: Colors.white,
+
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            //height: height! * 0.03,
+                                            height: MediaQuery.of(context).size.height/26,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen[100],
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(10.0),
+                                                    bottomRight: Radius.circular(10.0))
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+
+
+                                                  Container(
+                                                    child: Image.asset("assets/img_42.png"),
+                                                    height: 17,
+                                                    width: 15,
+                                                  ),
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 2),
+                                                    child: Text(
+                                                      "  Earning +৳18",
+                                                      style: TextStyle(fontSize: 12,
+                                                          color: Colors.green,
+                                                          fontWeight: FontWeight.w600),
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            ),
+                          ),
+                        ),
+
+                        SizedBox(height: 35,),
+
+                      ],
+                    ),
+                  ),
+
+
+                  SizedBox(height: 30,),
+                  //personal care
+                  Container(
+                    width: MediaQuery.of(context).size.width/1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+
+                        SizedBox(height: 25,),
+
+                        Container(
+                          width: MediaQuery.of(context).size.width/1.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Personal Care",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                              ),
+                              Text(
+                                "VIEW ALL",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        sized20,
+
+                        Stack(
+                            children: [
+                              Image.asset("assets/posterone.png"),
+                              Positioned(
+                                bottom: 10,
+                                left: 10,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Shop for daily needs",
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Container(
+                                        height: 15,
+                                        width: 15,
+                                        child: Image.asset("assets/v.png"),
+
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]
+                        ),
+                        sized20,
+                        Container(
+                          height: height*0.22,
+                          width: width,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:personalCarteData.length,
+                            itemBuilder: (_,index){
+                              return GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    valueOne=index.toString();
+                                    getpersonalCarteAfterTap(personalCarteData[index].links.products);
+                                  });
+                                },
+                                child:valueOne.toString()!=index.toString()?Container(
+                                  child: Container(
+                                    height: height * 0.2,
+                                    width: width*0.35,
+                                    margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      //color: Colors.grey.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10.0),
+
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        //SizedBox(height: 15,),
+                                        Container(
+                                          height: height*0.15,
+                                          //width: width*0.30,
+                                          width: width*0.30,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFF0E6F2),
+                                              borderRadius: BorderRadius.circular(15.0)
+                                          ),
+                                          child: Center(
+                                            child:Padding(
+                                              padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                              child: Image.network(
+                                                imagePath+personalCarteData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        sized5,
+                                        Text(
+                                          personalCarteData[index].name,
+                                          style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ):Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    //height: height * 0.2,
+                                      height: height * 0.2,
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height*0.15,
+                                            width: width*0.30,
+                                            decoration: BoxDecoration(
+                                              //color: Colors.grey.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(15.0)
+                                            ),
+                                            child: Center(
+                                              child:Image.network(imagePath+personalCarteData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                          sized5,
+                                          Text(
+                                            personalCarteData[index].name,
+                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: 5,),
+                        //sized20,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Grocery- Top Deals",
+                              style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                            ),
+                          ),
+                        ),
+                        sized20,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15,0,8,0),
+                          child: Container(
+                            height: height*0.31,
+                            width: width,
+                            child: ListView.builder(
+                                shrinkWrap:true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: personalCarteProducts.length,
+                                itemBuilder: (_,index){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF1EDF2),
+                                          borderRadius: BorderRadius.circular(15.0)
+                                      ),
+                                      //height: MediaQuery.of(context).size.height/3.2,
+                                      width: MediaQuery.of(context).size.width/2.34,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width/5,
+                                              height: MediaQuery.of(context).size.height/45,
+                                              margin: EdgeInsets.only(top: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(4.0),
+                                                    bottomRight: Radius.circular(4.0)
+                                                ),
+
+                                              ),
+                                              //
+
+                                              child: Center(
+                                                child: Text(
+                                                  "15% OFF",
+                                                  style: TextStyle(color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            child: Image.network(imagePath+personalCarteProducts[index].thumbnailImage),
+                                            height: MediaQuery.of(context).size.height/8,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                          ),
+
+
+                                          FittedBox(
+                                            child: Container(
+                                              ///height: height! * 0.08,
+                                              width: MediaQuery.of(context).size.width/2.36,
+                                              height: MediaQuery.of(context).size.height/20,
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,5,5,0),
+                                                child: Text(
+                                                  personalCarteProducts[index].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
+                                                  textAlign: TextAlign.center,
+
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Center(
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height/38,
+                                              child: Text(
+                                                "5 lit",
+                                                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Center(
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height/32,
+                                                width: MediaQuery.of(context).size.width/2.34,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Image.asset("assets/p.png"),
+                                                      height: 20,
+                                                      width: 22,
+                                                    ),
+                                                    Text(personalCarteProducts[index].basePrice.toString(),style: TextStyle(
+                                                        color: Color(0xFF515151),
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w700)
+                                                    ),
+                                                    Text(personalCarteProducts[index].baseDiscountedPrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)
+                                                    ),
+                                                    Container(
+                                                      height: 25,
+                                                      width: 25,
+                                                      decoration: BoxDecoration(
+
+                                                          color: kPrimaryColor,shape: BoxShape.circle),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.shopping_cart_rounded,
+                                                          color: Colors.white,
+
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            //height: height! * 0.03,
+                                            height: MediaQuery.of(context).size.height/26,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen[100],
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(10.0),
+                                                    bottomRight: Radius.circular(10.0))
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+
+
+                                                  Container(
+                                                    child: Image.asset("assets/img_42.png"),
+                                                    height: 17,
+                                                    width: 15,
+                                                  ),
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 2),
+                                                    child: Text(
+                                                      "  Earning +৳18",
+                                                      style: TextStyle(fontSize: 12,
+                                                          color: Colors.green,
+                                                          fontWeight: FontWeight.w600),
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 35,),
+                      ],
+                    ),
+                  ),
+
+
+                  SizedBox(height: 30,),
+                  //big sale offer
+                  InkWell(
+
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => OfferPage ()));
+                    },
+
+                    child: Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(image: AssetImage("assets/img_61.png"), fit: BoxFit.cover),
+                        color: Colors.blue[400],
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.15),
+                            spreadRadius: 5, //spread radius
+                            blurRadius: 5, // blur radius
+                            offset: Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      height: 200,
+                      width: MediaQuery.of(context).size.width / 1.1,
+                      child: Image.asset("assets/img_62.png"),
+                    ),
+                  ),
+
+
+                  SizedBox(height: 30,),
+                  //stationary
+                  Container(
+                    width: MediaQuery.of(context).size.width/1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+
+                        SizedBox(height: 25,),
+
+                        Container(
+                          width: MediaQuery.of(context).size.width/1.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Stationary",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                              ),
+                              Text(
+                                "VIEW ALL",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        sized20,
+
+                        Stack(
+                            children: [
+                              Image.asset("assets/posterone.png"),
+                              Positioned(
+                                bottom: 10,
+                                left: 10,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Shop for daily needs",
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Container(
+                                        height: 15,
+                                        width: 15,
+                                        child: Image.asset("assets/v.png"),
+
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]
+                        ),
+                        sized20,
+                        Container(
+                          height: height*0.22,
+                          width: width,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:stationaryData.length,
+                            itemBuilder: (_,index){
+                              return GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    valueOne=index.toString();
+                                    getpstationaryAfterTap(stationaryData[index].links.products);
+                                  });
+                                },
+                                child:valueOne.toString()!=index.toString()?Container(
+                                  child: Container(
+                                    height: height * 0.2,
+                                    width: width*0.35,
+                                    margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      //color: Colors.grey.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10.0),
+
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        //SizedBox(height: 15,),
+                                        Container(
+                                          height: height*0.15,
+                                          //width: width*0.30,
+                                          width: width*0.30,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFF0E6F2),
+                                              borderRadius: BorderRadius.circular(15.0)
+                                          ),
+                                          child: Center(
+                                            child:Padding(
+                                              padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                              child: Image.network(
+                                                imagePath+stationaryData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        sized5,
+                                        Text(
+                                          stationaryData[index].name,
+                                          style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ):Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    //height: height * 0.2,
+                                      height: height * 0.2,
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height*0.15,
+                                            width: width*0.30,
+                                            decoration: BoxDecoration(
+                                              //color: Colors.grey.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(15.0)
+                                            ),
+                                            child: Center(
+                                              child:Image.network(imagePath+stationaryData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                          sized5,
+                                          Text(
+                                            stationaryData[index].name,
+                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: 5,),
+                        //sized20,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Grocery- Top Deals",
+                              style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                            ),
+                          ),
+                        ),
+                        sized20,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15,0,8,0),
+                          child: Container(
+                            height: height*0.31,
+                            width: width,
+                            child: ListView.builder(
+                                shrinkWrap:true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: stationaryProducts.length,
+                                itemBuilder: (_,index){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF1EDF2),
+                                          borderRadius: BorderRadius.circular(15.0)
+                                      ),
+                                      //height: MediaQuery.of(context).size.height/3.2,
+                                      width: MediaQuery.of(context).size.width/2.34,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width/5,
+                                              height: MediaQuery.of(context).size.height/45,
+                                              margin: EdgeInsets.only(top: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(4.0),
+                                                    bottomRight: Radius.circular(4.0)
+                                                ),
+
+                                              ),
+                                              //
+
+                                              child: Center(
+                                                child: Text(
+                                                  "15% OFF",
+                                                  style: TextStyle(color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            child: Image.network(imagePath+stationaryProducts[index].thumbnailImage),
+                                            height: MediaQuery.of(context).size.height/8,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                          ),
+
+
+                                          FittedBox(
+                                            child: Container(
+                                              ///height: height! * 0.08,
+                                              width: MediaQuery.of(context).size.width/2.36,
+                                              height: MediaQuery.of(context).size.height/20,
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,5,5,0),
+                                                child: Text(
+                                                  stationaryProducts[index].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
+                                                  textAlign: TextAlign.center,
+
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Center(
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height/38,
+                                              child: Text(
+                                                "5 lit",
+                                                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Center(
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height/32,
+                                                width: MediaQuery.of(context).size.width/2.34,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Image.asset("assets/p.png"),
+                                                      height: 20,
+                                                      width: 22,
+                                                    ),
+                                                    Text(stationaryProducts[index].basePrice.toString(),style: TextStyle(
+                                                        color: Color(0xFF515151),
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w700)
+                                                    ),
+                                                    Text(stationaryProducts[index].baseDiscountedPrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)
+                                                    ),
+                                                    Container(
+                                                      height: 25,
+                                                      width: 25,
+                                                      decoration: BoxDecoration(
+
+                                                          color: kPrimaryColor,shape: BoxShape.circle),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.shopping_cart_rounded,
+                                                          color: Colors.white,
+
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            //height: height! * 0.03,
+                                            height: MediaQuery.of(context).size.height/26,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen[100],
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(10.0),
+                                                    bottomRight: Radius.circular(10.0))
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+
+
+                                                  Container(
+                                                    child: Image.asset("assets/img_42.png"),
+                                                    height: 17,
+                                                    width: 15,
+                                                  ),
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 2),
+                                                    child: Text(
+                                                      "  Earning +৳18",
+                                                      style: TextStyle(fontSize: 12,
+                                                          color: Colors.green,
+                                                          fontWeight: FontWeight.w600),
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 35,),
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(height: 30,),
+                  //toys & gift
+                  Container(
+                    width: MediaQuery.of(context).size.width/1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+
+                        SizedBox(height: 25,),
+
+                        Container(
+                          width: MediaQuery.of(context).size.width/1.1,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Toys & Gift",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                              ),
+                              Text(
+                                "VIEW ALL",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 12, fontWeight: FontWeight.w400),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        sized20,
+
+                        Stack(
+                            children: [
+                              Image.asset("assets/posterone.png"),
+                              Positioned(
+                                bottom: 10,
+                                left: 10,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Shop for daily needs",
+                                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 15),
+                                      child: Container(
+                                        height: 15,
+                                        width: 15,
+                                        child: Image.asset("assets/v.png"),
+
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ]
+                        ),
+                        sized20,
+                        Container(
+                          height: height*0.22,
+                          width: width,
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:toyGiftData.length,
+                            itemBuilder: (_,index){
+                              return GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    valueOne=index.toString();
+                                    gettoyGiftAfterTap(toyGiftData[index].links.products);
+                                  });
+                                },
+                                child:valueOne.toString()!=index.toString()?Container(
+                                  child: Container(
+                                    height: height * 0.2,
+                                    width: width*0.35,
+                                    margin: EdgeInsets.symmetric(vertical: 5.0,horizontal: 5),
+                                    decoration: BoxDecoration(
+                                      //color: Colors.grey.withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(10.0),
+
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        //SizedBox(height: 15,),
+                                        Container(
+                                          height: height*0.15,
+                                          //width: width*0.30,
+                                          width: width*0.30,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xFFF0E6F2),
+                                              borderRadius: BorderRadius.circular(15.0)
+                                          ),
+                                          child: Center(
+                                            child:Padding(
+                                              padding: const EdgeInsets.fromLTRB(5,0,5,0),
+                                              child: Image.network(
+                                                imagePath+toyGiftData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        sized5,
+                                        Text(
+                                          toyGiftData[index].name,
+                                          style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ):Padding(
+                                  padding: const EdgeInsets.only(left: 5.0),
+                                  child: Container(
+                                    //height: height * 0.2,
+                                      height: height * 0.2,
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(10.0),
+
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            height: height*0.15,
+                                            width: width*0.30,
+                                            decoration: BoxDecoration(
+                                              //color: Colors.grey.withOpacity(0.2),
+                                                borderRadius: BorderRadius.circular(15.0)
+                                            ),
+                                            child: Center(
+                                              child:Image.network(imagePath+toyGiftData[index].mobileBanner,
+                                              ),
+                                            ),
+                                          ),
+                                          sized5,
+                                          Text(
+                                            toyGiftData[index].name,
+                                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      )
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        SizedBox(height: 5,),
+                        //sized20,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Grocery- Top Deals",
+                              style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
+                            ),
+                          ),
+                        ),
+                        sized20,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(15,0,8,0),
+                          child: Container(
+                            height: height*0.31,
+                            width: width,
+                            child: ListView.builder(
+                                shrinkWrap:true,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: toyGiftProducts.length,
+                                itemBuilder: (_,index){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFF1EDF2),
+                                          borderRadius: BorderRadius.circular(15.0)
+                                      ),
+                                      //height: MediaQuery.of(context).size.height/3.2,
+                                      width: MediaQuery.of(context).size.width/2.34,
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width/5,
+                                              height: MediaQuery.of(context).size.height/45,
+                                              margin: EdgeInsets.only(top: 10),
+                                              decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight: Radius.circular(4.0),
+                                                    bottomRight: Radius.circular(4.0)
+                                                ),
+
+                                              ),
+                                              //
+
+                                              child: Center(
+                                                child: Text(
+                                                  "15% OFF",
+                                                  style: TextStyle(color: Colors.white,
+                                                      fontSize: 12,
+                                                      fontWeight: FontWeight.w500),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            child: Image.network((imagePath)+toyGiftProducts[index].thumbnailImage),
+                                            height: MediaQuery.of(context).size.height/8,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                          ),
+
+
+                                          FittedBox(
+                                            child: Container(
+                                              ///height: height! * 0.08,
+                                              width: MediaQuery.of(context).size.width/2.36,
+                                              height: MediaQuery.of(context).size.height/20,
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(5,5,5,0),
+                                                child: Text(
+                                                  toyGiftProducts[index].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
+                                                  textAlign: TextAlign.center,
+
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Center(
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height/38,
+                                              child: Text(
+                                                "5 lit",
+                                                style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Center(
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height/32,
+                                                width: MediaQuery.of(context).size.width/2.34,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+
+                                                    Container(
+                                                      child: Image.asset("assets/p.png"),
+                                                      height: 20,
+                                                      width: 22,
+                                                    ),
+                                                    Text(toyGiftProducts[index].basePrice.toString(),style: TextStyle(
+                                                        color: Color(0xFF515151),
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w700)
+                                                    ),
+                                                    Text(toyGiftProducts[index].baseDiscountedPrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)
+                                                    ),
+                                                    Container(
+                                                      height: 25,
+                                                      width: 25,
+                                                      decoration: BoxDecoration(
+
+                                                          color: kPrimaryColor,shape: BoxShape.circle),
+                                                      child: Center(
+                                                        child: Icon(
+                                                          Icons.shopping_cart_rounded,
+                                                          color: Colors.white,
+
+                                                        ),
+                                                      ),
+                                                    )
+
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+
+                                          Container(
+                                            //height: height! * 0.03,
+                                            height: MediaQuery.of(context).size.height/26,
+                                            width: MediaQuery.of(context).size.width/2.34,
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen[100],
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(10.0),
+                                                    bottomRight: Radius.circular(10.0))
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+
+
+                                                  Container(
+                                                    child: Image.asset("assets/img_42.png"),
+                                                    height: 17,
+                                                    width: 15,
+                                                  ),
+
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 2),
+                                                    child: Text(
+                                                      "  Earning +৳18",
+                                                      style: TextStyle(fontSize: 12,
+                                                          color: Colors.green,
+                                                          fontWeight: FontWeight.w600),
+
+                                                    ),
+                                                  ),
+
+                                                ],
+                                              ),
+                                            ),
+                                          )
+
+
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 35,),
+                      ],
+                    ),
+                  ),
+
+
+
+                  SizedBox(height: 35,),
+
 
 
                   Container(
@@ -2907,9 +5338,11 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                     ),
                   ),
 
-                  SizedBox(
-                    height: 20,
-                  ),
+
+                  sized20,
+
+
+
 
                   Padding(
                     padding: const EdgeInsets.only(left: 15.0),
@@ -2921,6 +5354,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                       ),
                     ),
                   ),
+
 
                   SizedBox(
                     height: 20,
@@ -2979,6 +5413,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 ]),
               ))),
     );
+
   }
+
 }
-*/
+
