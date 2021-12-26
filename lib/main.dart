@@ -62,21 +62,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        //backgroundColor: Color(0xFFE3FEFF),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Container(
-              child: Image.asset(
-                "assets/img_174.png",
-                fit: BoxFit.cover,
-              ),
-              height:MediaQuery.of(context).size.height/1,
-              width: MediaQuery.of(context).size.width/1,
-          ),
-        )
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+          //backgroundColor: Color(0xFFE3FEFF),
+          body: SingleChildScrollView(
+            child: Center(
+              child: Container(
+                child: Image.asset(
+                  "assets/img_174.png",
+                  fit: BoxFit.cover,
+                ),
+                height:MediaQuery.of(context).size.height/1,
+                width: MediaQuery.of(context).size.width/1,
+            ),
+          )
 
-        )
+          )
+      ),
     );
   }
 }
