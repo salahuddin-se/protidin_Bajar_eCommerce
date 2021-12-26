@@ -19,6 +19,7 @@ import 'package:customer_ui/dataModel/groceryTopDeals.dart';
 import 'package:customer_ui/dataModel/grocery_data_model.dart';
 import 'package:customer_ui/dataModel/one_ninetynine_data_model.dart';
 import 'package:customer_ui/dataModel/topdeals.dart';
+import 'package:flutter/cupertino.dart';
 //import 'package:customer_ui/dataModel/category_data_model.dart';
 import 'package:flutter/material.dart';
 
@@ -1210,7 +1211,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
 
                   // shop by category
-                  Container(
+                  /*Container(
                     ///height: height,
                     width: MediaQuery.of(context).size.width/1,
                     decoration: BoxDecoration(
@@ -1457,7 +1458,8 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                               child: Center(
                                                 child: Container(
-                                                  height: MediaQuery.of(context).size.height/32,
+                                                  //height: MediaQuery.of(context).size.height/32,
+                                                  height: MediaQuery.of(context).size.height/31.5,
                                                   width: MediaQuery.of(context).size.width/2.34,
                                                   child: Row(
                                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1482,17 +1484,10 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                       ),
 
 
-                                                      /*Container(
-                                                        height: 25,
-                                                        width: 25,
-                                                        decoration: BoxDecoration(color: kPrimaryColor,shape: BoxShape.circle),
-                                                        child: Center(
-                                                          child: Icon(
-                                                            Icons.shopping_cart_rounded,
-                                                            color: Colors.white,
-                                                          ),
-                                                        ),
-                                                      )*/
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(left: 10),
+                                                      ),
+
 
                                                       Container(
                                                         height: 25,
@@ -1514,7 +1509,741 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             Container(
                                               //height: height! * 0.03,
                                               //height: MediaQuery.of(context).size.height/26,
-                                              height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/21,
+                                              width: MediaQuery.of(context).size.width/2.34,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.lightGreen[100],
+                                                  borderRadius: BorderRadius.only(
+                                                      bottomLeft: Radius.circular(10.0),
+                                                      bottomRight: Radius.circular(10.0))
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                                  children: [
+
+
+                                                    Container(
+                                                      child: Image.asset("assets/img_42.png"),
+                                                      height: 17,
+                                                      width: 15,
+                                                    ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(top: 2),
+                                                      child: Text(
+                                                        "  Earning +৳18",
+                                                        style: TextStyle(fontSize: 12,
+                                                            color: Colors.green,
+                                                            fontWeight: FontWeight.w600),
+
+                                                      ),
+                                                    ),
+
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+
+
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            /////////////////////////////////////////////////////////
+
+
+                            SizedBox(height: 35,),
+
+
+                          ]),
+                        ),
+
+                      ],
+                    ),
+                  ),*/
+
+
+                  //SizedBox(height: 30,),
+
+
+                  //shop by category
+                  Container(
+                    ///height: height,
+                    width: MediaQuery.of(context).size.width/1,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 25,),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          //height: 685,
+                          width: MediaQuery.of(context).size.width / 1.1,
+                          child: Column(children: [
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Shop By Category",
+                                style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight: FontWeight.w700,fontFamily: "CeraProBold"),
+                              ),
+                            ),
+
+                            SizedBox(height: 12,),
+
+
+
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+
+                                  //grocery
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                     child: Container(
+                                        width: width*0.35,
+                                        margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          borderRadius: BorderRadius.circular(5.0),
+                                        ),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            //sized10,
+                                            SizedBox(height: 15,),
+
+                                            Expanded(
+                                                //Text("OK"):
+                                                child: categoryData[4].mobileBanner.isEmpty?
+                                                //Text("OK"):
+                                                Image.asset("assets/app_logo.png"):
+                                                Image.network(
+                                                  imagePath+categoryData[4].mobileBanner,
+                                                ),
+                                            ),
+                                            ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                            sized10,
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                              child: Container(
+                                                //height: MediaQuery.of(context).size.height/20,
+                                                height: MediaQuery.of(context).size.height/14,
+                                                child: Text(
+                                                  categoryData[4].name,
+                                                  style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                  ),
+
+                                  //dairy & veberages
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[2].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[2].mobileBanner,
+                                            ),
+                                          ),
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[2].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  //mother & baby
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[6].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[6].mobileBanner,
+                                            ),
+                                          ),
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[6].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  //fruits & vegetable
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[3].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[3].mobileBanner,
+                                            ),
+                                          ),
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[3].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  //personal care
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[7].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[7].mobileBanner,
+                                            ),
+                                          ),
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[7].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  //bread biscuits & snacks
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[0].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[0].mobileBanner,
+                                            ),
+                                          ),
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[0].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  //household
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[5].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[5].mobileBanner,
+                                            ),
+                                          ),
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[5].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  //chocolates & sweets
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[1].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[1].mobileBanner,
+                                            ),
+                                          ),
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[1].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  //toys & gift
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[9].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[9].mobileBanner,
+                                            ),
+                                          ),
+
+                                          ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[9].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  //stationary
+                                  Container(
+                                    height: height*0.24,
+                                    width: width*0.4,
+                                    child: Container(
+
+                                      width: width*0.35,
+                                      margin: EdgeInsets.symmetric(horizontal: 5,vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(5.0),
+
+                                      ),
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          //sized10,
+                                          SizedBox(height: 15,),
+
+                                          Expanded(
+                                            //Text("OK"):
+                                            child: categoryData[8].mobileBanner.isEmpty?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png"):
+                                            Image.network(
+                                              imagePath+categoryData[8].mobileBanner,
+                                            ),
+                                          ),
+
+                                          //Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
+
+                                          sized10,
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(4,2,4,2,),
+                                            child: Container(
+                                              //height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/14,
+                                              child: Text(
+                                                categoryData[8].name,
+                                                style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize:16),textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                ],
+                              ),
+                            ),
+
+                            SizedBox(height: 20,),
+
+
+                            ////////////////////////////////////////////////////////
+                            Container(
+                              height: MediaQuery.of(context).size.height/3,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount:categoryProducts.length,
+                                itemBuilder: (_,index){
+                                  return GestureDetector(
+
+                                    onTap: (){
+                                      //log(categoryProducts[index].links.details);
+                                      /*setState(() {
+                                        value=index.toString();
+
+                                        getProductsAfterTap(categoryData[index].links.products);
+                                      });*/
+                                    },
+
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(right: 8.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFFF1EDF2),
+                                            borderRadius: BorderRadius.circular(15.0)
+                                        ),
+                                        //height: MediaQuery.of(context).size.height/3.2,
+                                        width: MediaQuery.of(context).size.width/2.34,
+                                        child: Column(
+                                          children: [
+                                            Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: Container(
+                                                width: MediaQuery.of(context).size.width/5,
+                                                height: MediaQuery.of(context).size.height/45,
+                                                margin: EdgeInsets.only(top: 10),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.green,
+                                                  borderRadius: BorderRadius.only(
+                                                      topRight: Radius.circular(4.0),
+                                                      bottomRight: Radius.circular(4.0)
+                                                  ),
+
+                                                ),
+                                                //
+
+                                                child: Center(
+                                                  child: Text(
+                                                    "15% OFF",
+                                                    style: TextStyle(color: Colors.white,
+                                                        fontSize: 12,
+                                                        fontWeight: FontWeight.w500),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+
+
+                                            Container(
+                                              child: Image.network(imagePath+categoryProducts[index].thumbnailImage),
+                                              height: MediaQuery.of(context).size.height/8,
+                                              width: MediaQuery.of(context).size.width/2.34,
+                                            ),
+
+
+                                            FittedBox(
+                                              child: Container(
+                                                ///height: height! * 0.08,
+                                                width: MediaQuery.of(context).size.width/2.36,
+                                                height: MediaQuery.of(context).size.height/16,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.fromLTRB(5,5,5,0),
+                                                  child: Text(
+                                                    categoryProducts[index].name,
+                                                    style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w600,fontFamily: "CeraProBold",),maxLines: 2,
+                                                    textAlign: TextAlign.center,
+
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+
+
+
+                                            Center(
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.height/38,
+                                                child: Text(
+                                                  "5 lit",
+                                                  style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                                ),
+                                              ),
+                                            ),
+
+
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                              child: Center(
+                                                child: Container(
+                                                  //height: MediaQuery.of(context).size.height/32,
+                                                  height: MediaQuery.of(context).size.height/31.5,
+                                                  width: MediaQuery.of(context).size.width/2.34,
+                                                  child: Row(
+                                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                    children: [
+
+                                                      Container(
+                                                        child: Image.asset("assets/p.png"),
+                                                        height: 20,
+                                                        width: 22,
+                                                      ),
+                                                      Text(categoryProducts[index].baseDiscountedPrice.toString(),style: TextStyle(
+                                                          color: Color(0xFF515151),
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w700)
+                                                      ),
+                                                      Text(categoryProducts[index].basePrice.toString(),
+                                                          style: TextStyle(
+                                                              color: Color(0xFFA299A8),
+                                                              fontSize: 12,
+                                                              fontWeight: FontWeight.w400,
+                                                              decoration: TextDecoration.lineThrough)
+                                                      ),
+
+
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(left: 10),
+                                                      ),
+
+
+                                                      Container(
+                                                        height: 25,
+                                                        width: 25,
+                                                        decoration: BoxDecoration(color: kPrimaryColor,shape: BoxShape.circle),
+                                                        child: Center(
+                                                          child:  Image.asset("assets/pi.png"),
+                                                        ),
+                                                      )
+
+
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+
+
+                                            Container(
+                                              //height: height! * 0.03,
+                                              //height: MediaQuery.of(context).size.height/26,
+                                              height: MediaQuery.of(context).size.height/21,
                                               width: MediaQuery.of(context).size.width/2.34,
                                               decoration: BoxDecoration(
                                                   color: Colors.lightGreen[100],
@@ -1582,7 +2311,8 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                     //margin: EdgeInsets.symmetric(horizontal: 5.0),
                     decoration: BoxDecoration(color: kPrimaryColor, borderRadius: BorderRadius.circular(10.0)),
                     child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+                      //padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Column(
                         children: [
                           Row(
@@ -1600,40 +2330,43 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                             ],
                           ),
                           sized10,
-                          Center(
-                            child: Stack(
-                              children: [
-                                Image.asset("assets/posterfive.png"),
-                                Positioned(
-                                  bottom: 10,
-                                  left: 10,
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "Everything under ৳99",
-                                        style: TextStyle(color: Colors.white, fontSize:16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10),
-                                        child: Container(
-                                          height: 15,
-                                          width: 15,
-                                          child: Image.asset("assets/v.png"),
+                          Container(
+                            //width: MediaQuery.of(context).size.width/1,
+                            child: Center(
+                              child: Stack(
+                                children: [
+                                  Image.asset("assets/posterfive.png"),
+                                  Positioned(
+                                    bottom: 10,
+                                    left: 10,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Everything under ৳99",
+                                          style: TextStyle(color: Colors.white, fontSize:16, fontWeight:FontWeight.w700,fontFamily: "CeraProBold"),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10),
+                                          child: Container(
+                                            height: 15,
+                                            width: 15,
+                                            child: Image.asset("assets/v.png"),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
                           ),
                           sized10,
 
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(15,0,8,0),
+                            padding: const EdgeInsets.fromLTRB(5,0,5,0),
                             child: Container(
                               //height: height*0.31,
-                              height: height*0.32,
+                              height: height*0.33,
                               width: width,
                               child: ListView.builder(
                                   shrinkWrap:true,
@@ -1690,7 +2423,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                               child: Container(
                                                 ///height: height! * 0.08,
                                                 width: MediaQuery.of(context).size.width/2.36,
-                                                height: MediaQuery.of(context).size.height/20,
+                                                height: MediaQuery.of(context).size.height/17,
                                                 child: Padding(
                                                   padding: const EdgeInsets.fromLTRB(5,5,5,0),
                                                   child: Text(
@@ -1730,18 +2463,23 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                         height: 20,
                                                         width: 22,
                                                       ),
-                                                      Text(oneTwoNinentyNineData[index].basePrice.toString(),style: TextStyle(
+                                                      Text(oneTwoNinentyNineData[index].disCountPrice.toString(),style: TextStyle(
                                                           color: Color(0xFF515151),
                                                           fontSize: 16,
                                                           fontWeight: FontWeight.w700)
                                                       ),
-                                                      Text(oneTwoNinentyNineData[index].disCountPrice.toString(),
+                                                      Text(oneTwoNinentyNineData[index].basePrice.toString(),
                                                           style: TextStyle(
                                                               color: Color(0xFFA299A8),
                                                               fontSize: 12,
                                                               fontWeight: FontWeight.w400,
                                                               decoration: TextDecoration.lineThrough)
                                                       ),
+
+                                                      Padding(
+                                                        padding: const EdgeInsets.only(left: 10),
+                                                      ),
+
                                                       Container(
                                                         height: 25,
                                                         width: 25,
@@ -1762,7 +2500,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                             Container(
                                               //height: height! * 0.03,
-                                              height: MediaQuery.of(context).size.height/20,
+                                              height: MediaQuery.of(context).size.height/21,
                                               width: MediaQuery.of(context).size.width/2.34,
                                               decoration: BoxDecoration(
                                                   color: Colors.lightGreen[100],
@@ -1809,6 +2547,8 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                               ),
                             ),
                           ),
+
+                          SizedBox(height: 20,),
 
                         ],
                       ),
@@ -1914,7 +2654,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                           ),
                                           child: Center(
                                             child:Padding(
-                                              padding: const EdgeInsets.all(10),
+                                              padding: const EdgeInsets.all(0),
                                               child:groceryData[index].mobileBanner.isEmpty?
 
                                               //Text("OK"):
@@ -1956,7 +2696,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(10),
+                                              padding: const EdgeInsets.all(0),
                                               child: Center(
                                                 child:groceryData[index].mobileBanner.isEmpty?
 
@@ -2073,7 +2813,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                groceryProducts[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -2095,18 +2835,23 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                       height: 20,
                                                       width: 22,
                                                     ),
-                                                    Text(groceryProducts[index].basePrice.toString(),style: TextStyle(
+                                                    Text(groceryProducts[index].baseDiscountedPrice.toString(),style: TextStyle(
                                                         color: Color(0xFF515151),
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w700)
                                                     ),
-                                                    Text(groceryProducts[index].baseDiscountedPrice.toString(),
+                                                    Text(groceryProducts[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
                                                             fontSize: 12,
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -2126,7 +2871,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -2262,7 +3007,8 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                     //height: height * 0.2,
                                       height: height * 0.2,
                                       width: width*0.35,
-                                      margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      //margin: EdgeInsets.symmetric(vertical: 5.0),
+                                      margin: EdgeInsets.symmetric(vertical: 0.0),
                                       decoration: BoxDecoration(
                                         //color: Colors.white,
                                         borderRadius: BorderRadius.circular(10.0),
@@ -2271,20 +3017,25 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                       child: Column(
                                         children: [
                                           Container(
+                                            //height: height*0.15,
+                                            //width: width*0.30,
+
                                             height: height*0.15,
                                             width: width*0.30,
+
                                             decoration: BoxDecoration(
                                                 color: Color(0xFFF0E6F2),
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Center(
                                               child:Padding(
-                                                padding: const EdgeInsets.all(10),
+                                                padding: const EdgeInsets.all(0),
                                                 child: fruitBeverageData[index].mobileBanner.isEmpty?
 
                                                 //Text("OK"):
                                                 Image.asset("assets/app_logo.png"):
-                                                Image.network(imagePath+fruitBeverageData[index].mobileBanner,
+                                                Image.network(
+                                                  imagePath+fruitBeverageData[index].mobileBanner,
                                                 ),
                                               ),
                                             ),
@@ -2320,7 +3071,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(10),
+                                              padding: const EdgeInsets.all(0),
                                               child: Center(
                                                 child:fruitBeverageData[index].mobileBanner.isEmpty?
 
@@ -2436,7 +3187,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                fruitBeverageDataAfterTap[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -2458,18 +3209,23 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                       height: 20,
                                                       width: 22,
                                                     ),
-                                                    Text(fruitBeverageDataAfterTap[index].basePrice.toString(),style: TextStyle(
+                                                    Text(fruitBeverageDataAfterTap[index].baseDiscountedPrice.toString(),style: TextStyle(
                                                         color: Color(0xFF515151),
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w700)
                                                     ),
-                                                    Text(fruitBeverageDataAfterTap[index].baseDiscountedPrice.toString(),
+                                                    Text(fruitBeverageDataAfterTap[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
                                                             fontSize: 12,
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -2490,7 +3246,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -2627,11 +3383,6 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                     ),
                                   ),
 
-                                  /*Icon(
-                          Icons.arrow_right,
-                          color: Colors.white,
-                          size: block * 6,
-                        )*/
                                 ],
                               ),
                             )
@@ -2680,7 +3431,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             ),
                                             child: Center(
                                               child:Padding(
-                                                padding: const EdgeInsets.all(10),
+                                                padding: const EdgeInsets.all(0),
                                                 child:babyMotherData[index].mobileBanner.isEmpty?
 
                                                 //Text("OK"):
@@ -2721,7 +3472,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                 borderRadius: BorderRadius.circular(15.0)
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(10),
+                                              padding: const EdgeInsets.all(0),
                                               child: Center(
                                                 child:babyMotherData[index].mobileBanner.isEmpty?
 
@@ -2838,7 +3589,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                babyMotherDataAfterTap[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -2860,18 +3611,23 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                       height: 20,
                                                       width: 22,
                                                     ),
-                                                    Text(babyMotherDataAfterTap[index].basePrice.toString(),style: TextStyle(
+                                                    Text(babyMotherDataAfterTap[index].baseDiscountedPrice.toString(),style: TextStyle(
                                                         color: Color(0xFF515151),
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w700)
                                                     ),
-                                                    Text(babyMotherDataAfterTap[index].baseDiscountedPrice.toString(),
+                                                    Text(babyMotherDataAfterTap[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
                                                             fontSize: 12,
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -2892,7 +3648,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -3205,7 +3961,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                fruitsVegAfterTap[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -3227,18 +3983,23 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                       height: 20,
                                                       width: 22,
                                                     ),
-                                                    Text(fruitsVegAfterTap[index].basePrice.toString(),style: TextStyle(
+                                                    Text(fruitsVegAfterTap[index].baseDiscountedPrice.toString(),style: TextStyle(
                                                         color: Color(0xFF515151),
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w700)
                                                     ),
-                                                    Text(fruitsVegAfterTap[index].baseDiscountedPrice.toString(),
+                                                    Text(fruitsVegAfterTap[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
                                                             fontSize: 12,
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -3259,7 +4020,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -3594,7 +4355,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                  personalCarteProducts[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -3616,18 +4377,23 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                       height: 20,
                                                       width: 22,
                                                     ),
-                                                    Text(personalCarteProducts[index].basePrice.toString(),style: TextStyle(
+                                                    Text(personalCarteProducts[index].baseDiscountedPrice.toString(),style: TextStyle(
                                                         color: Color(0xFF515151),
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w700)
                                                     ),
-                                                    Text(personalCarteProducts[index].baseDiscountedPrice.toString(),
+                                                    Text(personalCarteProducts[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
                                                             fontSize: 12,
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -3648,7 +4414,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -3962,7 +4728,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                breadBiscuitProducts[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -3984,18 +4750,23 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                       height: 20,
                                                       width: 22,
                                                     ),
-                                                    Text(breadBiscuitProducts[index].basePrice.toString(),style: TextStyle(
+                                                    Text(breadBiscuitProducts[index].baseDiscountedPrice.toString(),style: TextStyle(
                                                         color: Color(0xFF515151),
                                                         fontSize: 16,
                                                         fontWeight: FontWeight.w700)
                                                     ),
-                                                    Text(breadBiscuitProducts[index].baseDiscountedPrice.toString(),
+                                                    Text(breadBiscuitProducts[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
                                                             fontSize: 12,
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -4016,7 +4787,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -4349,7 +5120,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                householdProducts[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -4383,6 +5154,11 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -4403,7 +5179,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -4716,7 +5492,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                chocolateSweetsProducts[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -4750,6 +5526,11 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -4770,7 +5551,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -5110,7 +5891,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                toyGiftProducts[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -5144,6 +5925,11 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -5164,7 +5950,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
@@ -5475,7 +6261,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                             child: Container(
                                               height: MediaQuery.of(context).size.height/38,
                                               child: Text(
-                                                "5 lit",
+                                                stationaryProducts[index].unit,
                                                 style: TextStyle(color: Colors.grey.withOpacity(0.9)),
                                               ),
                                             ),
@@ -5509,6 +6295,11 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)
                                                     ),
+
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+
                                                     Container(
                                                       height: 25,
                                                       width: 25,
@@ -5529,7 +6320,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
                                           Container(
                                             //height: height! * 0.03,
-                                            height: MediaQuery.of(context).size.height/24,
+                                            height: MediaQuery.of(context).size.height/26,
                                             width: MediaQuery.of(context).size.width/2.34,
                                             decoration: BoxDecoration(
                                                 color: Colors.lightGreen[100],
