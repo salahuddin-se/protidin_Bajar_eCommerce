@@ -1,5 +1,5 @@
 import 'package:customer_ui/HomePage/offer/grocery.dart';
-import 'package:customer_ui/OthersPage/cartDetails1stPage.dart';
+import 'package:customer_ui/OthersPage/cart_details1st_page.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';

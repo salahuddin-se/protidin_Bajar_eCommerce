@@ -1,7 +1,4 @@
-
-
-
-/*import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
@@ -48,7 +45,40 @@ showAlertDialog(BuildContext context) {
   // Create AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("Simple Alert"),
-    content: Text("This is an alert message."),
+    content: Container(
+      height: 150,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text("city"),
+              Container(
+                height: 20,
+                width: 100,
+                color: Colors.grey,
+                child: Container(
+                    height:25,
+                    child: Image.asset("assets/d2.png")),
+              )
+            ],
+          ),
+          SizedBox(height: 20,),
+          Row(
+            children: [
+              Text("area"),
+              Container(
+                height: 20,
+                width: 100,
+                color: Colors.grey,
+                child: Container(
+                    height:25,
+                    child: Image.asset("assets/d2.png")),
+              )
+            ],
+          ),
+        ],
+      ),
+    ),
     actions: [
       okButton,
     ],
@@ -61,4 +91,4 @@ showAlertDialog(BuildContext context) {
       return alert;
     },
   );
-}*/
+}

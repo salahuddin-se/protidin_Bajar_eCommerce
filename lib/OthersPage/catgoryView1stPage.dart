@@ -2,7 +2,7 @@
 /*import 'package:customer_ui/HomePage/grocer_offer/grocery_details.dart';
 import 'package:flutter/material.dart';
 
-import 'cartDetails1stPage.dart';
+import 'cart_details1st_page.dart';
 import 'productSinglePage1.dart';
 
 //import 'Language.dart';

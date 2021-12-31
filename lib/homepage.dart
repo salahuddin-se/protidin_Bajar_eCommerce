@@ -7,7 +7,7 @@ import 'HomePage/drawer_class.dart';
 import 'HomePage/grocer_offer/grocery_offer_page.dart';
 import 'Home_screen/category_home_screen.dart';
 import 'Home_screen/profile_screen.dart';
-import 'OthersPage/cartDetails1stPage.dart';
+import 'OthersPage/cart_details1st_page.dart';
 import 'OthersPage/catgoryView1stPage.dart';
 import 'OthersPage/myOrders.dart';
 import 'OthersPage/myaccopunt.dart';
@@ -300,7 +300,7 @@ import 'package:flutter/material.dart';
 import 'HomePage/drawer_class.dart';
 import 'Home_screen/category_home_screen.dart';
 import 'Home_screen/profile_screen.dart';
-import 'OthersPage/cartDetails1stPage.dart';
+import 'OthersPage/cart_details1st_page.dart';
 
 class Homepage extends StatefulWidget {
   @override

@@ -105,7 +105,7 @@ class TabProductItemWidget extends StatelessWidget {
             children: [
               InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
+                   // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
                   },
                   child: Image.asset(image!)
               ),

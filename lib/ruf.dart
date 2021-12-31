@@ -1,7 +1,7 @@
 /*import 'package:customer_ui/HomePage/grocer_offer/grocery_details.dart';
 import 'package:customer_ui/HomePage/grocer_offer/grocery_offer_page.dart';
 import 'package:customer_ui/HomePage/offer/offer_page.dart';
-import 'package:customer_ui/OthersPage/All_offerPage.dart';
+import 'package:customer_ui/OthersPage/all_offerpage.dart';
 import 'package:customer_ui/OthersPage/myOrders.dart';
 import 'package:customer_ui/OthersPage/myaccopunt.dart';
 import 'package:customer_ui/OthersPage/requestProduct.dart';
@@ -694,7 +694,7 @@ class _MyHomePageState extends State<Ruf> {
                             width: width,
 
                             block: block,
-                            image: "assets/cadebry.png",
+                            image: "assets/.png",
                             productName: "Cadbery Chocolate Milk Candy",
                             productWeight: "20g",
                             productActualPrice: "৳120",
@@ -786,7 +786,7 @@ class _MyHomePageState extends State<Ruf> {
                                   width: width,
 
                                   block: block,
-                                  image: "assets/cadebry.png",
+                                  image: "assets/cadeb.png",
                                   productName: "Cadbery Chocolate Milk Candy",
                                   productWeight: "20g",
                                   productActualPrice: "৳120",
@@ -942,7 +942,7 @@ class _MyHomePageState extends State<Ruf> {
                               width: width,
 
                               block: block,
-                              image: "assets/cadebry.png",
+                              image: "assets/cadeby.png",
                               productName: "Cadbery Chocolate Milk Candy",
                               productWeight: "20g",
                               productActualPrice: "৳120",
@@ -1116,7 +1116,7 @@ class _MyHomePageState extends State<Ruf> {
                             width: width,
 
                             block: block,
-                            image: "assets/cadebry.png",
+                            image: "assets/cadbry.png",
                             productName: "Cadbery Chocolate Milk Candy",
                             productWeight: "20g",
                             productActualPrice: "৳120",
@@ -1296,7 +1296,7 @@ class _MyHomePageState extends State<Ruf> {
                               width: width,
 
                               block: block,
-                              image: "assets/cadebry.png",
+                              image: "assets/cadbry.png",
                               productName: "Cadbery Chocolate Milk Candy",
                               productWeight: "20g",
                               productActualPrice: "৳120",
@@ -1467,7 +1467,7 @@ class _MyHomePageState extends State<Ruf> {
                               width: width,
 
                               block: block,
-                              image: "assets/cadebry.png",
+                              image: "assets/cadbry.png",
                               productName: "Cadbery Chocolate Milk Candy",
                               productWeight: "20g",
                               productActualPrice: "৳120",

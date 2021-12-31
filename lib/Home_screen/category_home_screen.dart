@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:customer_ui/HomePage/grocer_offer/grocery_offer_page.dart';
 import 'package:customer_ui/HomePage/offer/offer_page.dart';
-import 'package:customer_ui/OthersPage/All_offerPage.dart';
+import 'package:customer_ui/OthersPage/all_offerpage.dart';
 import 'package:customer_ui/OthersPage/myOrders.dart';
 import 'package:customer_ui/OthersPage/myaccopunt.dart';
 import 'package:customer_ui/OthersPage/requestProduct.dart';
@@ -1242,7 +1242,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                     height: height,
                                     width: width,
                                     block: block,
-                                    image: "assets/cadebry.png",
+                                    image: "assets/cadery.png",
                                     productName: "Cadbery Chocolate \nMilk Candy",
                                     productWeight: "20g",
                                     productActualPrice: "৳120",

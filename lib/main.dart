@@ -1,11 +1,14 @@
-import 'dart:async';
+// @dart=2.9
 
+import 'dart:async';
 import 'package:customer_ui/ruf_home_screen.dart';
+import 'package:customer_ui/welcomeScreen/sigininform.dart';
 import 'package:customer_ui/welcomeScreen/welcome_page.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'HomePage/grocer_offer/grocery_details.dart';
 import 'HomePage/grocer_offer/grocery_offer_page.dart';
 import 'HomePage/offer/offer_page.dart';
 import 'Home_screen/category_home_screen.dart';
@@ -13,25 +16,26 @@ import 'Home_screen/category_home_screen_main.dart';
 import 'column_test.dart';
 import 'ruf.dart';
 import 'test_3.dart';
+import 'welcomeScreen/alert_dialog.dart';
 
 
-/*void main() {
+void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: MyHomePage(),
+    home: SignInPage(),
   ));
-}*/
+}
 
-void main() => runApp(
+/*void main() => runApp(
   DevicePreview(
-    enabled: !kReleaseMode,
-    builder: (context) => MaterialApp(
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
-      home: CategoryHomeScreenRuf(),
+    enabled: !kReleaseMode MaterialApp(
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+        home: CategoryHomeScreenRuf(),
+      ), builder: (BuildContext context) {  },
     ), // Wrap your app
   ),
-);
+);*/
 
 /*class MyApp extends StatelessWidget {
   @override
@@ -62,9 +66,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
+    return Scaffold(
           //backgroundColor: Color(0xFFE3FEFF),
           body: SingleChildScrollView(
             child: Center(
@@ -79,7 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
           )
 
           )
-      ),
-    );
+      );
+
   }
 }

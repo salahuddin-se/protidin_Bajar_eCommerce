@@ -35,10 +35,10 @@ class Data {
   });
   late final int id;
   late final String name;
-  late final String largeBanner;
-  late final String mobileBanner;
-  late final String icon;
-  late final int numberOfChildren;
+  late final String? largeBanner;
+  late final String? mobileBanner;
+  late final String? icon;
+  late final int? numberOfChildren;
   late final Links links;
 
   Data.fromJson(Map<String, dynamic> json){
@@ -69,8 +69,8 @@ class Links {
     required this.products,
     required this.subCategories,
   });
-  late final String products;
-  late final String subCategories;
+  late final String? products;
+  late final String? subCategories;
 
   Links.fromJson(Map<String, dynamic> json){
     products = json['products'];

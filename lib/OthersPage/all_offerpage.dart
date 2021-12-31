@@ -5,6 +5,7 @@ import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
 
 
+
 class AllOfferPage extends StatefulWidget {
   @override
   _AllOfferPageState createState() => _AllOfferPageState();
