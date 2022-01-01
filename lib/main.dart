@@ -1,5 +1,4 @@
 // @dart=2.9
-
 import 'dart:async';
 import 'package:customer_ui/ruf_home_screen.dart';
 import 'package:customer_ui/welcomeScreen/sigininform.dart';
@@ -22,7 +21,7 @@ import 'welcomeScreen/alert_dialog.dart';
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: SignInPage(),
+    home: CategoryHomeScreenRuf(),
   ));
 }
 

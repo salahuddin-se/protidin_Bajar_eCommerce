@@ -35,6 +35,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   flutter_dropdown: ^1.0.0+hotfix.1
+  auto_size_text: ^3.0.0-nullsafety.0
+  carousel_slider: ^2.3.1
+  carousel_pro:
   json_annotation:
   device_preview:
   dio:
