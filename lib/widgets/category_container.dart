@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:customer_ui/HomePage/grocer_offer/grocery_details.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
@@ -11,13 +12,12 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
-
 class CategoryContainer extends StatefulWidget {
-  const CategoryContainer({Key? key, required this.categoryName, required this.nameNo, required this.large_Banner}) : super(key: key);
+  const CategoryContainer({Key? key, required this.categoryName, required this.nameNo, required this.large_Banner})
+      : super(key: key);
   final String categoryName;
   final String nameNo;
   final String large_Banner;
-
 
   @override
   _CategoryContainerState createState() => _CategoryContainerState();
@@ -27,7 +27,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
   var categoryData = [];
   var valueOne;
   var categoryItemData = " ";
-  var relatedProductsLink=" ";
+  var relatedProductsLink = " ";
   var subCategoryProducts = [];
 
   Future<void> getSubCategoryProductsAfterTap(link2) async {
@@ -40,7 +40,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
 
     if (groceryItemDataMap["success"] == true) {
       //log("category data after tap $biscuitSweetsDataMap");
-
 
       var groceryData = BiacuitSweets.fromJson(groceryItemDataMap);
       subCategoryProducts = groceryData.data;
@@ -72,7 +71,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
       categoryData = categoryDataModel.data;
       categoryItemData = categoryDataModel.data[0].name;
       //categoryItemData = categoryDataModel.data[0].large_Banner;
-      relatedProductsLink= categoryData[0].links.products;
+      relatedProductsLink = categoryData[0].links.products;
 
       await getSubCategoryProductsAfterTap(categoryDataModel.data[0].links.products);
       setState(() {});
@@ -84,23 +83,18 @@ class _CategoryContainerState extends State<CategoryContainer> {
     // log("after decode $dataMap");
   }
 
-  Future<void> addToCart(id,userId,quantity)async{
+  Future<void> addToCart(id, userId, quantity) async {
     var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/add"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $authToken'
-        },
-        body: jsonEncode(<String, dynamic>{"id": id,"variant":"",
-          "user_id":userId,"quantity":quantity}));
-
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $authToken'},
+        body: jsonEncode(<String, dynamic>{"id": id, "variant": "", "user_id": userId, "quantity": quantity}));
 
     log("Response ${res.body}");
     log("Response code jhjk ${res.statusCode}");
 
-    if(res.statusCode==200 || res.statusCode==201){
-      showToast("Cart Added Successfully",context:context);
-    }else{
-      showToast("Something went wrong",context:context);
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      showToast("Cart Added Successfully", context: context);
+    } else {
+      showToast("Something went wrong", context: context);
     }
   }
 
@@ -110,6 +104,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
     super.initState();
     getCategoryData(name: widget.nameNo);
   }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -132,10 +127,11 @@ class _CategoryContainerState extends State<CategoryContainer> {
             width: MediaQuery.of(context).size.width / 1.1,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children:  [
+              children: [
                 Text(
                   widget.categoryName,
-                  style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight: FontWeight.w700, fontFamily: "CeraProBold"),
+                  style:
+                      TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight: FontWeight.w700, fontFamily: "CeraProBold"),
                 ),
                 Text(
                   "VIEW ALL",
@@ -161,8 +157,12 @@ class _CategoryContainerState extends State<CategoryContainer> {
           */
 
           Container(
-              height:50,
-              child: Image.asset("assets/app_logo.png",fit: BoxFit.cover,),
+            height: 50,
+            width: double.infinity,
+            child: Image.network(
+              imagePath + widget.large_Banner,
+              fit: BoxFit.cover,
+            ),
           ),
 
           sized20,
@@ -179,93 +179,93 @@ class _CategoryContainerState extends State<CategoryContainer> {
                     setState(() {
                       valueOne = index.toString();
                       categoryItemData = categoryData[index].name;
-                      relatedProductsLink= categoryData[index].links.products;
+                      relatedProductsLink = categoryData[index].links.products;
                       getSubCategoryProductsAfterTap(categoryData[index].links.products);
                     });
                   },
                   child: valueOne.toString() != index.toString()
                       ? Container(
-                    child: Container(
-                      height: height * 0.2,
-                      width: width * 0.35,
-                      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
-                      decoration: BoxDecoration(
-                        //color: Colors.grey.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Column(
-                        children: [
-                          //SizedBox(height: 15,),
-                          Container(
-                            height: height * 0.15,
-                            //width: width*0.30,
-                            width: width * 0.30,
-                            decoration: BoxDecoration(color: Color(0xFFF0E6F2), borderRadius: BorderRadius.circular(15.0)),
-                            child: Center(
-                              child: Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: categoryData[index].mobileBanner.isEmpty
-                                    ?
-
-                                //Text("OK"):
-                                Image.asset("assets/app_logo.png")
-                                    : Image.network(
-                                  imagePath + categoryData[index].mobileBanner,
-                                ),
-                              ),
+                          child: Container(
+                            height: height * 0.2,
+                            width: width * 0.35,
+                            margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
+                            decoration: BoxDecoration(
+                              //color: Colors.grey.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                          ),
-                          sized5,
-                          Text(
-                            categoryData[index].name,
-                            style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                      : Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: Container(
-                      //height: height * 0.2,
-                        height: height * 0.2,
-                        width: width * 0.35,
-                        margin: EdgeInsets.symmetric(vertical: 5.0),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: height * 0.15,
-                              width: width * 0.30,
-                              decoration: BoxDecoration(
-                                //color: Colors.grey.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(15.0)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(0),
-                                child: Center(
-                                  child: categoryData[index].mobileBanner.isEmpty
-                                      ?
-                                  //Text("OK"):
-                                  Image.asset("assets/app_logo.png")
-                                      : Image.network(
-                                    imagePath + categoryData[index].mobileBanner,
+                            child: Column(
+                              children: [
+                                //SizedBox(height: 15,),
+                                Container(
+                                  height: height * 0.15,
+                                  //width: width*0.30,
+                                  width: width * 0.30,
+                                  decoration: BoxDecoration(color: Color(0xFFF0E6F2), borderRadius: BorderRadius.circular(15.0)),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(0),
+                                      child: categoryData[index].mobileBanner.isEmpty
+                                          ?
+
+                                          //Text("OK"):
+                                          Image.asset("assets/app_logo.png")
+                                          : Image.network(
+                                              imagePath + categoryData[index].mobileBanner,
+                                            ),
+                                    ),
                                   ),
                                 ),
+                                sized5,
+                                Text(
+                                  categoryData[index].name,
+                                  style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: Container(
+                              //height: height * 0.2,
+                              height: height * 0.2,
+                              width: width * 0.35,
+                              margin: EdgeInsets.symmetric(vertical: 5.0),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10.0),
                               ),
-                            ),
-                            sized5,
-                            Text(
-                              categoryData[index].name,
-                              style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        )),
-                  ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: height * 0.15,
+                                    width: width * 0.30,
+                                    decoration: BoxDecoration(
+                                        //color: Colors.grey.withOpacity(0.2),
+                                        borderRadius: BorderRadius.circular(15.0)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(0),
+                                      child: Center(
+                                        child: categoryData[index].mobileBanner.isEmpty
+                                            ?
+                                            //Text("OK"):
+                                            Image.asset("assets/app_logo.png")
+                                            : Image.network(
+                                                imagePath + categoryData[index].mobileBanner,
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+                                  sized5,
+                                  Text(
+                                    categoryData[index].name,
+                                    style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              )),
+                        ),
                 );
               },
             ),
@@ -303,7 +303,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
                         //height: MediaQuery.of(context).size.height/3.2,width: MediaQuery.of(context).size.width / 2.34,
                         child: Column(
                           children: [
-
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Container(
@@ -313,7 +312,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                 decoration: BoxDecoration(
                                   color: Colors.green,
                                   borderRadius:
-                                  BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
+                                      BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
                                 ),
                                 //
 
@@ -333,11 +332,9 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => GroceryDetails(
-                                          detailsLink: subCategoryProducts[index].links.details,
-                                          relatedProductLink: relatedProductsLink,
-                                        )
-                                    )
-                                );
+                                              detailsLink: subCategoryProducts[index].links.details,
+                                              relatedProductLink: relatedProductsLink,
+                                            )));
                               },
                               child: Container(
                                 child: Image.network(imagePath + subCategoryProducts[index].thumbnailImage),
@@ -345,6 +342,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                 width: MediaQuery.of(context).size.width / 2.34,
                               ),
                             ),
+
                             ///
 
                             FittedBox(
@@ -405,7 +403,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                       ),
                                       InkWell(
                                         onTap: () {
-                                         addToCart(subCategoryProducts[index].id, 61, 1);
+                                          addToCart(subCategoryProducts[index].id, 61, 1);
                                           //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
                                         },
                                         child: Container(
@@ -429,7 +427,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                               decoration: BoxDecoration(
                                   color: Colors.lightGreen[100],
                                   borderRadius:
-                                  BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
+                                      BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
                                 child: Row(
@@ -452,7 +450,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                 ),
                               ),
                             )
-
                           ],
                         ),
                       ),
@@ -468,15 +465,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
     );
   }
 }
-
-
-
-
-
-
-
-
-
 
 /*
 import 'dart:convert';
@@ -959,9 +947,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
 }
 
 */
-
-
-
 
 /*
 import 'dart:convert';

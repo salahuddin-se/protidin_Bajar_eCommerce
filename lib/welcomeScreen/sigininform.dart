@@ -29,7 +29,7 @@ class _MyHomePageState extends State<SignInPage> {
   Future<void> userSignIn(email, password) async {
     var jsonBody =
     (<String, dynamic>{"email": email,"password": password});
-    var res = await http.post(Uri.parse(userSignupAPI),
+    var res = await http.post(Uri.parse(userSignInAPI),
         headers: <String, String>{'Accept': 'application/json; charset=UTF-8'}, body: jsonBody);
     log("Response code ${res.statusCode}");
 

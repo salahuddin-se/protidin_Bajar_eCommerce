@@ -37,7 +37,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
   var Cart;
 
 
-  Future<dynamic> buildShowDialog(BuildContext context, String areaName) {
+  Future<dynamic> buildShowDialog(BuildContext context, List<String> areaName,List<String> cityName) {
     Widget okButton = FlatButton(
       child: Text("OK"),
       onPressed: () {
@@ -81,9 +81,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: DropDown(
-                                items: [
-                                  selectDhaka,
-                                ],
+                                items:cityName,
                                 hint: Text(
                                   "",
                                 ),
@@ -128,13 +126,13 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: DropDown(
-                              items: cityData,
+                              items: areaName,
                               hint: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
                                     color: Colors.teal,
                                     child: Text(
-                                      cityData[0],
+                                      " ",
                                     )),
                               ),
                               icon: Padding(
@@ -222,7 +220,40 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
   List<String> cityData = [];
   var selectDhaka = " ";
-  Future<void> getCityName() async {
+
+  List<String> areaName=[];
+  List<String> cityName=[];
+
+  Future<void> getCityName()async{
+    areaName.clear();
+    cityName.clear();
+
+    var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/cities"),
+        headers: <String, String>{
+          'Accept': 'application/json',
+
+        });
+
+    log(response.body);
+
+    var dataMap=jsonDecode(response.body);
+
+    var areaModel=CityModel.fromJson(dataMap);
+    for(var element in areaModel.data){
+      areaName.add(element.area);
+      cityName.add(element.name);
+    }
+    buildShowDialog(context, areaName,cityName);
+    setState(() {
+
+    });
+    log("area2 name $areaName");
+    log("city2 name $cityName");
+
+
+  }
+
+ /* Future<void> getCityName() async {
     String productURl = "https://test.protidin.com.bd/api/v2/cities";
 
     final response = await get(Uri.parse(productURl), headers: {"Accept": "application/json"});
@@ -249,7 +280,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
     } else {
       log("data invalid");
     }
-  }
+  }*/
 
 
   var relatedProductsLink = " ";
@@ -265,6 +296,9 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
 
   var categoryData = [];
   var categoryDataItem = " ";
+  var groceryLargeBanner="";
+  var chocolateLargeBanner="";
+  var breadLargeBanner="";
   Future<void> getCategory() async {
     log("comes");
     String productURl = "https://test.protidin.com.bd/api/v2/categories/home";
@@ -280,6 +314,16 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
       var categoryDataModel = CategoryDataModel.fromJson(dataMap);
       categoryData = categoryDataModel.data;
       categoryDataItem = categoryDataModel.data[0].name;
+      for(var ele in categoryDataModel.data){
+        if(ele.name=="Grocery"){
+          groceryLargeBanner = ele.largeBanner!;
+          log("Banner Image $groceryLargeBanner");
+        }else if(ele.name=="Chocolate & Sweets"){
+          chocolateLargeBanner=ele.largeBanner!;
+        }else if(ele.name=="Bread Biscuit & Snacks"){
+          breadLargeBanner=ele.largeBanner!;
+        }
+      }
       await getProductsAfterTap(categoryDataModel.data[0].links.products);
       setState(() {});
       log("data length ${categoryData.length}");
@@ -947,17 +991,14 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
                 child: Container(
 
                   decoration: BoxDecoration(
-                    //color: Color(0xFFE5E5E5),
+                    color: Colors.grey,
                     borderRadius: BorderRadius.circular(15),
                   ),
                     width: MediaQuery.of(context).size.width/1.1,
                     //height: MediaQuery.of(context).size.height/3.5,
-                    height: MediaQuery.of(context).size.height/3.6,
+                   // height: MediaQuery.of(context).size.height/3.6,
                     child: Carousel(
-
-
                         images: [
-
                           Image.asset("assets/p1.jpg"),
                           Image.asset("assets/p2.jpg"),
                           Image.asset("assets/p3.jpg"),
@@ -1658,7 +1699,8 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
               SizedBox(
                 height: 30,
               ),
-              CategoryContainer(categoryName: "Grocery", nameNo: '4',large_Banner: "uploads/all/FyGBmxMX9Guyblt5DFcN73oAOjylaUo7oG0envvF.png"),
+              CategoryContainer(categoryName: "Grocery",
+                  nameNo: '4',large_Banner: groceryLargeBanner),
 
               SizedBox(
                 height: 30,
@@ -1734,7 +1776,7 @@ class _MyHomePageState extends State<CategoryHomeScreenRuf> {
               SizedBox(
                 height: 30,
               ),
-              CategoryContainer(categoryName: "Bread Biscuit & Snacks", nameNo: '11',large_Banner: ""),
+              CategoryContainer(categoryName: "Bread Biscuit & Snacks", nameNo: '11',large_Banner: breadLargeBanner),
 
               SizedBox(
                 height: 30,
