@@ -1,4 +1,4 @@
-/*import 'package:customer_ui/HomePage/grocer_offer/grocery_details.dart';
+/*import 'package:customer_ui/HomePage/grocer_offer/product_details.dart';
 import 'package:customer_ui/HomePage/grocer_offer/grocery_offer_page.dart';
 import 'package:customer_ui/HomePage/offer/offer_page.dart';
 import 'package:customer_ui/OthersPage/all_offerpage.dart';

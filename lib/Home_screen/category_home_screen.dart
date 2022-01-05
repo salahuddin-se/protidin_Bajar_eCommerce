@@ -1,4 +1,4 @@
-import 'dart:convert';
+/*import 'dart:convert';
 import 'dart:developer';
 import 'package:customer_ui/HomePage/grocer_offer/grocery_offer_page.dart';
 import 'package:customer_ui/HomePage/offer/offer_page.dart';
@@ -80,7 +80,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   }
 
-  List<BuiscitData> categoryProducts=[];
+  List<BiacuitSweets> categoryProducts=[];
   Future<void> getProductsAfterTap(link) async {
     log("calling 2");
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
@@ -2863,4 +2863,4 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   }
 
 }
-
+*/

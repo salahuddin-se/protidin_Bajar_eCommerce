@@ -49,9 +49,11 @@ class _MyHomePageState extends State<SignInPage> {
     log("Response code ${res.statusCode}");
 
     var dataMap = jsonDecode(res.body);
+    print(jsonDecode(res.body));
 
     setState(() {});
     //log("demo length "+demo.length.toString());
+
   }
 
   @override
@@ -83,8 +85,7 @@ class _MyHomePageState extends State<SignInPage> {
               ),
               SizedBox(
                 height: 100,
-              ),
-              Text(
+              ), Text(
                 "Sign In to Your Account",
                 style: TextStyle(color: kBlackColor, fontSize: block * 5.0, fontWeight: FontWeight.w500),
               ),

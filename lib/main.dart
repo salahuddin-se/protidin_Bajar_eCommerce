@@ -7,7 +7,8 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'HomePage/grocer_offer/grocery_details.dart';
+import 'HomePage/final_home_screen.dart';
+import 'HomePage/grocer_offer/product_details.dart';
 import 'HomePage/grocer_offer/grocery_offer_page.dart';
 import 'HomePage/offer/offer_page.dart';
 import 'Home_screen/category_home_screen.dart';
@@ -21,7 +22,7 @@ import 'welcomeScreen/alert_dialog.dart';
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: CategoryHomeScreenRuf(),
+    home: CategoryHomeScreenRuf (),
   ));
 }
 

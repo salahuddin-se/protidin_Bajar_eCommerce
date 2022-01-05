@@ -25,11 +25,11 @@ class _MyHomePageState extends State<SignUpPage> {
   Future<void> userSignUp(name, emailOrPhone, password) async {
     var jsonBody =
         (<String, dynamic>{"name": name, "email_or_phone": emailOrPhone, "password": password, "password_confirmation": password});
-    //debugPrint(jsonBody.toString());
+    debugPrint(jsonBody.toString());
 
     var res = await http.post(Uri.parse(userSignupAPI),
-        headers: <String, String>{'Accept': 'application/json; charset=UTF-8'}, body: jsonBody);
-    // log("Response ${res.body}");
+        headers: <String, String>{'Accept': 'application/json'}, body: jsonBody);
+    log("Response ${res.body}");
     log("Response code ${res.statusCode}");
 
     var dataMap = jsonDecode(res.body);

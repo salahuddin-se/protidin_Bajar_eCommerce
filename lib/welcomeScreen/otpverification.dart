@@ -61,9 +61,9 @@ class _MyHomePageState extends State<OTPPage> {
               ),
 
               child:InkWell(
-                onTap: () {
+                /*onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
-                },
+                },*/
                 child: Container(
                   child: Center(
                     child: Text(

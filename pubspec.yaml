@@ -37,6 +37,7 @@ dependencies:
   flutter_dropdown: ^1.0.0+hotfix.1
   auto_size_text: ^3.0.0-nullsafety.0
   carousel_slider: ^2.3.1
+  cached_network_image: ^2.0.0
   carousel_pro:
   json_annotation:
   device_preview:

@@ -1,4 +1,4 @@
-import 'package:customer_ui/HomePage/grocer_offer/grocery_details.dart';
+import 'package:customer_ui/HomePage/grocer_offer/product_details.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';

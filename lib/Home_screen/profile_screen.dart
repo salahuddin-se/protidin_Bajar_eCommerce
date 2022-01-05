@@ -38,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:customer_ui/HomePage/grocer_offer/grocery_details.dart';
+import 'package:customer_ui/HomePage/grocer_offer/product_details.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:flutter/material.dart';
@@ -1770,7 +1770,7 @@ class _CartDetailsState extends State<CartDetails> {
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:customer_ui/HomePage/grocer_offer/grocery_details.dart';
+import 'package:customer_ui/HomePage/grocer_offer/product_details.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:flutter/material.dart';
