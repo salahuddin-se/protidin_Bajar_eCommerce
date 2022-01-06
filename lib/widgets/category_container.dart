@@ -178,6 +178,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
               ),*/
 
               sized20,
+
               Container(
                 height: height * 0.22,
                 width: width,

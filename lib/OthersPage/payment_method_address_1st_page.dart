@@ -1,5 +1,6 @@
 
 import 'package:customer_ui/components/styles.dart';
+import 'package:customer_ui/components/utils.dart';
 import 'package:flutter/material.dart';
 
 import 'paymentSuccessfull.dart';
@@ -56,7 +57,6 @@ class _Payment_Address1stPageState extends State<Payment_Address1stPage> {
                 children: [
 
                   SizedBox(height: 20,),
-
 
                   //const SizedBox(height: 20,),
 
@@ -135,6 +135,9 @@ class _Payment_Address1stPageState extends State<Payment_Address1stPage> {
 
 
                   SizedBox(height: 10,),
+                  ElevatedButton(onPressed: () {
+                    bottomSheet(context: context, userId: userId.toString(), address: '', country: '', city: '', postalCode: '', phone: '');
+                  }, child: Text('Add address',),),
 
                   Align(
                       alignment: Alignment.center,
@@ -823,6 +826,181 @@ class _Payment_Address1stPageState extends State<Payment_Address1stPage> {
 
 }
 
+
+
+bottomSheet({
+  required BuildContext context,
+  required String userId,
+  String? subDocId,
+  required String address,
+  required String country,
+  required String city,
+  required String postalCode,
+  required String phone,
+}) {
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    builder: (context) {
+      String newAddress = address;
+      String newCountry = country;
+      String newCity = city;
+      String newPostalCode = postalCode;
+      String newPhone = phone;
+
+      return SingleChildScrollView(
+        child: Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 20,
+              bottom: 10,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    subDocId == null ? 'ADD ADDRESS' : 'EDIT ADDRESS',
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  initialValue: address,
+                  autofocus: true,
+                  onChanged: (value) {
+                    newAddress = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Address',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  initialValue: country,
+                  autofocus: true,
+                  onChanged: (value) {
+                    newCountry = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Country',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  initialValue:city,
+                  autofocus: true,
+                  onChanged: (value) {
+                    newCity = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'City',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  initialValue: postalCode,
+                  autofocus: true,
+                  onChanged: (value) {
+                    newPostalCode = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Postal code',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.phone,
+                  initialValue: phone,
+                  autofocus: true,
+                  onChanged: (value) {
+                    newPhone = value;
+                  },
+                  decoration: const InputDecoration(
+                    labelText: 'Phone',
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text(
+                          'Cancel',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          if (address != newAddress ||
+                              country != newCountry ||
+                              city != newCity ||
+                              postalCode != newPostalCode ||
+                              phone != newPhone) {
+
+
+
+                          } else {
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: const Text(
+                          'Save',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
 
 
 

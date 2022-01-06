@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:customer_ui/ruf_home_screen.dart';
 import 'package:customer_ui/welcomeScreen/sigininform.dart';
+import 'package:customer_ui/welcomeScreen/signupform.dart';
 import 'package:customer_ui/welcomeScreen/welcome_page.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +14,7 @@ import 'HomePage/grocer_offer/grocery_offer_page.dart';
 import 'HomePage/offer/offer_page.dart';
 import 'Home_screen/category_home_screen.dart';
 import 'Home_screen/category_home_screen_main.dart';
+import 'OthersPage/cart_details1st_page.dart';
 import 'column_test.dart';
 import 'ruf.dart';
 import 'test_3.dart';
@@ -22,7 +24,7 @@ import 'welcomeScreen/alert_dialog.dart';
 void main() {
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: CategoryHomeScreenRuf (),
+    home:CategoryHomeScreenRuf(),
   ));
 }
 

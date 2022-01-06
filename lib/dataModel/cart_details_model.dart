@@ -51,7 +51,7 @@ class CartItems {
   late final String currencySymbol;
   late final int tax;
   late final int shippingCost;
-  late final int quantity;
+  late  int quantity;
   late final int lowerLimit;
   late final int upperLimit;
 

@@ -43,7 +43,7 @@ import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:flutter/material.dart';
 
-import 'paymentMethod&_address_1stPage.dart';
+import 'payment_method_address_1st_page.dart';
 import 'productSinglePage1.dart';
 import 'package:http/http.dart' as http;
 //import 'Language.dart';
@@ -1775,7 +1775,7 @@ import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:flutter/material.dart';
 
-import 'paymentMethod&_address_1stPage.dart';
+import 'payment_method_address_1st_page.dart';
 import 'productSinglePage1.dart';
 import 'package:http/http.dart' as http;
 //import 'Language.dart';
