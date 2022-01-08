@@ -1,7 +1,7 @@
-//import 'package:customer_ui/paymentMethod&_address/Payment_Screen.dart';
+//import 'package:customer_ui/paymentMethod&_address/payment_screen.dart';
 import 'package:flutter/material.dart';
 
-import 'Payment_Screen.dart';
+import '../all_screen/payment_screen.dart';
 
 //import 'Language.dart';
 

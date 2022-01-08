@@ -14,7 +14,7 @@ class CartSummaryModel {
   late final String shippingCost;
   late final String discount;
   late final String grandTotal;
-  late final int grandTotalValue;
+  late final dynamic grandTotalValue;
   late final String couponCode;
   late final bool couponApplied;
 

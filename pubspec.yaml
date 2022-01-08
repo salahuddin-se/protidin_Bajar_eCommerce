@@ -38,13 +38,13 @@ dependencies:
   auto_size_text: ^3.0.0-nullsafety.0
   carousel_slider: ^2.3.1
   cached_network_image: ^2.0.0
-  carousel_pro:
   json_annotation:
   device_preview:
   dio:
   http:
   flutter_styled_toast: ^2.0.0
-
+  get: ^4.6.1
+  get_storage: ^2.0.3
 
 
 dev_dependencies:

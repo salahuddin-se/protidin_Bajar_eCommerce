@@ -2,9 +2,9 @@
 import 'package:customer_ui/HomePage/grocer_offer/grocery_offer_page.dart';
 import 'package:customer_ui/HomePage/offer/offer_page.dart';
 import 'package:customer_ui/OthersPage/all_offerpage.dart';
-import 'package:customer_ui/OthersPage/myOrders.dart';
+import 'package:customer_ui/OthersPage/my_orders.dart';
 import 'package:customer_ui/OthersPage/myaccopunt.dart';
-import 'package:customer_ui/OthersPage/requestProduct.dart';
+import 'package:customer_ui/OthersPage/request_product.dart';
 import 'package:customer_ui/OthersPage/tarck_order.dart';
 import 'package:customer_ui/OthersPage/wallet.dart';
 import 'package:customer_ui/components/size_config.dart';

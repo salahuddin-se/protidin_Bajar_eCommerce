@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:customer_ui/HomePage/grocer_offer/product_details.dart';
+import 'package:customer_ui/all_screen/product_details.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
+import 'package:customer_ui/dataModel/breat_biscuit.dart';
 import 'package:customer_ui/dataModel/category_data_model.dart';
-import 'package:customer_ui/dataModel/chocolate_sweet_data_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:http/http.dart';
@@ -43,7 +43,8 @@ class _CategoryContainerState extends State<CategoryContainer> {
     if (groceryItemDataMap["success"] == true) {
       //log("category data after tap $biscuitSweetsDataMap");
 
-      var groceryData = BiacuitSweets.fromJson(groceryItemDataMap);
+      //var groceryData = BiacuitSweets.fromJson(groceryItemDataMap);
+      var groceryData = BreadBiscuit.fromJson(groceryItemDataMap);
       subCategoryProducts = groceryData.data;
       //relatedProductsLink=groceryProducts[0].links.products;
 

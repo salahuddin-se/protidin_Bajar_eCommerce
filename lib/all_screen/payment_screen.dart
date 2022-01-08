@@ -1,8 +1,8 @@
-//import 'package:customer_ui/MyOrders/myOrders.dart';
+//import 'package:customer_ui/MyOrders/my_orders.dart';
+import 'package:customer_ui/all_screen/tarck_order.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
 
-import 'tarck_order.dart';
 
 //import 'Language.dart';
 

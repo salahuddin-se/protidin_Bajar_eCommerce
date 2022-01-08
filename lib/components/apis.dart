@@ -4,3 +4,5 @@ const userSignupAPI=baseUrl+"auth/signup";
 const userSignInAPI=baseUrl+"auth/login";
 const userGetAPI=baseUrl+"get-user-by-access_token";
 const cartSummary=baseUrl+"cart-summary";
+const userInfoAPI=baseUrl+"user/info/";
+const addUserAddressAPI=baseUrl+"user/shipping/create";

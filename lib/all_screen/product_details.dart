@@ -1,12 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:customer_ui/OthersPage/cart_details1st_page.dart';
+import 'package:customer_ui/all_screen/cart_details1st_page.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/dataModel/breat_biscuit.dart';
-import 'package:customer_ui/dataModel/chocolate_sweet_data_model.dart';
-import 'package:customer_ui/dataModel/groceryTopDeals.dart';
 import 'package:customer_ui/dataModel/product_details_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -62,7 +60,8 @@ class _GroceryDetailsState extends State<GroceryDetails> {
       //log("category data after tap $biscuitSweetsDataMap");
 
       setState(() {
-        var biscuitSweetsDataModel = BiacuitSweets.fromJson(biscuitSweetsDataMap);
+        //var biscuitSweetsDataModel = BiacuitSweets.fromJson(biscuitSweetsDataMap);
+        var biscuitSweetsDataModel = BreadBiscuit .fromJson(biscuitSweetsDataMap);
         relatedData = biscuitSweetsDataModel.data;
       });
       log("categoryProducts data length ${relatedData.length}");
@@ -84,7 +83,8 @@ class _GroceryDetailsState extends State<GroceryDetails> {
     if (dataMap2["success"] == true) {
       log("data $dataMap2");
 
-      var productsDataMap2=BreadBiscuit.fromJson(dataMap2);
+      //var productsDataMap2=BreadBiscuit.fromJson(dataMap2);
+      var productsDataMap2=BreadBiscuit .fromJson(dataMap2);
       relatedData=productsDataMap2.data;
       setState(() {});
 

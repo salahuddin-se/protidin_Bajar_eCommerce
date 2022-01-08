@@ -1,4 +1,4 @@
-import 'package:customer_ui/HomePage/grocer_offer/product_details.dart';
+
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +105,7 @@ class TabProductItemWidget extends StatelessWidget {
             children: [
               InkWell(
                   onTap: () {
-                   // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
                   },
                   child: Image.asset(image!)
               ),

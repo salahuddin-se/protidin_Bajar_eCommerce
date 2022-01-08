@@ -1,5 +1,4 @@
-import 'package:customer_ui/Home_screen/category_home_screen.dart';
-import 'package:customer_ui/Home_screen/category_home_screen.dart';
+
 import 'package:flutter/material.dart';
 
 import '../homepage.dart';

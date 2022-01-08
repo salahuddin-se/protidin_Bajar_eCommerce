@@ -1,11 +1,12 @@
 
-import 'package:customer_ui/OthersPage/wallet.dart';
+import 'package:customer_ui/all_screen/tarck_order.dart';
+import 'package:customer_ui/all_screen/wallet.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
 
 import 'myaccopunt.dart';
-import 'requestProduct.dart';
-import 'tarck_order.dart';
+import 'request_product.dart';
+
 
 //import 'Language.dart';
 

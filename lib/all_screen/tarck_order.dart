@@ -1,7 +1,7 @@
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
 
-import 'order_delivered.dart';
+import '../all_screen/order_delivered.dart';
 
 //import 'Language.dart';
 

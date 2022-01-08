@@ -1,30 +1,16 @@
-// @dart=2.9
 import 'dart:async';
-import 'package:customer_ui/ruf_home_screen.dart';
-import 'package:customer_ui/welcomeScreen/sigininform.dart';
-import 'package:customer_ui/welcomeScreen/signupform.dart';
+
+import 'package:customer_ui/all_screen/home_screen.dart';
+import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/welcomeScreen/welcome_page.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 
-import 'HomePage/final_home_screen.dart';
-import 'HomePage/grocer_offer/product_details.dart';
-import 'HomePage/grocer_offer/grocery_offer_page.dart';
-import 'HomePage/offer/offer_page.dart';
-import 'Home_screen/category_home_screen.dart';
-import 'Home_screen/category_home_screen_main.dart';
-import 'OthersPage/cart_details1st_page.dart';
-import 'column_test.dart';
-import 'ruf.dart';
-import 'test_3.dart';
-import 'welcomeScreen/alert_dialog.dart';
-
-
-void main() {
+void main() async {
+  await GetStorage.init();
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home:CategoryHomeScreenRuf(),
+    home: MyHomePage(),
   ));
 }
 
@@ -53,6 +39,8 @@ void main() {
 }*/
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -62,28 +50,26 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     Timer(
-        Duration(seconds: 3), () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WelcomePage()))
-    );
+        Duration(seconds: 3),
+        () => box.read(userToken) == null
+            ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WelcomePage()))
+            : Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CategoryHomeScreenRuf())));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          //backgroundColor: Color(0xFFE3FEFF),
-          body: SingleChildScrollView(
+        //backgroundColor: Color(0xFFE3FEFF),
+        body: SingleChildScrollView(
             child: Center(
-              child: Container(
-                child: Image.asset(
-                  "assets/img_174.png",
-                  fit: BoxFit.cover,
-                ),
-                height:MediaQuery.of(context).size.height/1,
-                width: MediaQuery.of(context).size.width/1,
-            ),
-          )
-
-          )
-      );
-
+      child: Container(
+        child: Image.asset(
+          "assets/img_174.png",
+          fit: BoxFit.cover,
+        ),
+        height: MediaQuery.of(context).size.height / 1,
+        width: MediaQuery.of(context).size.width / 1,
+      ),
+    )));
   }
 }

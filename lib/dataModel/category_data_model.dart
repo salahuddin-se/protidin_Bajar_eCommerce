@@ -92,25 +92,3 @@ class Links {
 
 
 
-/*
-class Links {
-  Links({
-    required this.products,
-    required this.subCategories,
-  });
-  late final String? products;
-  late final String? subCategories;
-
-  Links.fromJson(Map<String, dynamic> json){
-    products = json['products'];
-    subCategories = json['sub_categories'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final _data = <String, dynamic>{};
-    _data['products'] = products;
-    _data['sub_categories'] = subCategories;
-    return _data;
-  }
-}
-*/

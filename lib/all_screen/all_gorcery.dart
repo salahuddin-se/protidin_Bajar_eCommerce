@@ -216,7 +216,7 @@ class _AllGroceryState extends State<AllGrocery> {
   }
 }*/
 
-import 'package:customer_ui/HomePage/offer/grocery.dart';
+import 'package:customer_ui/all_screen/grocery.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
