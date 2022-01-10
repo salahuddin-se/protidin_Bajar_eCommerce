@@ -1,5 +1,5 @@
-class SearchModel {
-  SearchModel({
+class SearchProductModel {
+  SearchProductModel({
     required this.data,
     required this.links,
     required this.meta,
@@ -12,8 +12,8 @@ class SearchModel {
   late final bool success;
   late final int status;
 
-  SearchModel.fromJson(Map<String, dynamic> json){
-    data = List.from(json['data']).map((e)=>Data.fromJson(e)).toList();
+  SearchProductModel.fromJson(Map<String, dynamic> json) {
+    data = List.from(json['data']).map((e) => Data.fromJson(e)).toList();
     links = Links.fromJson(json['links']);
     meta = Meta.fromJson(json['meta']);
     success = json['success'];
@@ -22,7 +22,7 @@ class SearchModel {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['data'] = data.map((e)=>e.toJson()).toList();
+    _data['data'] = data.map((e) => e.toJson()).toList();
     _data['links'] = links.toJson();
     _data['meta'] = meta.toJson();
     _data['success'] = success;
@@ -36,6 +36,7 @@ class Data {
     required this.id,
     required this.name,
     required this.shopName,
+    required this.userId,
     required this.erpId,
     required this.thumbnailImage,
     required this.hasDiscount,
@@ -51,6 +52,7 @@ class Data {
   late final int id;
   late final String name;
   late final String shopName;
+  late final int userId;
   late final String erpId;
   late final String thumbnailImage;
   late final bool hasDiscount;
@@ -63,10 +65,11 @@ class Data {
   late final String unit;
   late final Links links;
 
-  Data.fromJson(Map<String, dynamic> json){
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     shopName = json['shop_name'];
+    userId = json['user_id'];
     erpId = json['erp_id'];
     thumbnailImage = json['thumbnail_image'];
     hasDiscount = json['has_discount'];
@@ -85,6 +88,7 @@ class Data {
     _data['id'] = id;
     _data['name'] = name;
     _data['shop_name'] = shopName;
+    _data['user_id'] = userId;
     _data['erp_id'] = erpId;
     _data['thumbnail_image'] = thumbnailImage;
     _data['has_discount'] = hasDiscount;
@@ -106,7 +110,7 @@ class Links {
   });
   late final String details;
 
-  Links.fromJson(Map<String, dynamic> json){
+  Links.fromJson(Map<String, dynamic> json) {
     details = json['details'];
   }
 
@@ -135,7 +139,7 @@ class Meta {
   late final int to;
   late final int total;
 
-  Meta.fromJson(Map<String, dynamic> json){
+  Meta.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     from = json['from'];
     lastPage = json['last_page'];

@@ -8,15 +8,15 @@ class UserInfoModel {
   late final bool success;
   late final int status;
 
-  UserInfoModel.fromJson(Map<String, dynamic> json){
-    data = List.from(json['data']).map((e)=>Data.fromJson(e)).toList();
+  UserInfoModel.fromJson(Map<String, dynamic> json) {
+    data = List.from(json['data']).map((e) => Data.fromJson(e)).toList();
     success = json['success'];
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['data'] = data.map((e)=>e.toJson()).toList();
+    _data['data'] = data.map((e) => e.toJson()).toList();
     _data['success'] = success;
     _data['status'] = status;
     return _data;
@@ -37,6 +37,7 @@ class Data {
     this.postalCode,
     required this.phone,
   });
+
   late final int id;
   late final String name;
   late final String type;
@@ -49,7 +50,7 @@ class Data {
   late final dynamic postalCode;
   late final String phone;
 
-  Data.fromJson(Map<String, dynamic> json){
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     type = json['type'];

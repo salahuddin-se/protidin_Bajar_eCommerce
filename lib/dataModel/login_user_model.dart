@@ -48,7 +48,8 @@ class User {
   late final int id;
   late final String type;
   late final String name;
-  late final String email;
+  //late final String email;
+  late final String? email;
   late final dynamic avatar;
   late final String avatarOriginal;
   late final dynamic phone;
