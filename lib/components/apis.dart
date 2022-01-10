@@ -8,3 +8,4 @@ const userInfoAPI = baseUrl + "user/info/";
 const addUserAddressAPI = baseUrl + "user/shipping/create";
 const createOrderAPI = baseUrl + "order/store";
 const showAddressAPI = baseUrl + "user/shipping/address";
+const purchaseHistoryAPI = baseUrl + "purchase-history-details";

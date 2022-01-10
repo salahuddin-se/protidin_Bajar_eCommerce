@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'all_screen/home_screen.dart';
+import 'all_screen/my_orders.dart';
 import 'components/utils.dart';
 
 void main() async {
   await GetStorage.init();
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: CategoryHomeScreen()));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyOrder()));
 }
 
 class MyHomePage extends StatefulWidget {
