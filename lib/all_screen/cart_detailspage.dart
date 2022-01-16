@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:customer_ui/all_screen/payment_method_address_1st_page.dart';
+import 'package:customer_ui/all_screen/payment_method_address.dart';
 import 'package:customer_ui/components/apis.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
@@ -13,7 +13,6 @@ import 'package:http/http.dart' as http;
 
 class CartDetails extends StatelessWidget {
   const CartDetails({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -32,6 +31,10 @@ class CartDetailsPage extends StatefulWidget {
 class _CartDetailsPageState extends State<CartDetailsPage> {
   final TextEditingController _controller = TextEditingController();
 
+  //
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  //
+
   var demo = [];
   int totalProducts = 0;
   var subTotal = "";
@@ -42,10 +45,58 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   var ownerId = 0;
 
   ///
+  /*
+  Future<void> getLogoutResponse() async {
+    log("Log out response calling");
+    final response = await http.get(
+      Uri.parse("https://test.protidin.com.bd/api/v2/auth/logout"),
+      headers: {"Authorization": "Bearer ${box.read(userToken)}"},
+    );
+
+    //
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
+
+      ///print(box.read('userName'));
+      ///log(userDataModel.user.name);
+
+      setState(() {});
+    }
+    //
+
+    log("Response from log out ${response.body}");
+
+    ///return logoutResponseFromJson(response.body);
+  }
+   */
+  ///
 
   Future<void> getCartName() async {
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/61"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $authToken'});
+    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/${box.read(userID)}"),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
+    // log("Response ${res.body}");
+    log("Response code ${res.statusCode}");
+
+    var dataMap = jsonDecode(res.body);
+    log(dataMap[0].toString());
+    var cartModel = CartDetailsModel.fromJson(dataMap[0]);
+    demo = cartModel.cartItems;
+    ownerId = cartModel.ownerId;
+    //await cartDeleteAPI();
+    totalProducts = cartModel.cartItems.length;
+    log("length ${cartModel.cartItems.length}");
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      //await cartDeleteAPI(${cartID});
+    }
+    //demo=dataMap;
+    setState(() {});
+    //log("demo length "+demo.length.toString());
+  }
+
+  /*Future<void> deleteCart() async {
+    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/${box.read(userID)}"),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
     // log("Response ${res.body}");
     log("Response code ${res.statusCode}");
 
@@ -59,17 +110,18 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     //demo=dataMap;
     setState(() {});
     //log("demo length "+demo.length.toString());
-  }
+  }*/
 
   Future<void> changeQuantity(id, userId, quantity) async {
     var res2 = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/change-quantity"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $authToken'},
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{"id": id, "variant": "", "user_id": userId, "quantity": quantity}));
 
     log("Response ${res2.body}");
     log("Response code  ${res2.statusCode}");
 
     if (res2.statusCode == 200 || res2.statusCode == 201) {
+      await getCartSummary();
       showToast("Cart Updated Successfully", context: context);
       getCartSummary();
     } else {
@@ -78,8 +130,8 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   }
 
   Future<void> getCartSummary() async {
-    var res = await http.get(Uri.parse("$cartSummary/$userId"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $authToken'});
+    var res = await http.get(Uri.parse("$cartSummary/${box.read(userID)}"),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
 
     log("cart Summary response= " + res.body);
 
@@ -95,6 +147,18 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     }
   }
 
+  Future cartDeleteAPI(cartID) async {
+    var res = await http.delete(Uri.parse("$cartDelete/$cartID"),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      showToast("Item delete Successfully", context: context);
+      await getCartName();
+      await getCartSummary();
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -106,6 +170,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: kWhiteColor,
@@ -115,11 +180,24 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
           style: TextStyle(color: kBlackColor, fontSize: 14),
         ),
         iconTheme: IconThemeData(color: kBlackColor),
-        actions: const [
-          Center(
-            child: Icon(
-              Icons.menu,
-              color: kBlackColor,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              scaffoldKey.currentState?.openDrawer();
+              Drawer();
+              //Drawer();
+              /*
+              if (!scaffoldKey.currentState!.isDrawerOpen) {
+                //check if drawer is closed
+                scaffoldKey.currentState!.openDrawer(); //open drawer
+              }
+              */
+            },
+            child: Center(
+              child: Icon(
+                Icons.menu,
+                color: kBlackColor,
+              ),
             ),
           ),
           SizedBox(
@@ -133,10 +211,11 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
           children: [
             ///listview builder
             Container(
-              height: MediaQuery.of(context).size.height / 3,
+              // height: MediaQuery.of(context).size.height / 1,
               child: ListView.builder(
                 itemCount: demo.length,
                 scrollDirection: Axis.vertical,
+                shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (_, index) {
                   //var data=demo[index].product_name;
@@ -256,65 +335,82 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                           SizedBox(
                             height: 20,
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 50, 10, 0),
-                            child: Align(
-                              alignment: Alignment.bottomRight,
-                              child: Container(
-                                width: MediaQuery.of(context).size.width / 4,
+                          Column(
+                            children: [
+                              SizedBox(
                                 height: 35,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF9900FF),
-                                  borderRadius: BorderRadius.circular(20),
+                              ),
+                              GestureDetector(
+                                onTap: () => cartDeleteAPI(demo[index].id),
+                                child: Container(
+                                  child: Image.asset(
+                                    "assets/img_106.png",
+                                  ),
+                                  height: 40,
+                                  width: 40,
                                 ),
-                                child: Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    children: <Widget>[
-                                      FittedBox(
-                                        child: Container(
-                                          child: MaterialButton(
-                                              child: Icon(Icons.remove, color: Colors.white),
-                                              onPressed: () {
-                                                demo[index].quantity--;
-                                                changeQuantity(demo[index].id, 61, demo[index].quantity);
-                                                setState(() {});
-                                              }),
-                                          width: MediaQuery.of(context).size.width / 30,
-                                        ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 30, 10, 0),
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width / 4,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xFF9900FF),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                        children: <Widget>[
+                                          FittedBox(
+                                            child: Container(
+                                              child: MaterialButton(
+                                                  child: Icon(Icons.remove, color: Colors.white),
+                                                  onPressed: () {
+                                                    demo[index].quantity--;
+                                                    changeQuantity(demo[index].id, "${box.read(userID)}", demo[index].quantity);
+                                                    setState(() {});
+                                                  }),
+                                              width: MediaQuery.of(context).size.width / 30,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 15.0),
+                                            child: FittedBox(
+                                              child: Container(
+                                                  width: 36,
+                                                  child: Center(
+                                                      child: Text(
+                                                    "${demo[index].quantity}",
+                                                    style: TextStyle(fontSize: 18, color: kWhiteColor),
+                                                  ))),
+                                            ),
+                                          ),
+                                          FittedBox(
+                                            child: Container(
+                                              child: MaterialButton(
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: Colors.white,
+                                                  ),
+                                                  onPressed: () {
+                                                    demo[index].quantity++;
+                                                    changeQuantity(demo[index].id, "${box.read(userID)}", demo[index].quantity);
+                                                    setState(() {});
+                                                  }),
+                                              width: MediaQuery.of(context).size.width / 10,
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 15.0),
-                                        child: FittedBox(
-                                          child: Container(
-                                              width: 36,
-                                              child: Center(
-                                                  child: Text(
-                                                "${demo[index].quantity}",
-                                                style: TextStyle(fontSize: 18, color: kWhiteColor),
-                                              ))),
-                                        ),
-                                      ),
-                                      FittedBox(
-                                        child: Container(
-                                          child: MaterialButton(
-                                              child: Icon(
-                                                Icons.add,
-                                                color: Colors.white,
-                                              ),
-                                              onPressed: () {
-                                                demo[index].quantity++;
-                                                changeQuantity(demo[index].id, 61, demo[index].quantity);
-                                                setState(() {});
-                                              }),
-                                          width: MediaQuery.of(context).size.width / 10,
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
+                            ],
                           ),
                         ],
                       ),
@@ -567,6 +663,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
             SizedBox(
               height: 10,
             ),
+
             Container(
               height: 10,
               width: MediaQuery.of(context).size.width / 1.1,
@@ -1091,7 +1188,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:customer_ui/all_screen/payment_method_address_1st_page.dart';
+import 'package:customer_ui/all_screen/payment_method_address.dart';
 import 'package:customer_ui/components/apis.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
@@ -1103,7 +1200,6 @@ import 'package:http/http.dart' as http;
 
 class CartDetails extends StatelessWidget {
   const CartDetails({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -1122,6 +1218,10 @@ class CartDetailsPage extends StatefulWidget {
 class _CartDetailsPageState extends State<CartDetailsPage> {
   final TextEditingController _controller = TextEditingController();
 
+  //
+  var scaffoldKey = GlobalKey<ScaffoldState>();
+  //
+
   var demo = [];
   int totalProducts = 0;
   var subTotal = "";
@@ -1134,8 +1234,8 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   ///
 
   Future<void> getCartName() async {
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/61"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $authToken'});
+    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/${box.read(userID)}"),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
     // log("Response ${res.body}");
     log("Response code ${res.statusCode}");
 
@@ -1153,7 +1253,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
   Future<void> changeQuantity(id, userId, quantity) async {
     var res2 = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/change-quantity"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $authToken'},
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{"id": id, "variant": "", "user_id": userId, "quantity": quantity}));
 
     log("Response ${res2.body}");
@@ -1168,8 +1268,8 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   }
 
   Future<void> getCartSummary() async {
-    var res = await http.get(Uri.parse("$cartSummary/$userId"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $authToken'});
+    var res = await http.get(Uri.parse("$cartSummary/${box.read(userID)}"),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
 
     log("cart Summary response= " + res.body);
 
@@ -1196,6 +1296,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: kWhiteColor,
@@ -1205,11 +1306,24 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
           style: TextStyle(color: kBlackColor, fontSize: 14),
         ),
         iconTheme: IconThemeData(color: kBlackColor),
-        actions: const [
-          Center(
-            child: Icon(
-              Icons.menu,
-              color: kBlackColor,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              scaffoldKey.currentState?.openDrawer();
+              Drawer();
+              //Drawer();
+              /*
+              if (!scaffoldKey.currentState!.isDrawerOpen) {
+                //check if drawer is closed
+                scaffoldKey.currentState!.openDrawer(); //open drawer
+              }
+              */
+            },
+            child: Center(
+              child: Icon(
+                Icons.menu,
+                color: kBlackColor,
+              ),
             ),
           ),
           SizedBox(
@@ -1223,10 +1337,11 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
           children: [
             ///listview builder
             Container(
-              height: MediaQuery.of(context).size.height / 3,
+              // height: MediaQuery.of(context).size.height / 1,
               child: ListView.builder(
                 itemCount: demo.length,
                 scrollDirection: Axis.vertical,
+                shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 itemBuilder: (_, index) {
                   //var data=demo[index].product_name;
@@ -1367,7 +1482,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                               child: Icon(Icons.remove, color: Colors.white),
                                               onPressed: () {
                                                 demo[index].quantity--;
-                                                changeQuantity(demo[index].id, 61, demo[index].quantity);
+                                                changeQuantity(demo[index].id, "${box.read(userID)}", demo[index].quantity);
                                                 setState(() {});
                                               }),
                                           width: MediaQuery.of(context).size.width / 30,
@@ -1380,9 +1495,9 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                               width: 36,
                                               child: Center(
                                                   child: Text(
-                                                "${demo[index].quantity}",
-                                                style: TextStyle(fontSize: 18, color: kWhiteColor),
-                                              ))),
+                                                    "${demo[index].quantity}",
+                                                    style: TextStyle(fontSize: 18, color: kWhiteColor),
+                                                  ))),
                                         ),
                                       ),
                                       FittedBox(
@@ -1394,7 +1509,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                               ),
                                               onPressed: () {
                                                 demo[index].quantity++;
-                                                changeQuantity(demo[index].id, 61, demo[index].quantity);
+                                                changeQuantity(demo[index].id, "${box.read(userID)}", demo[index].quantity);
                                                 setState(() {});
                                               }),
                                           width: MediaQuery.of(context).size.width / 10,
@@ -1657,6 +1772,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
             SizedBox(
               height: 10,
             ),
+
             Container(
               height: 10,
               width: MediaQuery.of(context).size.width / 1.1,
@@ -2133,7 +2249,13 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
               child: InkWell(
                 onTap: () {
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => PaymentAddress1stPage(grandTotal: grand_Total, ownerId: ownerId)));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentAddress1stPage(
+                            grandTotal: grand_Total,
+                            ownerId: ownerId,
+                            user_address: userAddress,
+                          )));
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -2170,6 +2292,4 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     );
   }
 }
-
-
 */

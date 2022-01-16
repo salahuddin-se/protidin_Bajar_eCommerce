@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:customer_ui/all_screen/tarck_order.dart';
 import 'package:customer_ui/components/apis.dart';
 import 'package:customer_ui/components/styles.dart';
+import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/dataModel/purchase_histoty_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -18,20 +18,30 @@ class MyOrder extends StatefulWidget {
 
 class _MyOrderState extends State<MyOrder> {
   var transactionID = "";
+  var grandTotal = "";
+  var paymentStatus = "";
+  var name = "";
+  var address = "";
 
   Future<void> getPurchaseHistory() async {
     log("calling 2");
+
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
 
-    final response6 = await get(Uri.parse(purchaseHistoryAPI + "/" + "61"), headers: {"Accept": "application/json"});
+    final response6 = await get(Uri.parse(purchaseHistoryAPI + "/" + box.read(userID).toString()), headers: {"Accept": "application/json"});
 
     log("Histoty Resposne ${response6.body}");
 
     if (response6.statusCode == 200) {
-      //log("category data after tap $biscuitSweetsDataMap");
       var dataMap = jsonDecode(response6.body);
       var purchaseData = PurchaseHistoryModel.fromJson(dataMap);
+
       transactionID = purchaseData.data[0].code;
+      grandTotal = purchaseData.data[0].grandTotal;
+      paymentStatus = purchaseData.data[0].paymentStatus;
+      name = purchaseData.data[0].shippingAddress.name;
+      address = purchaseData.data[0].shippingAddress.address;
+
       // transactionID = purchaseData.data[0].shippingAddress.;
       setState(() {});
     } else {
@@ -77,52 +87,6 @@ class _MyOrderState extends State<MyOrder> {
           SizedBox(
             height: 35,
           ),
-
-          /*Container(
-                    //width: 330,
-                    width: MediaQuery.of(context).size.width/1.1,
-                    height: 115,
-
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-
-                            Padding(padding: const EdgeInsets.fromLTRB(0,0,0,0),),
-
-                            Container(
-                              //color: Colors.white,
-                              height: 15,
-                              width: 20,
-                              child: Image.asset("assets/img_134.png",color: Colors.black,),
-                            ),
-
-                            Padding(padding: const EdgeInsets.fromLTRB(0,0,0,0),),
-
-                            Center(
-                              child: Container(
-                                height: 22,
-                                width: 150,
-                                child: Text("My orders",style: TextStyle(fontSize: 15,fontWeight: FontWeight.w500,color: Colors.black),),
-                              ),
-                            ),
-
-                            Container(
-                              //color: Colors.white,
-                              height: 15,
-                              width: 20,
-                              child: Image.asset("assets/img_77.png",color: Colors.black,),
-                            ),
-
-                          ],
-                        ),
-
-
-                      ],
-                    ),
-                  ),*/
-
           Center(
             child: Container(
               height: 25,
@@ -136,27 +100,6 @@ class _MyOrderState extends State<MyOrder> {
           SizedBox(
             height: 20,
           ),
-
-          /*Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Center(
-                        child: Container(
-                          height: 22,
-                          //width: 230,
-                          child: Text("Ongoing",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500,color: Colors.black,decoration: TextDecoration.underline,decorationThickness: 5,decorationColor: Colors.purpleAccent[700]),),
-                        ),
-                      ),
-                      Center(
-                        child: Container(
-                          height: 22,
-                          //width: 230,
-                          child: Text("History",style: TextStyle(fontSize: 17,fontWeight: FontWeight.w500,color: Colors.black,decoration: TextDecoration.underline,),),
-                        ),
-                      ),
-                    ],
-                  ),*/
-
           Align(
             alignment: Alignment.centerLeft,
             child: Container(
@@ -195,7 +138,8 @@ class _MyOrderState extends State<MyOrder> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Container(
-                            width: MediaQuery.of(context).size.width / 3,
+                            //width: MediaQuery.of(context).size.width / 3,
+                            width: MediaQuery.of(context).size.width / 2.5,
                             child: Column(
                               children: [
                                 Align(
@@ -227,7 +171,7 @@ class _MyOrderState extends State<MyOrder> {
                             ),
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width / 3,
+                            width: MediaQuery.of(context).size.width / 4,
                             child: Column(
                               children: [
                                 Align(
@@ -247,7 +191,7 @@ class _MyOrderState extends State<MyOrder> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "৳1050",
+                                    grandTotal,
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -259,7 +203,7 @@ class _MyOrderState extends State<MyOrder> {
                             ),
                           ),
                           Container(
-                            width: MediaQuery.of(context).size.width / 3,
+                            width: MediaQuery.of(context).size.width / 4,
                             child: Column(
                               children: [
                                 Align(
@@ -279,7 +223,7 @@ class _MyOrderState extends State<MyOrder> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "paid",
+                                    paymentStatus,
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14,
@@ -323,7 +267,7 @@ class _MyOrderState extends State<MyOrder> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "Shafayat Hossain",
+                              name,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
@@ -364,7 +308,7 @@ class _MyOrderState extends State<MyOrder> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              "40,Topkhana Road,3rd floor,Dhaka-1000",
+                              address,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 14,
@@ -384,13 +328,13 @@ class _MyOrderState extends State<MyOrder> {
                   alignment: Alignment.center,
                   child: InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => TrackOrder()));
+                      ///Navigator.push(context, MaterialPageRoute(builder: (context) => TrackOrder()));
                     },
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.purpleAccent[700],
                         borderRadius: BorderRadius.circular(25),
-                        boxShadow: [
+                        boxShadow: const [
                           BoxShadow(
                             color: Colors.white,
                           ),

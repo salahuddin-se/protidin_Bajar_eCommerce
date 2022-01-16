@@ -12,8 +12,8 @@ class BreadBiscuit {
   late final bool success;
   late final int status;
 
-  BreadBiscuit.fromJson(Map<String, dynamic> json){
-    data = List.from(json['data']).map((e)=>Data.fromJson(e)).toList();
+  BreadBiscuit.fromJson(Map<String, dynamic> json) {
+    data = List.from(json['data']).map((e) => Data.fromJson(e)).toList();
     links = Links.fromJson(json['links']);
     meta = Meta.fromJson(json['meta']);
     success = json['success'];
@@ -22,7 +22,7 @@ class BreadBiscuit {
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['data'] = data.map((e)=>e.toJson()).toList();
+    _data['data'] = data.map((e) => e.toJson()).toList();
     _data['links'] = links.toJson();
     _data['meta'] = meta.toJson();
     _data['success'] = success;
@@ -63,7 +63,7 @@ class Data {
   late final String unit;
   late final Links links;
 
-  Data.fromJson(Map<String, dynamic> json){
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     shopName = json['shop_name'];
@@ -106,7 +106,7 @@ class Links {
   });
   late final String? details;
 
-  Links.fromJson(Map<String, dynamic> json){
+  Links.fromJson(Map<String, dynamic> json) {
     details = json['details'];
   }
 
@@ -135,7 +135,7 @@ class Meta {
   late final int to;
   late final int total;
 
-  Meta.fromJson(Map<String, dynamic> json){
+  Meta.fromJson(Map<String, dynamic> json) {
     currentPage = json['current_page'];
     from = json['from'];
     lastPage = json['last_page'];

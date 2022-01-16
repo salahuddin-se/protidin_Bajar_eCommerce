@@ -1,5 +1,5 @@
+import 'package:customer_ui/all_screen/cart_detailspage.dart';
 import 'package:customer_ui/all_screen/grocery.dart';
-import 'package:customer_ui/all_screen/cart_details1st_page.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
@@ -64,35 +64,31 @@ class _OfferPageState extends State<OfferPage> with SingleTickerProviderStateMix
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 //SizedBox(height: 10,),
 
                 Container(
                   decoration: BoxDecoration(
-
-                    image: const DecorationImage(
-                        image: AssetImage("assets/img_79.png"),
-                        fit: BoxFit.cover
-                    ),
-
+                    image: const DecorationImage(image: AssetImage("assets/img_79.png"), fit: BoxFit.cover),
                     borderRadius: BorderRadius.circular(5),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey
-                            .withOpacity(0.15),
+                        color: Colors.grey.withOpacity(0.15),
                         spreadRadius: 5, //spread radius
                         blurRadius: 5, // blur radius
-                        offset: Offset(
-                            0, 3),
+                        offset: Offset(0, 3),
                       ),
                     ],
                   ),
                   height: 180,
-                  width: MediaQuery.of(context).size.width/1.1,
-                  child: Image.asset("assets/img_80.png",),
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  child: Image.asset(
+                    "assets/img_80.png",
+                  ),
                 ),
 
-                SizedBox(height: 20,),
+                SizedBox(
+                  height: 20,
+                ),
 
                 Text(
                   "Enjoy upto 80% off on the following items",
@@ -106,12 +102,11 @@ class _OfferPageState extends State<OfferPage> with SingleTickerProviderStateMix
                     indicatorColor: kPrimaryColor,
                     controller: controller,
                     tabs: [
-                      tabBarItems(block,"Grocery  ","184"),
-                      tabBarItems(block,"99 Shop  ","99"),
-                      tabBarItems(block,"Kid Care  ","56"),
-                      tabBarItems(block,"Home Cleaning  ",""),
-                      tabBarItems(block,"Foods  ",""),
-
+                      tabBarItems(block, "Grocery  ", "184"),
+                      tabBarItems(block, "99 Shop  ", "99"),
+                      tabBarItems(block, "Kid Care  ", "56"),
+                      tabBarItems(block, "Home Cleaning  ", ""),
+                      tabBarItems(block, "Foods  ", ""),
                     ],
                   ),
                 ),
@@ -128,7 +123,9 @@ class _OfferPageState extends State<OfferPage> with SingleTickerProviderStateMix
                   ),
                 ),
 
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
 
                 Center(
                   child: InkWell(
@@ -137,12 +134,11 @@ class _OfferPageState extends State<OfferPage> with SingleTickerProviderStateMix
                     },
                     child: Container(
                       height: 60,
-                      width: MediaQuery.of(context).size.width/4,
+                      width: MediaQuery.of(context).size.width / 4,
                       child: Image.asset("assets/img_160.png"),
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
@@ -151,7 +147,7 @@ class _OfferPageState extends State<OfferPage> with SingleTickerProviderStateMix
     );
   }
 
-  Row tabBarItems(double block,String title,String amount) {
+  Row tabBarItems(double block, String title, String amount) {
     return Row(
       children: [
         Text(

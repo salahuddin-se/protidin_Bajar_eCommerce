@@ -4,12 +4,12 @@ class ShowUserAddressModel {
     required this.success,
     required this.status,
   });
-  late final List<Data> data;
+  late final List<AddressData> data;
   late final bool success;
   late final int status;
 
   ShowUserAddressModel.fromJson(Map<String, dynamic> json) {
-    data = List.from(json['data']).map((e) => Data.fromJson(e)).toList();
+    data = List.from(json['data']).map((e) => AddressData.fromJson(e)).toList();
     success = json['success'];
     status = json['status'];
   }
@@ -23,8 +23,8 @@ class ShowUserAddressModel {
   }
 }
 
-class Data {
-  Data({
+class AddressData {
+  AddressData({
     required this.id,
     required this.userId,
     required this.address,
@@ -37,14 +37,14 @@ class Data {
 
   late final int id;
   late final int userId;
-  late final String address;
+  late final String? address;
   late final String? country;
   late final String? city;
   late final String? postalCode;
   late final String? phone;
   late final int setDefault;
 
-  Data.fromJson(Map<String, dynamic> json) {
+  AddressData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
     address = json['address'];

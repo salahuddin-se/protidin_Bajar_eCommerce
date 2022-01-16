@@ -1,8 +1,8 @@
-import 'package:customer_ui/all_screen/grocery.dart';
-import 'package:customer_ui/all_screen/cart_details1st_page.dart';
+import 'package:customer_ui/all_screen/cart_detailspage.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
+
 import 'all_gorcery.dart';
 
 class GroceryOfferPage extends StatefulWidget {
@@ -12,7 +12,7 @@ class GroceryOfferPage extends StatefulWidget {
   _GroceryOfferPageState createState() => _GroceryOfferPageState();
 }
 
-class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerProviderStateMixin{
+class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerProviderStateMixin {
   late TabController controller;
 
   @override
@@ -26,9 +26,9 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
     // TODO: implement dispose
     controller.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-
     SizeConfig().init(context);
     var width = SizeConfig.screenWidth;
     var height = SizeConfig.screenHeight;
@@ -66,7 +66,6 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset("assets/groceryposter.png"),
-
               SizedBox(
                 height: 50,
                 child: TabBar(
@@ -74,11 +73,10 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
                   indicatorColor: kPrimaryColor,
                   controller: controller,
                   tabs: [
-                    tabBarItems(block,"All Grocery  ","184"),
-                    tabBarItems(block,"Edible Oil  ","99"),
-                    tabBarItems(block,"Spices  ","56"),
-                    tabBarItems(block,"Bakery  ",""),
-
+                    tabBarItems(block, "All Grocery  ", "184"),
+                    tabBarItems(block, "Edible Oil  ", "99"),
+                    tabBarItems(block, "Spices  ", "56"),
+                    tabBarItems(block, "Bakery  ", ""),
                   ],
                 ),
               ),
@@ -93,9 +91,9 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
                   ],
                 ),
               ),
-
-              SizedBox(height: 10,),
-
+              SizedBox(
+                height: 10,
+              ),
               Center(
                 child: InkWell(
                   onTap: () {
@@ -103,13 +101,11 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
                   },
                   child: Container(
                     height: 60,
-                    width: MediaQuery.of(context).size.width/4.5,
+                    width: MediaQuery.of(context).size.width / 4.5,
                     child: Image.asset("assets/img_160.png"),
                   ),
                 ),
               ),
-
-
             ],
           ),
         ),
@@ -117,16 +113,14 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
     );
   }
 
-  Row tabBarItems(double block,String title,String amount) {
+  Row tabBarItems(double block, String title, String amount) {
     return Row(
       children: [
         Text(
           title,
           style: TextStyle(color: kBlackColor),
         ),
-
       ],
     );
   }
-
 }

@@ -1,19 +1,19 @@
-//import 'package:customer_ui/MyOrders/my_orders.dart';
 import 'dart:developer';
 
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
 
 import 'my_orders.dart';
-
 //import 'Language.dart';
 
 class Payment_Screen extends StatefulWidget {
   String? orderNo = "";
   String grandTotal = "";
   String address = "";
+  String paymentTypes = "";
 
-  Payment_Screen({required this.orderNo, required this.grandTotal, required this.address});
+  Payment_Screen({Key? key, required this.orderNo, required this.grandTotal, required this.address, required this.paymentTypes})
+      : super(key: key);
 
   @override
   _Payment_ScreenState createState() => _Payment_ScreenState();
@@ -121,7 +121,7 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                       //color: Colors.indigo[100],
                       borderRadius: BorderRadius.circular(30),
 
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.white,
                         ),
@@ -259,7 +259,7 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          "Cash on delivery",
+                                          widget.paymentTypes,
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 16,
@@ -273,7 +273,7 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          "Total Payable",
+                                          "Payment Method",
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 14,
@@ -321,7 +321,7 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          "${widget.address}",
+                                          widget.address,
                                           style: TextStyle(
                                             color: Colors.black,
                                             fontSize: 16,
@@ -335,7 +335,7 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
-                                          "Total Payable",
+                                          "Delivery Address",
                                           style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 14,

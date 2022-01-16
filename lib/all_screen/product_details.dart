@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:customer_ui/all_screen/cart_details1st_page.dart';
+
+import 'package:customer_ui/all_screen/cart_detailspage.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
@@ -14,8 +15,9 @@ class GroceryDetails extends StatefulWidget {
   var detailsLink = "";
   var relatedProductLink = "";
 
-
-  GroceryDetails({required this.detailsLink,required this.relatedProductLink,
+  GroceryDetails({
+    required this.detailsLink,
+    required this.relatedProductLink,
   });
 
   @override
@@ -23,11 +25,9 @@ class GroceryDetails extends StatefulWidget {
 }
 
 class _GroceryDetailsState extends State<GroceryDetails> {
-
-  var productsData=[];
+  var productsData = [];
 
   Future<void> getProductsDetails() async {
-
     final response = await get(Uri.parse(widget.detailsLink), headers: {"Accept": "application/json"});
 
     var dataMap = jsonDecode(response.body);
@@ -35,18 +35,15 @@ class _GroceryDetailsState extends State<GroceryDetails> {
     if (dataMap["success"] == true) {
       log("data $dataMap");
 
-      var productsDataMap=ProductDetailsDataModel.fromJson(dataMap);
-      productsData=productsDataMap.data;
+      var productsDataMap = ProductDetailsDataModel.fromJson(dataMap);
+      productsData = productsDataMap.data;
       setState(() {});
-
     } else {
       log("data invalid");
     }
   }
 
-
-  var relatedData=[];
-
+  var relatedData = [];
 
   Future<void> getRelatedProducts(link) async {
     log("calling 2");
@@ -61,7 +58,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
 
       setState(() {
         //var biscuitSweetsDataModel = BiacuitSweets.fromJson(biscuitSweetsDataMap);
-        var biscuitSweetsDataModel = BreadBiscuit .fromJson(biscuitSweetsDataMap);
+        var biscuitSweetsDataModel = BreadBiscuit.fromJson(biscuitSweetsDataMap);
         relatedData = biscuitSweetsDataModel.data;
       });
       log("categoryProducts data length ${relatedData.length}");
@@ -72,10 +69,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
     // log("after decode $dataMap");
   }
 
-
-
   Future<void> getrelatedData() async {
-
     final response2 = await get(Uri.parse(widget.relatedProductLink), headers: {"Accept": "application/json"});
 
     var dataMap2 = jsonDecode(response2.body);
@@ -84,16 +78,13 @@ class _GroceryDetailsState extends State<GroceryDetails> {
       log("data $dataMap2");
 
       //var productsDataMap2=BreadBiscuit.fromJson(dataMap2);
-      var productsDataMap2=BreadBiscuit .fromJson(dataMap2);
-      relatedData=productsDataMap2.data;
+      var productsDataMap2 = BreadBiscuit.fromJson(dataMap2);
+      relatedData = productsDataMap2.data;
       setState(() {});
-
     } else {
       log("data invalid");
     }
   }
-
-
 
   @override
   void initState() {
@@ -101,7 +92,6 @@ class _GroceryDetailsState extends State<GroceryDetails> {
     log("details Link ${widget.detailsLink} related link ${widget.relatedProductLink}");
     getProductsDetails();
     getRelatedProducts(widget.relatedProductLink);
-
   }
 
   @override
@@ -141,7 +131,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                 width: width,
                 child: ListView.builder(
                   itemCount: productsData.length,
-                  itemBuilder: (_,index){
+                  itemBuilder: (_, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 13.0, vertical: 10.0),
                       child: Column(
@@ -149,7 +139,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                         children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
+                            children: const [
                               Icon(
                                 Icons.share,
                                 color: kBlackColor,
@@ -158,7 +148,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                           ),
                           Center(
                             child: Image.network(
-                              imagePath+productsData[index].thumbnailImage,
+                              imagePath + productsData[index].thumbnailImage,
                               fit: BoxFit.cover,
                               height: height * 0.2,
                             ),
@@ -167,11 +157,10 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                           Text(
                             productsData[index].name,
                             style: TextStyle(color: kBlackColor, fontSize: block * 5, fontWeight: FontWeight.w500),
-
                           ),
                           sized15,
                           Text(
-                            "${productsData[index].description?? "No"} description Found",
+                            "${productsData[index].description ?? "No"} description Found",
                             style: TextStyle(color: kBlackColor.withOpacity(0.5), fontSize: block * 3.5, fontWeight: FontWeight.w300),
                           ),
                           sized15,
@@ -180,29 +169,35 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                             children: [
                               Row(
                                 children: [
-                                  Text(productsData[index].baseDiscountedPrice, style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.bold)),
+                                  Text(productsData[index].baseDiscountedPrice,
+                                      style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.bold)),
                                   SizedBox(
                                     width: 15,
                                   ),
                                   Text(
                                     productsData[index].basePrice,
                                     style: TextStyle(
-                                        color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w300, decoration: TextDecoration.lineThrough),
+                                        color: kBlackColor,
+                                        fontSize: block * 4,
+                                        fontWeight: FontWeight.w300,
+                                        decoration: TextDecoration.lineThrough),
                                   ),
                                   SizedBox(
                                     width: 15,
                                   ),
-                                  productsData[index].hasDiscount==true?Container(
-                                    height: height * 0.02,
-                                    width: width * 0.15,
-                                    decoration: BoxDecoration(color: Colors.green),
-                                    child: Center(
-                                      child: Text(
-                                        "15% OFF",
-                                        style: TextStyle(color: Colors.white, fontSize: block * 3, fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ):Container(),
+                                  productsData[index].hasDiscount == true
+                                      ? Container(
+                                          height: height * 0.02,
+                                          width: width * 0.15,
+                                          decoration: BoxDecoration(color: Colors.green),
+                                          child: Center(
+                                            child: Text(
+                                              "15% OFF",
+                                              style: TextStyle(color: Colors.white, fontSize: block * 3, fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                        )
+                                      : Container(),
                                 ],
                               ),
                               Row(
@@ -214,7 +209,8 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                   SizedBox(
                                     width: 10,
                                   ),
-                                  Text("BDT ${productsData[index].calculablePrice}", style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w400)),
+                                  Text("BDT ${productsData[index].calculablePrice}",
+                                      style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w400)),
                                 ],
                               )
                             ],
@@ -228,25 +224,19 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-
                                 Image.asset("assets/emo.png"),
-
                                 Text(
                                   "Member Price: BDT 690",
                                   style: TextStyle(color: kBlackColor, fontSize: block * 3.5, fontWeight: FontWeight.w400),
                                 ),
-
                                 Text(
                                   "Save BDT 20",
                                   style: TextStyle(color: Colors.green, fontSize: block * 3.5, fontWeight: FontWeight.w400),
                                 ),
-
                                 Icon(
                                   Icons.shopping_bag_outlined,
                                   color: kBlackColor.withOpacity(0.3),
                                 )
-
-
                               ],
                             ),
                           ),
@@ -257,7 +247,6 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                               SizedBox(
                                 width: 10.0,
                               ),
-
                               width10,
                               uniteWidget(height, width, block, productsData[index].unit, kPrimaryColor),
                             ],
@@ -290,11 +279,6 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                             ),
                           ),
                           sized30,
-
-
-
-
-
                           Center(
                             child: InkWell(
                               onTap: () {
@@ -302,15 +286,11 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                               },
                               child: Container(
                                 height: 60,
-                                width: MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width / 4,
+                                width: MediaQuery.of(context).size.width / 4,
                                 child: Image.asset("assets/img_160.png"),
                               ),
                             ),
                           ),
-
                           SingleChildScrollView(
                             child: Column(
                               children: [
@@ -318,13 +298,13 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
                                     Text("Related", style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.bold)),
-                                    Text("Show more", style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w300)),
-
+                                    Text("Show more",
+                                        style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w300)),
                                   ],
                                 ),
-
-                                SizedBox(height: 10,),
-
+                                SizedBox(
+                                  height: 10,
+                                ),
                                 Container(
                                   height: height,
                                   width: width,
@@ -337,23 +317,22 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                       itemBuilder: (_, index) {
                                         return FittedBox(
                                           child: Column(
-
                                             children: [
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
+                                                children: const [
                                                   //Text("Related", style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.bold)),
                                                   //Text("Show more", style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w300)),
                                                 ],
                                               ),
-
                                               Column(
                                                 children: [
                                                   Container(
                                                     //height: height * 0.15,
                                                     width: width,
                                                     padding: EdgeInsets.symmetric(horizontal: 10.0),
-                                                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: kWhiteColor),
+                                                    decoration:
+                                                        BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: kWhiteColor),
                                                     child: Row(
                                                       children: [
                                                         InkWell(
@@ -368,7 +347,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                                             );
                                                           },*/
                                                           child: Image.network(
-                                                            imagePath+relatedData[index].thumbnailImage,
+                                                            imagePath + relatedData[index].thumbnailImage,
                                                             fit: BoxFit.cover,
                                                             height: height * 0.2,
                                                           ),
@@ -384,7 +363,8 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                                               sized10,
                                                               Text(
                                                                 relatedData[index].name,
-                                                                style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w500),
+                                                                style: TextStyle(
+                                                                    color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w500),
                                                                 maxLines: 2,
                                                               ),
                                                               sized5,
@@ -396,7 +376,10 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                                                 child: Center(
                                                                   child: Text(
                                                                     "15% Off",
-                                                                    style: TextStyle(color: Colors.white, fontSize: block * 3, fontWeight: FontWeight.bold),
+                                                                    style: TextStyle(
+                                                                        color: Colors.white,
+                                                                        fontSize: block * 3,
+                                                                        fontWeight: FontWeight.bold),
                                                                   ),
                                                                 ),
                                                               ),
@@ -405,7 +388,11 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                                                 children: [
                                                                   Row(
                                                                     children: [
-                                                                      Text(relatedData[index].baseDiscountedPrice, style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.bold)),
+                                                                      Text(relatedData[index].baseDiscountedPrice,
+                                                                          style: TextStyle(
+                                                                              color: kBlackColor,
+                                                                              fontSize: block * 4.5,
+                                                                              fontWeight: FontWeight.bold)),
                                                                       SizedBox(
                                                                         width: 10,
                                                                       ),
@@ -428,7 +415,11 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                                                     ),
                                                                     child: Row(
                                                                       children: [
-                                                                        Text("Add", style: TextStyle(color: kWhiteColor, fontSize: block * 4, fontWeight: FontWeight.bold)),
+                                                                        Text("Add",
+                                                                            style: TextStyle(
+                                                                                color: kWhiteColor,
+                                                                                fontSize: block * 4,
+                                                                                fontWeight: FontWeight.bold)),
                                                                         Icon(
                                                                           Icons.add,
                                                                           color: kWhiteColor,
@@ -456,38 +447,21 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                             ],
                                           ),
                                         );
-
-
-
-                                      }
-                                  ),
+                                      }),
                                 ),
                               ],
                             ),
                           )
-
-
                         ],
                       ),
-
-
                     );
                   },
                 ),
               ),
-
-
-
-
-
             ],
           ),
-        )
-
-    );
+        ));
   }
-
-
 
   Container uniteWidget(double height, double width, double block, String unit, Color borderColor) {
     return Container(
@@ -618,7 +592,6 @@ class RelatedMoreItems extends StatelessWidget {
   }
 }
 
-
 /*
 Container(
                       height: height,
@@ -745,10 +718,9 @@ Container(
                     ),
 */
 
-
 /*import 'dart:convert';
 import 'dart:developer';
-import 'package:customer_ui/OthersPage/cart_details1st_page.dart';
+import 'package:customer_ui/OthersPage/cart_detailspage.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';

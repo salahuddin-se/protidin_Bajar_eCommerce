@@ -48,7 +48,7 @@ class Data {
   late final dynamic city;
   late final dynamic country;
   late final dynamic postalCode;
-  late final String phone;
+  late final String? phone;
 
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
