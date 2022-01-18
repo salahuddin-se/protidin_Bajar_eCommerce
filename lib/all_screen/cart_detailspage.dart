@@ -3,12 +3,16 @@ import 'dart:developer';
 
 import 'package:customer_ui/all_screen/payment_method_address.dart';
 import 'package:customer_ui/components/apis.dart';
+import 'package:customer_ui/components/drawer_class.dart';
+import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
+import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:customer_ui/dataModel/cart_details_model.dart';
 import 'package:customer_ui/dataModel/cart_summary_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 class CartDetails extends StatelessWidget {
@@ -44,32 +48,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   var grand_Total = "";
   var ownerId = 0;
 
-  ///
-  /*
-  Future<void> getLogoutResponse() async {
-    log("Log out response calling");
-    final response = await http.get(
-      Uri.parse("https://test.protidin.com.bd/api/v2/auth/logout"),
-      headers: {"Authorization": "Bearer ${box.read(userToken)}"},
-    );
-
-    //
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
-
-      ///print(box.read('userName'));
-      ///log(userDataModel.user.name);
-
-      setState(() {});
-    }
-    //
-
-    log("Response from log out ${response.body}");
-
-    ///return logoutResponseFromJson(response.body);
-  }
-   */
-  ///
+  var controller = Get.put(CartItemsController());
 
   Future<void> getCartName() async {
     var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/${box.read(userID)}"),
@@ -78,12 +57,13 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     log("Response code ${res.statusCode}");
 
     var dataMap = jsonDecode(res.body);
-    log(dataMap[0].toString());
+    // log(dataMap[0].toString());
     var cartModel = CartDetailsModel.fromJson(dataMap[0]);
     demo = cartModel.cartItems;
     ownerId = cartModel.ownerId;
     //await cartDeleteAPI();
     totalProducts = cartModel.cartItems.length;
+    controller.cartLength.value = cartModel.cartItems.length;
     log("length ${cartModel.cartItems.length}");
 
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -154,6 +134,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     if (res.statusCode == 200 || res.statusCode == 201) {
       showToast("Item delete Successfully", context: context);
       await getCartName();
+      // await Get.find<CartItemsController>().getCartName();
       await getCartSummary();
       setState(() {});
     }
@@ -169,8 +150,13 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var width = SizeConfig.screenWidth;
+    var height = SizeConfig.screenHeight;
+    var block = SizeConfig.block;
     return Scaffold(
       key: scaffoldKey,
+      endDrawer: buildDrawerClass(context, block),
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: kWhiteColor,
@@ -183,15 +169,10 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
         actions: [
           GestureDetector(
             onTap: () {
-              scaffoldKey.currentState?.openDrawer();
-              Drawer();
-              //Drawer();
-              /*
-              if (!scaffoldKey.currentState!.isDrawerOpen) {
+              if (!scaffoldKey.currentState!.isEndDrawerOpen) {
                 //check if drawer is closed
-                scaffoldKey.currentState!.openDrawer(); //open drawer
+                scaffoldKey.currentState!.openEndDrawer(); //open drawer
               }
-              */
             },
             child: Center(
               child: Icon(
@@ -1172,6 +1153,17 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                       ),
                     ),
                   ],
+                ),
+              ),
+            ),
+
+            Container(
+              height: 20,
+              width: 10,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 0),
+                child: Image.asset(
+                  "assets/img_115.png",
                 ),
               ),
             ),

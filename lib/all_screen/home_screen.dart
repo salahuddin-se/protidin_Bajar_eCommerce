@@ -3,19 +3,15 @@ import 'dart:developer';
 
 import 'package:customer_ui/all_screen/all_offerpage.dart';
 import 'package:customer_ui/all_screen/cart_detailspage.dart';
-import 'package:customer_ui/all_screen/grocery_offer_page.dart';
-import 'package:customer_ui/all_screen/my_orders.dart';
-import 'package:customer_ui/all_screen/myaccopunt.dart';
 import 'package:customer_ui/all_screen/offer_page.dart';
-import 'package:customer_ui/all_screen/request_product.dart';
-import 'package:customer_ui/all_screen/tarck_order.dart';
-import 'package:customer_ui/all_screen/wallet.dart';
+import 'package:customer_ui/components/drawer_class.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:customer_ui/dataModel/category_data_model.dart';
 import 'package:customer_ui/dataModel/one_ninetynine_data_model.dart';
+import 'package:customer_ui/dataModel/product_response.dart';
 import 'package:customer_ui/dataModel/search_data_model.dart';
 import 'package:customer_ui/welcomeScreen/sigininform.dart';
 import 'package:customer_ui/widgets/category_container.dart';
@@ -30,7 +26,6 @@ import 'package:http/http.dart' as http;
 import '../dataModel/breat_biscuit.dart';
 import '../dataModel/cart_details_model.dart';
 import '../dataModel/city_model.dart';
-import '../dataModel/product_response.dart';
 import '../dataModel/seller_response.dart';
 import '../dataModel/shop_response.dart';
 import 'product_details.dart';
@@ -349,14 +344,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       'Accept': 'application/json',
     });
 
-    log(response.body);
+    log("Get City Name: " + response.body);
 
     var dataMap = jsonDecode(response.body);
 
     var areaModel = CityModel.fromJson(dataMap);
     for (var element in areaModel.data) {
-      areaName.add(element.area);
       cityName.add(element.name);
+      areaName.add(element.area);
     }
     // city name comment out
     buildShowDialog(context, areaName, cityName);
@@ -399,14 +394,31 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     fetchProducts();
   }
 
+  ///
+
+  List<Product> listOfProducts = [];
+
   Future fetchProducts() async {
-    for (Shop shop in _shops) {
-      if (shop.user_id == _userId) shopId = shop.id!;
-    }
-    log("shop ID $shopId");
-    var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/shops/products/all/${shopId.toString()}"));
-    log("products response ${response.body}");
+    /*for (Shop shop in _shops) {
+      if (shop.user_id == _userId || shop.user_id == _webStoreId) shopId = shop.id!;
+    }*/
+    // log("----- shop ID ----- $shopId");
+    var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/products"));
+    // log("products response ${response.body}");
     var productResponse = productMiniResponseFromJson(response.body);
+
+    for (var i = 0; i < productResponse.products!.length; i++) {
+      if (productResponse.products![i].user_id == _userId || (productResponse.products![i].user_id == _webStoreId)) {
+        //log("DATA EXIST");
+        listOfProducts = productResponse.products!;
+        log("products list length ${listOfProducts.length}");
+        setState(() {});
+      } else {
+        listOfProducts.length = 0;
+        log("DATA NOT EXISTS");
+      }
+    }
+
     shopName = productResponse.products![0].shop_name!;
     for (var ele in productResponse.products!) {
       log(ele.shop_name!);
@@ -414,14 +426,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   }
 
   var relatedProductsLink = " ";
-/*
-  Future<void> addToCart(id, userId, quantity) async {
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/add"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
-        body: jsonEncode(<String, dynamic>{"id": id, "variant": "", "user_id": userId, "quantity": quantity}));
-    //log("Response ${res.body}");
-    //log("Response code jhjk ${res.statusCode}");
-  }*/
 
   var categoryData = [];
   var categoryDatafor_add_banner = [];
@@ -654,344 +658,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         backgroundColor: Color(0xFFE5E5E5),
-        endDrawer: Drawer(
-          child: ListView(
-            // Important: Remove any padding from the ListView.
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              DrawerHeader(
-                child: Container(
-                  height: 200,
-                  width: MediaQuery.of(context).size.width / 1.2,
-                  child: Column(children: [
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          //color: Colors.white,
-                          height: 60,
-                          width: 60,
-                          child: Image.asset(
-                            "assets/img_135.png",
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                        ),
-                        Container(
-                          width: 120,
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  "Welcome ",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  box.read(userName),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w900,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ]),
-                ),
-                decoration: BoxDecoration(
-                  color: Color(0xFF9900FF),
-                ),
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Container(
-                      //color: Colors.white,
-                      height: 20,
-                      width: 20,
-                      child: Image.asset(
-                        "assets/img_149.png",
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    Text(
-                      'Track Order',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TrackOrder()));
-                },
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Container(
-                      //color: Colors.white,
-                      height: 20,
-                      width: 20,
-                      child: Image.asset(
-                        "assets/img_150.png",
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    Text(
-                      'My Orders',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrder()));
-                },
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Container(
-                      //color: Colors.white,
-                      height: 20,
-                      width: 20,
-                      child: Image.asset(
-                        "assets/img_151.png",
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    Text(
-                      'Categories',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryOfferPage()));
-                },
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Container(
-                      //color: Colors.white,
-                      height: 20,
-                      width: 20,
-                      child: Image.asset(
-                        "assets/img_152.png",
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    Text(
-                      'Wallet',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyWallet()));
-                },
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Container(
-                      //color: Colors.white,
-                      height: 20,
-                      width: 20,
-                      child: Image.asset(
-                        "assets/img_153.png",
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    Text(
-                      'Request a product',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ReqquestPage()));
-                },
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Container(
-                      //color: Colors.white,
-                      height: 20,
-                      width: 20,
-                      child: Image.asset(
-                        "assets/img_149.png",
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    Text(
-                      'Call to order',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => TrackOrder()));
-                },
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Container(
-                      //color: Colors.white,
-                      height: 20,
-                      width: 20,
-                      child: Image.asset(
-                        "assets/img_154.png",
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    Text(
-                      'My Account',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => MyAccountPage()));
-                },
-              ),
-              ListTile(
-                title: Row(
-                  children: [
-                    Container(
-                      //color: Colors.white,
-                      height: 20,
-                      width: 20,
-                      child: Image.asset(
-                        "assets/e.jpg",
-                        color: Colors.black,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
-                    ),
-                    Text(
-                      'Exit',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () => getLogoutResponse(),
-                      child: Container(
-                        height: 30,
-                        width: 40,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Image.asset(
-                            "assets/img_45.png",
-                            fit: BoxFit.contain,
-                            height: 30,
-                            width: 40,
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () => getLogoutResponse(),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 12),
-                        child: Text(
-                          "Log Out",
-                          style: TextStyle(color: kBlackColor, fontSize: block * 4.2, fontWeight: FontWeight.w800),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
+        endDrawer: buildDrawerClass(context, block, callback: getLogoutResponse),
         body: SingleChildScrollView(
             child: Padding(
           //padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),
@@ -1071,20 +738,26 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   child: Row(
                     children: [
                       SizedBox(height: 17, child: Image.asset("assets/img_49.png")),
-                      Text(
-                        "  Protidin PG Store, Shahbag  ",
-                        style: TextStyle(
-                          color: Color(0xFF515151),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "CeraProBold",
+                      Padding(
+                        padding: const EdgeInsets.only(top: 2.5),
+                        child: Text(
+                          "  Protidin PG Store, Shahbag  ",
+                          style: TextStyle(
+                            color: Color(0xFF515151),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "CeraProBold",
+                          ),
                         ),
                       ),
                       Container(
-                          height: 10,
-                          child: Image.asset(
-                            "assets/img_50.png",
-                            height: 5,
+                          height: 9,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 2.0),
+                            child: Image.asset(
+                              "assets/img_50.png",
+                              height: 5,
+                            ),
                           )),
                     ],
                   ),
@@ -1095,6 +768,31 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             SizedBox(
               height: 5,
             ),
+
+            ///Product Fetch
+
+            listOfProducts.isEmpty
+                ? Text("NO Product found")
+                : SizedBox(
+                    height: 100,
+                    width: width,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: listOfProducts.length,
+                      itemBuilder: (_, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Text("${listOfProducts[index].name}"),
+                              Text("${listOfProducts[index].base_price}"),
+                              Text("${listOfProducts[index].user_id}"),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
 
             // top banner
             Container(
