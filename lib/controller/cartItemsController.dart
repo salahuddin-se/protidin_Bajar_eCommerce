@@ -53,6 +53,7 @@ class CartItemsController extends GetxController {
 }
 
 ///List<String> streetsList = new List<String>.from(streetsFromJson);
+
 /*
 import 'dart:convert';
 import 'dart:developer';
@@ -108,4 +109,5 @@ class CartItemsController extends GetxController {
   }
 }
 
+///List<String> streetsList = new List<String>.from(streetsFromJson);
 */

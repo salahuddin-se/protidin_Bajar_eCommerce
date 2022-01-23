@@ -9,7 +9,10 @@ import 'components/utils.dart';
 
 void main() async {
   await GetStorage.init();
+
   runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyHomePage()));
+
+  ///runApp(MaterialApp(debugShowCheckedModeBanner: false, home: InBox()));
 }
 
 class MyHomePage extends StatefulWidget {

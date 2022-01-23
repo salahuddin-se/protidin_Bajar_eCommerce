@@ -83,7 +83,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
   ///
 
-  ///
   var bestProducts = [];
   Future<void> getBestSellersProduct() async {
     var res = await http.get(Uri.parse("https://test.protidin.com.bd/api/v2/products/best-seller"),
@@ -131,7 +130,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
       tax = cartSummaryModel.tax;
       shipCost = cartSummaryModel.shippingCost;
       discount = cartSummaryModel.discount;
-
       grand_Total = cartSummaryModel.grandTotal;
 
       //await addToCart("", "", "");
@@ -436,7 +434,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      //Padding(padding: const EdgeInsets.only(left: 16)),
                       Container(
                         height: 40,
                         width: MediaQuery.of(context).size.width / 4.5,
@@ -599,18 +596,8 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                         //padding: const EdgeInsets.only(top: 0),
                                         child: InkWell(
                                           onTap: () {
-                                            //box.read(add_carts);
                                             addToCart(bestProducts[index].id, box.read(userID), 1);
                                           },
-
-                                          /*
-                                          onTap: () {
-                                            ///addToCart(listOfProducts[index].id, box.read(userID), 1);
-                                            ///addToCart((box.read(list_of_products)[index].id), box.read(userID), 1);
-                                            box.read(add_carts)(box.read(list_of_products)[index].id); box.read(userID); 1;)
-                                            //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
-                                          },
-                                          */
                                           child: Container(
                                             child: Image.asset(
                                               "assets/img_104.png",
@@ -684,8 +671,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
               ),
             ),
 
-            ///
-
             ///order summary
             SizedBox(
               height: 10,
@@ -709,8 +694,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
             Align(
               alignment: Alignment.centerLeft,
               child: Container(
-                //height: 35,
-                //width: 200,
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(20, 5, 0, 0),
                   child: Text(
@@ -1007,10 +990,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                       width: MediaQuery.of(context).size.width / 1.1,
                       child: Row(
                         children: [
-                          /*Padding(
-                              padding: const EdgeInsets.fromLTRB(20,0,00,0),
-                            ),*/
-
                           Container(
                             height: 20,
                             width: MediaQuery.of(context).size.width / 7,
@@ -1066,9 +1045,6 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
             Container(
               decoration: BoxDecoration(
                 image: DecorationImage(image: AssetImage("assets/img_110.png"), fit: BoxFit.cover),
-
-                //color: Colors.white,
-                //borderRadius: BorderRadius.circular(20),
               ),
               height: 40,
               width: MediaQuery.of(context).size.width / 1.1,

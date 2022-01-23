@@ -1260,8 +1260,26 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
     }
   }
 
-  ///
+  Future<void> updateAddressInCart(userId, addressID) async {
+    log("address ID $addressID");
+    var jsonBody = (<String, dynamic>{"user_id": userId.toString(), "address_id": addressID.toString()});
 
+    var res = await post(Uri.parse("https://test.protidin.com.bd/api/v2/update-address-in-cart"),
+        headers: <String, String>{'Accept': 'application/json', 'Authorization': 'Bearer ${box.read(userToken)}'}, body: jsonBody);
+
+    log("update address in cart ${res.body}");
+
+    ///log("add user address response ${res.body}");
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      var dataMap = jsonDecode(res.body);
+    } else {
+      showToast("Something went wrong", context: context);
+    }
+    setState(() {});
+  }
+
+  ///
   Future<void> orderCreate(userId, ownerID, paymentType, userAddress, grandTotal) async {
     log("CALLING");
     log("owner_ID $ownerID user id $userId payment type $paymentType");
@@ -1305,6 +1323,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
     log("Grand Total ${widget.grandTotal} and owner Id ${widget.ownerId}");
     getUserInfo(box.read(userID));
     getUserAddress(box.read(userID));
+    // updateAddressInCart(11);
     getPaymentTypes();
   }
 
@@ -1649,6 +1668,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                                 )
                               : GestureDetector(
                                   onTap: () {
+                                    updateAddressInCart(box.read(userID), userAddressData[index].id);
                                     selectedAddress =
                                         ("${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone}");
                                     log(selectedAddress);

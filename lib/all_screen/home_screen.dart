@@ -150,6 +150,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                               onChanged: (String? value) {
                                 setState(() {
                                   selectAreaName = value!;
+                                  log("Area name is $selectAreaName");
                                 });
                               },
                             ),
@@ -210,27 +211,29 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     userId,
     quantity,
   ) async {
-    log("user id $userId id $id quantity $quantity");
+    log("user id $userId");
     var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/add"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{
-          "id": id,
+          "id": id.toString(),
           "variant": "",
-          "user_id": 44,
+          "user_id": userId,
           "quantity": quantity,
         }));
 
-    log("Response ${res.body}");
-    log("Response ${res.statusCode}");
-    //log("Response code jhjk ${res.statusCode}");
-
     if (res.statusCode == 200 || res.statusCode == 201) {
       showToast("Cart Added Successfully", context: context);
-      await updateAddressInCart(userId);
+
+      ///await updateAddressInCart(userId);
       await controller.getCartName();
+
+      //await getCartSummary();
     } else {
       showToast("Something went wrong", context: context);
     }
+    /////////
+    //box.write(add_carts, addToCart(, box.read(userID), 1));
+    ////////
   }
 
   Future<void> updateAddressInCart(userId) async {
@@ -480,9 +483,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       await getProductsAfterTap(categoryDataModel.data[0].links.products);
       setState(() {});
       //log("data length ${categoryData.length}");
-    } else {
-      //log("data invalid");
-    }
+    } else {}
 
     // log("after decode $dataMap");
   }
@@ -512,31 +513,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   }
 
   var groceryProducts = [];
-/*
-  Future<void> getGroceryProductsAfterTap(link2) async {
-    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
-
-    final response7 = await get(Uri.parse(link2), headers: {"Accept": "application/json"});
-
-    var groceryItemDataMap = jsonDecode(response7.body);
-
-    if (groceryItemDataMap["success"] == true) {
-      //log("category data after tap $biscuitSweetsDataMap");
-
-      var groceryData = BreadBiscuit.fromJson(groceryItemDataMap);
-      groceryProducts = groceryData.data;
-      // relatedProductsLink = groceryProducts[0].links.products;
-
-      setState(() {});
-
-      //log("after tap grocery data length ${groceryProducts.length}");
-
-    } else {
-      //log("data invalid");
-    }
-    // log("after decode $dataMap");
-  }
-*/
 
   /// one to 99 data
   List<OneToNinentyNineDataModel> oneTwoNinentyNineData = [];
@@ -573,8 +549,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
           }
         }
       });
-      //log("1-99 data length ${oneTwoNinentyNineData.length}");
-
     } else {
       //log("data invalid");
     }
@@ -702,7 +676,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 2.5),
                         child: Text(
-                          "  Protidin PG Store, Shahbag  ",
+                          "  Protidin PG Store, $selectAreaName ",
                           style: TextStyle(
                             color: Color(0xFF515151),
                             fontSize: 13,
@@ -711,15 +685,20 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                           ),
                         ),
                       ),
-                      Container(
-                          height: 9,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 2.0),
-                            child: Image.asset(
-                              "assets/img_50.png",
-                              height: 5,
-                            ),
-                          )),
+                      GestureDetector(
+                        onTap: () {
+                          getCityName();
+                        },
+                        child: Container(
+                            height: 9,
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 2.0),
+                              child: Image.asset(
+                                "assets/img_50.png",
+                                height: 5,
+                              ),
+                            )),
+                      ),
                     ],
                   ),
                 ),
@@ -835,10 +814,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             ),
                           ),
                         ),
-                        /*child: Container(
-                          //height: 170,
-                          child: Image.asset("assets/p1.png"),
-                        ),*/
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 15),
@@ -1085,7 +1060,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                         height: 20,
                       ),
 
-                      ////////////////////////////////////////////////////////
+                      ///
                       Container(
                         height: MediaQuery.of(context).size.height / 3,
                         child: ListView.builder(
