@@ -26,7 +26,7 @@ class GroceryDetails extends StatefulWidget {
 
 class _GroceryDetailsState extends State<GroceryDetails> {
   var productsData = [];
-
+  var scaffoldKey = GlobalKey<ScaffoldState>();
   Future<void> getProductsDetails() async {
     final response = await get(Uri.parse(widget.detailsLink), headers: {"Accept": "application/json"});
 
@@ -46,6 +46,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
   var relatedData = [];
 
   Future<void> getRelatedProducts(link) async {
+    log("get related product $link");
     log("calling 2");
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
 
@@ -108,14 +109,22 @@ class _GroceryDetailsState extends State<GroceryDetails> {
           centerTitle: true,
           title: Text(
             "Product Details",
-            style: TextStyle(color: kBlackColor, fontSize: block * 4),
+            style: TextStyle(color: kBlackColor, fontSize: 14),
           ),
           iconTheme: IconThemeData(color: kBlackColor),
-          actions: const [
-            Center(
-              child: Icon(
-                Icons.menu,
-                color: kBlackColor,
+          actions: [
+            GestureDetector(
+              onTap: () {
+                if (!scaffoldKey.currentState!.isEndDrawerOpen) {
+                  //check if drawer is closed
+                  scaffoldKey.currentState!.openEndDrawer(); //open drawer
+                }
+              },
+              child: Center(
+                child: Icon(
+                  Icons.menu,
+                  color: kBlackColor,
+                ),
               ),
             ),
             SizedBox(
@@ -314,6 +323,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                       shrinkWrap: true,
                                       scrollDirection: Axis.vertical,
                                       itemCount: relatedData.length,
+                                      physics: NeverScrollableScrollPhysics(),
                                       itemBuilder: (_, index) {
                                         return FittedBox(
                                           child: Column(

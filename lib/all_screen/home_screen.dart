@@ -11,7 +11,6 @@ import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:customer_ui/dataModel/category_data_model.dart';
 import 'package:customer_ui/dataModel/one_ninetynine_data_model.dart';
-import 'package:customer_ui/dataModel/product_response.dart';
 import 'package:customer_ui/dataModel/search_data_model.dart';
 import 'package:customer_ui/welcomeScreen/sigininform.dart';
 import 'package:customer_ui/widgets/category_container.dart';
@@ -24,7 +23,6 @@ import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 
 import '../dataModel/breat_biscuit.dart';
-import '../dataModel/cart_details_model.dart';
 import '../dataModel/city_model.dart';
 import '../dataModel/seller_response.dart';
 import '../dataModel/shop_response.dart';
@@ -212,17 +210,18 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     userId,
     quantity,
   ) async {
-    log("user id $userId");
+    log("user id $userId id $id quantity $quantity");
     var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/add"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{
           "id": id,
           "variant": "",
-          "user_id": userId,
+          "user_id": 44,
           "quantity": quantity,
         }));
 
-    //log("Response ${res.body}");
+    log("Response ${res.body}");
+    log("Response ${res.statusCode}");
     //log("Response code jhjk ${res.statusCode}");
 
     if (res.statusCode == 200 || res.statusCode == 201) {
@@ -303,26 +302,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   var demo = [];
   var controller = Get.put(CartItemsController());
 
-  Future<void> getCartName() async {
-    log("-----get cart items------");
-
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/${box.read(userID)}"),
-        //headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer $authToken'});
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
-    // log("Response ${res.body}");
-    log("Response code ${res.statusCode}");
-
-    var dataMap = jsonDecode(res.body);
-    log(dataMap[0].toString());
-    var cartModel = CartDetailsModel.fromJson(dataMap[0]);
-
-    demo = cartModel.cartItems;
-    //log("cart added ${cartModel.cartItems.length} product");
-    //demo=dataMap;
-    setState(() {});
-    //log("demo length "+demo.length.toString());
-  }
-
   List<String> cityData = [];
   var selectDhaka = " ";
 
@@ -361,11 +340,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   }
 
   Future fetchShop(String areaName) async {
+    _shops.clear();
     var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/shops?page=1"));
     log("shops res: " + response.body);
     var shopResponse = shopResponseFromJson(response.body);
     _shops.addAll(shopResponse.shops!);
-
+    setState(() {});
     fetchSellers(areaName);
   }
 
@@ -385,45 +365,23 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             _webStoreId = seller.webStoreId!;
             _userId = seller.userId!;
 
+            box.write(webStoreId, _webStoreId);
+            box.write(user_Id, _userId);
+
             log("webstore ID $_webStoreId");
             log("user ID $_userId");
+
+            //await getCategoryData(name: widget.na)
+
+            setState(() {});
           }
         }
       }
     }
-    fetchProducts();
+    //fetchProducts();
   }
 
   ///
-
-  List<Product> listOfProducts = [];
-
-  Future fetchProducts() async {
-    /*for (Shop shop in _shops) {
-      if (shop.user_id == _userId || shop.user_id == _webStoreId) shopId = shop.id!;
-    }*/
-    // log("----- shop ID ----- $shopId");
-    var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/products"));
-    // log("products response ${response.body}");
-    var productResponse = productMiniResponseFromJson(response.body);
-
-    for (var i = 0; i < productResponse.products!.length; i++) {
-      if (productResponse.products![i].user_id == _userId || (productResponse.products![i].user_id == _webStoreId)) {
-        //log("DATA EXIST");
-        listOfProducts = productResponse.products!;
-        log("products list length ${listOfProducts.length}");
-        setState(() {});
-      } else {
-        listOfProducts.length = 0;
-        log("DATA NOT EXISTS");
-      }
-    }
-
-    shopName = productResponse.products![0].shop_name!;
-    for (var ele in productResponse.products!) {
-      log(ele.shop_name!);
-    }
-  }
 
   var relatedProductsLink = " ";
 
@@ -531,9 +489,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   var categoryProducts = [];
   Future<void> getProductsAfterTap(link) async {
-    log("calling 2");
-    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
-
+    // log("calling 2");
+    log("shop by cat link $link"); //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
+    relatedProductsLink = link;
     final response6 = await get(Uri.parse(link), headers: {"Accept": "application/json"});
 
     var biscuitSweetsDataMap = jsonDecode(response6.body);
@@ -544,16 +502,17 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       setState(() {
         var biscuitSweetsDataModel = BreadBiscuit.fromJson(biscuitSweetsDataMap);
         categoryProducts = biscuitSweetsDataModel.data;
+        //relatedProductsLink=ca
       });
       //log("categoryProducts data length ${categoryProducts.length}");
     } else {
       //log("data invalid");
     }
-
     // log("after decode $dataMap");
   }
 
   var groceryProducts = [];
+/*
   Future<void> getGroceryProductsAfterTap(link2) async {
     //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
 
@@ -566,18 +525,20 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
       var groceryData = BreadBiscuit.fromJson(groceryItemDataMap);
       groceryProducts = groceryData.data;
-      //relatedProductsLink=groceryProducts[0].links.products;
+      // relatedProductsLink = groceryProducts[0].links.products;
 
       setState(() {});
 
       //log("after tap grocery data length ${groceryProducts.length}");
+
     } else {
       //log("data invalid");
     }
-
     // log("after decode $dataMap");
   }
+*/
 
+  /// one to 99 data
   List<OneToNinentyNineDataModel> oneTwoNinentyNineData = [];
 
   Future<void> getOneTo99Data() async {
@@ -769,32 +730,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
               height: 5,
             ),
 
-            ///Product Fetch
-
-            listOfProducts.isEmpty
-                ? Text("NO Product found")
-                : SizedBox(
-                    height: 100,
-                    width: width,
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: listOfProducts.length,
-                      itemBuilder: (_, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Text("${listOfProducts[index].name}"),
-                              Text("${listOfProducts[index].base_price}"),
-                              Text("${listOfProducts[index].user_id}"),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-
-            // top banner
+            /// top banner
             Container(
               //width: 320.0,
               width: MediaQuery.of(context).size.width / 1,
@@ -851,7 +787,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
               height: 20,
             ),
 
-            // Offer For you
+            /// Offer For you
             SizedBox(
               width: MediaQuery.of(context).size.width / 1.1,
               child: Row(
@@ -875,11 +811,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 ],
               ),
             ),
-
             SizedBox(
               height: 15,
             ),
-
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: SingleChildScrollView(
@@ -984,7 +918,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             SizedBox(
               height: 30,
             ),
-            // shop by category
+
+            /// shop by category
             Container(
               ///height: height,
               width: MediaQuery.of(context).size.width / 1,
@@ -1032,6 +967,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                     value = index.toString();
                                     categoryDataItem = categoryData[index].name;
                                     log(categoryData[index].links.products);
+                                    relatedProductsLink = categoryData[index].links.products;
                                     getProductsAfterTap(categoryData[index].links.products);
                                   });
                                 },
@@ -1187,11 +1123,11 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                     ),
                                     InkWell(
                                       onTap: () {
-                                        Navigator.pushReplacement(
+                                        Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => GroceryDetails(
-                                                      detailsLink: groceryProducts[index].links.details,
+                                                      detailsLink: categoryProducts[index].links.details,
                                                       relatedProductLink: relatedProductsLink,
                                                     )));
                                       },
@@ -1720,7 +1656,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 Center(
                     child: Image.asset(
                   "assets/pi.png",
-                  height: 40,
+                  height: 45,
+                  width: 30,
                 )),
 
                 Obx(() => Text(
