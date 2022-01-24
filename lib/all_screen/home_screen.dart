@@ -676,7 +676,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                       Padding(
                         padding: const EdgeInsets.only(top: 2.5),
                         child: Text(
-                          "  Protidin PG Store, $selectAreaName ",
+                          ///"  Protidin PG Store, $selectAreaName ",
+                          "  Protidin PG Store, Shahbag ",
                           style: TextStyle(
                             color: Color(0xFF515151),
                             fontSize: 13,
@@ -686,9 +687,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {
+                        /*onTap: () {
                           getCityName();
-                        },
+                        },*/
                         child: Container(
                             height: 9,
                             child: Padding(
