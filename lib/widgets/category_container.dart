@@ -58,6 +58,8 @@ class _CategoryContainerState extends State<CategoryContainer> {
             unit: ele.unit,
             id: ele.id,
             links: ele.links!,
+            discount: ele.discount!,
+            has_discount: ele.has_discount,
             user_id: ele.user_id));
         //box.write(list_of_products, listOfProducts[index].id);
         log("product length ${listOfProducts.length}");
@@ -113,7 +115,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
       ///await updateAddressInCart(userId);
       await controller.getCartName();
 
-      // await getCartSummary();
+      //await getCartSummary();
     } else {
       showToast("Something went wrong", context: context);
     }
@@ -324,24 +326,34 @@ class _CategoryContainerState extends State<CategoryContainer> {
                             decoration: BoxDecoration(color: Color(0xFFF1EDF2), borderRadius: BorderRadius.circular(15.0)),
                             //height: MediaQuery.of(context).size.height/3.2,width: MediaQuery.of(context).size.width / 2.34,
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Container(
                                     width: MediaQuery.of(context).size.width / 5,
-                                    height: MediaQuery.of(context).size.height / 45,
+
+                                    height: MediaQuery.of(context).size.height / 41,
                                     margin: EdgeInsets.only(top: 10),
                                     decoration: BoxDecoration(
-                                      color: Colors.green,
+                                      color: listOfProducts[index].has_discount == true ? Colors.green : Color(0xFFF1EDF2),
                                       borderRadius: BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
                                     ),
                                     //
 
                                     child: Center(
-                                      child: Text(
-                                        "15% OFF",
-                                        style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
-                                      ),
+                                      child: listOfProducts[index].has_discount == true
+                                          ? Text(
+                                              //"15% OFF",
+                                              "-৳ ${listOfProducts[index].discount.toString()}",
+                                              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                                            )
+                                          : Text(
+                                              //"15% OFF",
+                                              "",
+                                              style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                            ),
                                     ),
                                   ),
                                 ),
@@ -390,20 +402,16 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                   ),
                                 ),
 
-                                Center(
+                                Align(
+                                  alignment: Alignment.center,
                                   child: Container(
                                     height: MediaQuery.of(context).size.height / 38,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          listOfProducts[index].unit.toString(),
-                                          style: TextStyle(color: Colors.grey.withOpacity(0.9)),
-                                        ),
-                                        Text(
-                                          listOfProducts[index].user_id.toString(),
-                                          style: TextStyle(color: Colors.grey.withOpacity(0.9)),
-                                        ),
-                                      ],
+                                    width: MediaQuery.of(context).size.width / 2.5,
+                                    child: Center(
+                                      child: Text(
+                                        listOfProducts[index].unit.toString(),
+                                        style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                      ),
                                     ),
                                   ),
                                 ),

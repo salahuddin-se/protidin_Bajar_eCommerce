@@ -6,14 +6,14 @@ class BreadBiscuit {
     required this.success,
     required this.status,
   });
-  late final List<Data> data;
+  late final List<ProductsData> data;
   late final Links links;
   late final Meta meta;
   late final bool success;
   late final int status;
 
   BreadBiscuit.fromJson(Map<String, dynamic> json) {
-    data = List.from(json['data']).map((e) => Data.fromJson(e)).toList();
+    data = List.from(json['data']).map((e) => ProductsData.fromJson(e)).toList();
     links = Links.fromJson(json['links']);
     meta = Meta.fromJson(json['meta']);
     success = json['success'];
@@ -31,41 +31,41 @@ class BreadBiscuit {
   }
 }
 
-class Data {
-  Data({
-    required this.id,
-    required this.name,
-    required this.shopName,
-    required this.userId,
-    required this.erpId,
-    required this.thumbnailImage,
-    required this.hasDiscount,
-    required this.basePrice,
-    required this.baseDiscountedPrice,
-    required this.discount,
-    required this.discountType,
-    required this.rating,
-    required this.sales,
-    required this.unit,
-    required this.links,
+class ProductsData {
+  ProductsData({
+    this.id,
+    this.name,
+    this.shopName,
+    this.userId,
+    this.erpId,
+    this.thumbnailImage,
+    this.hasDiscount,
+    this.basePrice,
+    this.baseDiscountedPrice,
+    this.discount,
+    this.discountType,
+    this.rating,
+    this.sales,
+    this.unit,
+    this.links,
   });
-  late final int id;
-  late final String name;
-  late final String shopName;
+  late final int? id;
+  late final String? name;
+  late final String? shopName;
   late final int? userId;
-  late final String erpId;
-  late final String thumbnailImage;
-  late final bool hasDiscount;
-  late final String basePrice;
-  late final String baseDiscountedPrice;
-  late final int discount;
-  late final String discountType;
-  late final int rating;
-  late final int sales;
-  late final String unit;
-  late final Links links;
+  late final String? erpId;
+  late final String? thumbnailImage;
+  late final bool? hasDiscount;
+  late final String? basePrice;
+  late final String? baseDiscountedPrice;
+  late final int? discount;
+  late final String? discountType;
+  late final int? rating;
+  late final int? sales;
+  late final String? unit;
+  late final Links? links;
 
-  Data.fromJson(Map<String, dynamic> json) {
+  ProductsData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     shopName = json['shop_name'];
@@ -99,7 +99,7 @@ class Data {
     _data['rating'] = rating;
     _data['sales'] = sales;
     _data['unit'] = unit;
-    _data['links'] = links.toJson();
+    _data['links'] = links?.toJson();
     return _data;
   }
 }

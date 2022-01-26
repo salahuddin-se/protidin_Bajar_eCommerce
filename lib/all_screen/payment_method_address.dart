@@ -882,7 +882,8 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                 ),
 
                 ///card image
-                Center(
+                /*
+                                Center(
                   child: Container(
                     height: 190,
                     width: MediaQuery.of(context).size.width / 1.1,
@@ -895,9 +896,11 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                   ),
                 ),
 
+                 */
                 SizedBox(height: 20),
 
                 ///card number
+                /*
                 Container(
                   height: 200,
                   decoration: BoxDecoration(
@@ -1040,6 +1043,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                     ],
                   ),
                 )
+                 */
               ]),
             ),
 

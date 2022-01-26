@@ -19,6 +19,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
+#sdk: '>=2.12.0 <3.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -36,7 +37,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_dropdown: ^1.0.0+hotfix.1
   auto_size_text: ^3.0.0-nullsafety.0
-  carousel_slider: ^2.3.1
+  carousel_slider: ^4.0.0
+  carousel_pro: ^1.0.0
   cached_network_image: ^2.0.0
   json_annotation:
   device_preview:
