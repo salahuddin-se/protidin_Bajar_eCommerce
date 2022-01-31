@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'history_order.dart';
 
 class MyOrderTabBar extends StatefulWidget {
+  const MyOrderTabBar({Key? key}) : super(key: key);
+
   @override
   _MyOrderTabBarState createState() => _MyOrderTabBarState();
 }
@@ -55,12 +57,18 @@ class _MyOrderTabBarState extends State<MyOrderTabBar> with SingleTickerProvider
                   isScrollable: true,
                   indicatorColor: kPrimaryColor,
                   controller: controller,
-                  tabs: [
-                    Text(
-                      "Ongoing",
-                      style: TextStyle(color: kBlackColor),
+                  tabs: const [
+                    Padding(
+                      padding: EdgeInsets.only(right: 45.0),
+                      child: Text(
+                        "Ongoing",
+                        style: TextStyle(color: kBlackColor),
+                      ),
                     ),
-                    Text("History", style: TextStyle(color: kBlackColor)),
+                    Padding(
+                      padding: EdgeInsets.only(left: 45.0),
+                      child: Text("History", style: TextStyle(color: kBlackColor)),
+                    ),
                   ],
                 ),
               ),

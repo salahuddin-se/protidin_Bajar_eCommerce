@@ -123,6 +123,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.grey[100],
         // appBar: AppBar(
         //   backgroundColor: kWhiteColor,
         //   centerTitle: true,
@@ -138,23 +139,26 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                TextField(
-                  controller: _filter,
-                  decoration: InputDecoration(
-                      hintText: '',
-                      contentPadding: const EdgeInsets.all(15),
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: kBlackColor,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      )),
-                  onChanged: (value) {
-                    // do something
-                    _getNames();
-                    //_searchPressed();
-                  },
+                Container(
+                  color: Colors.white,
+                  child: TextField(
+                    controller: _filter,
+                    decoration: InputDecoration(
+                        hintText: '',
+                        contentPadding: const EdgeInsets.all(15),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: kBlackColor,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        )),
+                    onChanged: (value) {
+                      // do something
+                      _getNames();
+                      //_searchPressed();
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 20.0,

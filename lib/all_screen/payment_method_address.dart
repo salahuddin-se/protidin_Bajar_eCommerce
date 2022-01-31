@@ -350,7 +350,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
     var jsonBody = (<String, dynamic>{
       "user_id": userId.toString(),
       "owner_id": ownerID.toString(),
-      "payment_type": "cash_payment",
+      "payment_type_key": "cash_payment",
       "address": selectedAddress
     });
 
@@ -1270,7 +1270,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                                       width: MediaQuery.of(context).size.width * 3 / 5,
                                       child: ListTile(
                                         title: Text(
-                                          paymentData[index].payment_type,
+                                          paymentData[index].payment_type_key,
                                           style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
                                         ),
                                       ),
@@ -1289,7 +1289,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                                 )
                               : GestureDetector(
                                   onTap: () {
-                                    paymentType = paymentData[index].payment_type;
+                                    paymentType = paymentData[index].payment_type_key;
                                     setState(() {
                                       value = index.toString();
                                     });
@@ -1305,7 +1305,8 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                                         width: MediaQuery.of(context).size.width * 3 / 5,
                                         child: ListTile(
                                           title: Text(
-                                            paymentData[index].payment_type,
+                                            ///payment_type_key
+                                            paymentData[index].payment_type_key,
                                             style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
                                           ),
                                         ),

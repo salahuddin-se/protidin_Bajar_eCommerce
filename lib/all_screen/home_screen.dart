@@ -1449,6 +1449,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                   onTap: () {
                                                     //box.write("sub_category", subCategoryProducts);
                                                     //addToCart();
+
+                                                    addToCart(oneTwoNinentyNineData[index].id, box.read(userID), 1);
+                                                    //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
                                                     //addToCart(box.read(areaName.toString()), box.read(userID), 1);
                                                   },
                                                   /*onTap: () {

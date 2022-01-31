@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:customer_ui/all_screen/purchase_details.dart';
 import 'package:customer_ui/components/apis.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/dataModel/purchase_history_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+
+import 'purchase_details.dart';
 
 //import 'Language.dart';
 
@@ -67,6 +68,9 @@ class _OngoingOrderState extends State<OngoingOrder> {
               "You have 1 (one) delivery in progress",
               style: TextStyle(color: Colors.grey),
             ),
+            SizedBox(
+              height: 20,
+            ),
             Container(
               padding: EdgeInsets.all(5.0),
               decoration: BoxDecoration(
@@ -75,21 +79,31 @@ class _OngoingOrderState extends State<OngoingOrder> {
               ),
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Transaction ID",
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          Text(
-                            purchaseData.last.code,
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                        ],
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Transaction ID",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            Text(
+                              purchaseData.last.code,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +114,11 @@ class _OngoingOrderState extends State<OngoingOrder> {
                           ),
                           Text(
                             purchaseData.last.grandTotal,
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w900,
+                            ),
                           ),
                         ],
                       ),
@@ -113,14 +131,21 @@ class _OngoingOrderState extends State<OngoingOrder> {
                           ),
                           Text(
                             purchaseData.last.paymentStatus,
-                            style: TextStyle(color: Colors.grey),
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w900,
+                            ),
                           ),
                         ],
                       ),
                     ],
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
+                    padding: const EdgeInsets.only(left: 5.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
@@ -144,7 +169,7 @@ class _OngoingOrderState extends State<OngoingOrder> {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                purchaseData.last.userId.toString(),
+                                box.read(userName),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
@@ -161,7 +186,7 @@ class _OngoingOrderState extends State<OngoingOrder> {
                     height: 15,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 15.0),
+                    padding: const EdgeInsets.only(left: 5.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Container(
@@ -198,6 +223,9 @@ class _OngoingOrderState extends State<OngoingOrder> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Align(
                     alignment: Alignment.center,
                     child: InkWell(
@@ -222,7 +250,7 @@ class _OngoingOrderState extends State<OngoingOrder> {
                           ],
                         ),
                         //color: Colors.green,
-                        height: 45,
+                        height: 40,
                         width: MediaQuery.of(context).size.width / 1.7,
                         child: Padding(
                           padding: const EdgeInsets.all(0),
@@ -236,6 +264,9 @@ class _OngoingOrderState extends State<OngoingOrder> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  )
                 ],
               ),
             )

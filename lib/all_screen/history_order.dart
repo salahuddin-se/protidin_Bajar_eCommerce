@@ -54,10 +54,9 @@ class _HistoryOrderState extends State<HistoryOrder> {
             padding: const EdgeInsets.all(8.0),
             child: Container(
               width: MediaQuery.of(context).size.width / 1.3,
-              height: 290,
               decoration: BoxDecoration(
-                color: Colors.grey[100],
-                borderRadius: BorderRadius.circular(20),
+                color: Colors.grey.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10.0),
               ),
               child: Column(
                 children: [
@@ -201,7 +200,7 @@ class _HistoryOrderState extends State<HistoryOrder> {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                purchaseDataList[index].userId.toString(),
+                                box.read(userName),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
@@ -296,6 +295,9 @@ class _HistoryOrderState extends State<HistoryOrder> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  )
                 ],
               ),
             ),

@@ -67,34 +67,38 @@ Future<void> getrelatedData() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(),
+
+        ///appBar: AppBar(),
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                height: 300,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: purchaseDetails.length,
-                    itemBuilder: (_, index) {
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(color: Color(0xFFF1EDF2), borderRadius: BorderRadius.circular(15.0)),
-                          width: MediaQuery.of(context).size.width / 2.34,
-                          child: Column(
-                            children: [
-                              Text(purchaseDetails[index].product),
-                              Text(purchaseDetails[index].tax.toString()),
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-              ),
-            ],
+      child: Column(
+        children: [
+          SizedBox(
+            height: 35,
           ),
-        ));
+          Container(
+            height: 300,
+            child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
+                itemCount: purchaseDetails.length,
+                itemBuilder: (_, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Container(
+                      decoration: BoxDecoration(color: Color(0xFFF1EDF2), borderRadius: BorderRadius.circular(15.0)),
+                      width: MediaQuery.of(context).size.width / 2.34,
+                      child: Column(
+                        children: [
+                          Text(purchaseDetails[index].product),
+                          Text(purchaseDetails[index].tax.toString()),
+                        ],
+                      ),
+                    ),
+                  );
+                }),
+          ),
+        ],
+      ),
+    ));
   }
 }
