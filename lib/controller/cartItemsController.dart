@@ -13,6 +13,7 @@ class CartItemsController extends GetxController {
 
   Future<void> getCartName() async {
     cartItemsList.clear();
+    log("cart length ${cartLength.value}");
     log("-----get cart items---with user ID ${box.read(userID)}--");
 
     var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/${box.read(userID)}"),
@@ -24,7 +25,6 @@ class CartItemsController extends GetxController {
       var dataMap = jsonDecode(res.body);
       final cartModel = dataMap.map((json) => CartDetailsModel.fromJson(json)).toList();
 
-      //log("cart items ${cartModel.length}");
       for (var element in cartModel) {
         for (var element2 in element.cartItems) {
           cartItemsList.add(CartItems(

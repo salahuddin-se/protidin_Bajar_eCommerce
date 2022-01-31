@@ -48,9 +48,9 @@ class Data {
   late final int id;
   late final String code;
   late final int userId;
-  late final ShippingAddress shippingAddress;
+  late final ShippingAddress? shippingAddress;
   late final String paymentType;
-  late final Null shippingType;
+  late final Null? shippingType;
   late final String shippingTypeString;
   late final String paymentStatus;
   late final String paymentStatusString;
@@ -92,7 +92,7 @@ class Data {
     _data['id'] = id;
     _data['code'] = code;
     _data['user_id'] = userId;
-    _data['shipping_address'] = shippingAddress.toJson();
+    _data['shipping_address'] = shippingAddress!.toJson();
     _data['payment_type'] = paymentType;
     _data['shipping_type'] = shippingType;
     _data['shipping_type_string'] = shippingTypeString;
@@ -127,18 +127,18 @@ class ShippingAddress {
     required this.name,
     required this.email,
   });
-  late final int id;
-  late final int userId;
-  late final String address;
-  late final String country;
-  late final String city;
-  late final String postalCode;
-  late final String phone;
-  late final int setDefault;
-  late final String createdAt;
-  late final String updatedAt;
-  late final String name;
-  late final String email;
+  late final int? id;
+  late final int? userId;
+  late final String? address;
+  late final String? country;
+  late final String? city;
+  late final String? postalCode;
+  late final String? phone;
+  late final int? setDefault;
+  late final String? createdAt;
+  late final String? updatedAt;
+  late final String? name;
+  late final String? email;
 
   ShippingAddress.fromJson(Map<String, dynamic> json) {
     id = json['id'];

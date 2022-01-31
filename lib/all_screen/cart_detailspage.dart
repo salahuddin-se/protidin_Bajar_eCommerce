@@ -146,6 +146,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
       await controller.getCartName();
       // await Get.find<CartItemsController>().getCartName();
       await getCartSummary();
+
       setState(() {});
     }
   }
@@ -735,7 +736,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: Text(
                           ///"MRP ($totalProducts products)",
-                          "MRP (${box.read(cart_length)} products)",
+                          "MRP (${box.read(cart_length) ?? 0} products)",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 15,
@@ -753,7 +754,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                         height: 20,
                         width: MediaQuery.of(context).size.width / 2.4,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                           child: Text(
                             subTotal,
                             style: TextStyle(
@@ -810,7 +811,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                         height: 20,
                         width: MediaQuery.of(context).size.width / 2.4,
                         child: Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
                           child: Text(
                             tax,
                             style: TextStyle(
@@ -971,7 +972,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                               child: Text(
-                                "- ৳96.00",
+                                "0.00",
                                 style: TextStyle(
                                   color: Color(0xFF9900FF),
                                   fontSize: 16,
@@ -1019,7 +1020,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                             height: 20,
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                               child: Text(
                                 "free",
                                 style: TextStyle(
@@ -1105,7 +1106,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                       child: Text(
-                        "- ৳96.00",
+                        "0.00",
                         style: TextStyle(
                           color: Color(0xFF9900FF),
                           fontSize: 16,

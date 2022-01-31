@@ -61,7 +61,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
             discount: ele.discount!,
             has_discount: ele.has_discount,
             user_id: ele.user_id));
-        //box.write(list_of_products, listOfProducts[index].id);
         log("product length ${listOfProducts.length}");
         setState(() {});
       }
@@ -78,11 +77,9 @@ class _CategoryContainerState extends State<CategoryContainer> {
     var groceryDataMap = jsonDecode(response3.body);
 
     if (groceryDataMap["success"] == true) {
-      //log("data valid");
       var categoryDataModel = CategoryDataModel.fromJson(groceryDataMap);
       categoryData = categoryDataModel.data;
       categoryItemData = categoryDataModel.data[0].name;
-      //categoryItemData = categoryDataModel.data[0].large_Banner;
       relatedProductsLink = categoryData[0].links.products;
 
       box.write(related_product_link, relatedProductsLink);
@@ -114,8 +111,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
 
       ///await updateAddressInCart(userId);
       await controller.getCartName();
-
-      //await getCartSummary();
     } else {
       showToast("Something went wrong", context: context);
     }
@@ -220,7 +215,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                 ),
                                 child: Column(
                                   children: [
-                                    //SizedBox(height: 15,),
                                     Container(
                                       height: height * 0.15,
                                       //width: width*0.30,
@@ -230,9 +224,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(0),
                                           child: categoryData[index].mobileBanner.isEmpty
-                                              ?
-                                              //Text("OK"):
-                                              Image.asset("assets/app_logo.png")
+                                              ? Image.asset("assets/app_logo.png")
                                               : Image.network(
                                                   imagePath + categoryData[index].mobileBanner,
                                                 ),
@@ -265,9 +257,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                       Container(
                                         height: height * 0.15,
                                         width: width * 0.30,
-                                        decoration: BoxDecoration(
-                                            //color: Colors.grey.withOpacity(0.2),
-                                            borderRadius: BorderRadius.circular(15.0)),
+                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
                                         child: Padding(
                                           padding: const EdgeInsets.all(0),
                                           child: Center(

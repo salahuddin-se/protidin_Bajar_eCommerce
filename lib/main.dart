@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:customer_ui/ruf/search.dart';
 import 'package:customer_ui/welcomeScreen/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -13,7 +12,7 @@ void main() async {
 
   ///runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SearchScreen()));
 
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: SearchScreen()));
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: MyHomePage()));
 }
 
 class MyHomePage extends StatefulWidget {

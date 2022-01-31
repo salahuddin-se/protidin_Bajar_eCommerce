@@ -1,5 +1,5 @@
 import 'package:customer_ui/all_screen/grocery_offer_page.dart';
-import 'package:customer_ui/all_screen/my_orders.dart';
+import 'package:customer_ui/all_screen/my_order_tab.dart';
 import 'package:customer_ui/all_screen/myaccopunt.dart';
 import 'package:customer_ui/all_screen/request_product.dart';
 import 'package:customer_ui/all_screen/tarck_order.dart';
@@ -131,7 +131,7 @@ Drawer buildDrawerClass(BuildContext context, double block, {VoidCallback? callb
             ],
           ),
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrder()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrderTabBar()));
           },
         ),
         ListTile(

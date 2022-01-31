@@ -2,8 +2,6 @@ import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:flutter/material.dart';
 
-//import 'Language.dart';
-
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);
   @override
@@ -144,7 +142,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "${box.read(userAddress)}",
+                                    box.read(account_userAddress) ?? "No address",
                                     style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 14,
@@ -202,7 +200,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "Contact Number",
+                                    "Email",
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 16,
