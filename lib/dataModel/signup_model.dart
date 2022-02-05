@@ -6,7 +6,7 @@ import 'dart:convert';
 
 SignupResponse signupResponseFromJson(String str) => SignupResponse.fromJson(json.decode(str));
 
-String signupResponseToJson(SignupResponse data) => json.encode(data.toJson());
+String signupResponseToJson(SignupResponse data) => json.encode(data.toJson().toString());
 
 class SignupResponse {
   SignupResponse({

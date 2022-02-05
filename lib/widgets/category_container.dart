@@ -36,7 +36,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
   var adt;
 
   List<Product> listOfProducts = [];
-
   Future fetchProducts(link2) async {
     listOfProducts.clear();
     log("tap link $link2");

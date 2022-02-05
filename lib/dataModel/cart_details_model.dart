@@ -8,10 +8,15 @@ class CartDetailsModel {
   late final int? ownerId;
   late final List<CartItems> cartItems;
 
-  CartDetailsModel.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    ownerId = json['owner_id'];
-    cartItems = List.from(json['cart_items']).map((e) => CartItems.fromJson(e)).toList();
+  factory CartDetailsModel.fromJson(Map<String, dynamic> json) {
+    return CartDetailsModel(
+      name: json['name'],
+      ownerId: json['owner_id'],
+      cartItems: List.from(json['cart_items']).map((e) => CartItems.fromJson(e)).toList(),
+    );
+    // name = json['name'];
+    // ownerId = json['owner_id'];
+    // cartItems = List.from(json['cart_items']).map((e) => CartItems.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {

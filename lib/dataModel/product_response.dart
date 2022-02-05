@@ -66,6 +66,8 @@ class Product {
   bool? has_discount;
   int? rating;
   int? sales;
+
+  ///Links? links;
   Links? links;
   String? unit;
   int? discount;

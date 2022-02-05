@@ -56,7 +56,7 @@ class _SearchScreenState extends State<SearchScreen> {
       for (int i = 0; i < searchProduct.data.length; i++) {
         tempList.add(searchProduct.data[i]);
       }
-      _filter.clear();
+      //_filter.clear();
     });
   }
 

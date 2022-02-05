@@ -143,9 +143,9 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
     if (res.statusCode == 200 || res.statusCode == 201) {
       showToast("Item delete Successfully", context: context);
+      await getCartSummary();
       await controller.getCartName();
       // await Get.find<CartItemsController>().getCartName();
-      await getCartSummary();
 
       setState(() {});
     }

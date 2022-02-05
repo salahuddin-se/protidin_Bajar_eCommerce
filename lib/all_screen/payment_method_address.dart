@@ -69,17 +69,33 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
     }
   }
 
-  Future<void> addUserAddress(userID, address, country, city, postalCode, phone) async {
-    var res = await post(Uri.parse(addUserAddressAPI),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
-        body: jsonEncode(<String, dynamic>{
-          "user_id": userID,
-          "address": address,
-          "country": country,
-          "city": city,
-          "postal_code": postalCode,
-          "phone": phone
-        }));
+  Future<void> addUserAddress(userID, address, country, city, postalCode, phone, bool isUpdate, int addressId) async {
+    String targetUrl = isUpdate ? "https://test.protidin.com.bd/api/v2/update-address-in-cart" : addUserAddressAPI;
+
+    var bodyData = isUpdate
+        ? jsonEncode(<String, dynamic>{
+            "user_id": userID,
+            "address": address,
+            "address_id": addressId,
+            "country": country,
+            "city": city,
+            "postal_code": postalCode,
+            "phone": phone
+          })
+        : jsonEncode(<String, dynamic>{
+            "user_id": userID,
+            "address": address,
+            "country": country,
+            "city": city,
+            "postal_code": postalCode,
+            "phone": phone
+          });
+
+    var res = await post(
+      Uri.parse(targetUrl),
+      headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
+      body: bodyData,
+    );
 
     ///log("add user address response ${res.body}");
 
@@ -166,181 +182,6 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
       showToast("Something went wrong", context: context);
     }
     setState(() {});
-
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
-                right: 20,
-                top: 20,
-                bottom: 10,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: userAddressController,
-                    autofocus: true,
-                    onChanged: (value) {},
-                    decoration: InputDecoration(
-                      hintText: 'Address',
-                      fillColor: Colors.grey[100],
-                      filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      enabledBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      focusedBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: userCityController,
-                    autofocus: true,
-                    onChanged: (value) {},
-                    decoration: InputDecoration(
-                      hintText: 'City',
-                      fillColor: Colors.grey[100],
-                      filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      enabledBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      focusedBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: userPostalCodeController,
-                    autofocus: true,
-                    onChanged: (value) {},
-                    decoration: InputDecoration(
-                      hintText: 'Postal code',
-                      fillColor: Colors.grey[100],
-                      filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      enabledBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      focusedBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: userCountryController,
-                    autofocus: true,
-                    onChanged: (value) {},
-                    decoration: InputDecoration(
-                      hintText: 'Country',
-                      fillColor: Colors.grey[100],
-                      filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      enabledBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      focusedBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TextFormField(
-                    controller: userPhoneController,
-                    keyboardType: TextInputType.phone,
-                    autofocus: true,
-                    onChanged: (value) {},
-                    decoration: InputDecoration(
-                      hintText: 'Phone',
-                      fillColor: Colors.grey[100],
-                      filled: true,
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                      enabledBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      focusedBorder:
-                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Color(0xFF9900FF), //background color of button
-                              //side: BorderSide(width:3, color:Colors.brown), //border width and color
-                              elevation: 1, //elevation of button
-                              shape: RoundedRectangleBorder(
-                                  //to set border radius to button
-                                  borderRadius: BorderRadius.circular(30)),
-                              padding: EdgeInsets.all(10) //content padding inside button
-                              ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text(
-                            'Cancel',
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              primary: Color(0xFF9900FF), //background color of button
-                              //side: BorderSide(width:3, color:Colors.brown), //border width and color
-                              elevation: 1, //elevation of button
-                              shape: RoundedRectangleBorder(
-                                  //to set border radius to button
-                                  borderRadius: BorderRadius.circular(30)),
-                              padding: EdgeInsets.all(10) //content padding inside button
-                              ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                            addUserAddress("${box.read(userID)}", userAddressController.text, userCountryController.text,
-                                userCityController.text, userPostalCodeController.text, userPhoneController.text);
-                          },
-                          child: const Text(
-                            'Save',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 
   Future<void> orderCreate(userId, ownerID, paymentType, userAddress, grandTotal) async {
@@ -454,190 +295,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                             padding: EdgeInsets.all(10) //content padding inside button
                             ),
                         onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return SingleChildScrollView(
-                                child: Padding(
-                                  padding: MediaQuery.of(context).viewInsets,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: 20,
-                                      right: 20,
-                                      top: 20,
-                                      bottom: 10,
-                                    ),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: <Widget>[
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        TextFormField(
-                                          controller: userAddressController,
-                                          autofocus: true,
-                                          onChanged: (value) {},
-                                          decoration: InputDecoration(
-                                            hintText: 'Address',
-                                            fillColor: Colors.grey[100],
-                                            filled: true,
-                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        TextFormField(
-                                          controller: userCityController,
-                                          autofocus: true,
-                                          onChanged: (value) {},
-                                          decoration: InputDecoration(
-                                            hintText: 'City',
-                                            fillColor: Colors.grey[100],
-                                            filled: true,
-                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        TextFormField(
-                                          controller: userPostalCodeController,
-                                          autofocus: true,
-                                          onChanged: (value) {},
-                                          decoration: InputDecoration(
-                                            hintText: 'Postal code',
-                                            fillColor: Colors.grey[100],
-                                            filled: true,
-                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        TextFormField(
-                                          controller: userCountryController,
-                                          autofocus: true,
-                                          onChanged: (value) {},
-                                          decoration: InputDecoration(
-                                            hintText: 'Country',
-                                            fillColor: Colors.grey[100],
-                                            filled: true,
-                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        TextFormField(
-                                          controller: userPhoneController,
-                                          keyboardType: TextInputType.phone,
-                                          autofocus: true,
-                                          onChanged: (value) {},
-                                          decoration: InputDecoration(
-                                            hintText: 'Phone',
-                                            fillColor: Colors.grey[100],
-                                            filled: true,
-                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                            enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Color(0xFF9900FF), //background color of button
-                                                    //side: BorderSide(width:3, color:Colors.brown), //border width and color
-                                                    elevation: 1, //elevation of button
-                                                    shape: RoundedRectangleBorder(
-                                                        //to set border radius to button
-                                                        borderRadius: BorderRadius.circular(30)),
-                                                    padding: EdgeInsets.all(10) //content padding inside button
-                                                    ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: const Text(
-                                                  'Cancel',
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              width: 20,
-                                            ),
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    primary: Color(0xFF9900FF), //background color of button
-                                                    //side: BorderSide(width:3, color:Colors.brown), //border width and color
-                                                    elevation: 1, //elevation of button
-                                                    shape: RoundedRectangleBorder(
-                                                        //to set border radius to button
-                                                        borderRadius: BorderRadius.circular(30)),
-                                                    padding: EdgeInsets.all(10) //content padding inside button
-                                                    ),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                  addUserAddress(
-                                                      "${box.read(userID)}",
-                                                      userAddressController.text,
-                                                      userCountryController.text,
-                                                      userCityController.text,
-                                                      userPostalCodeController.text,
-                                                      userPhoneController.text);
-                                                },
-                                                child: const Text(
-                                                  'Save',
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
-                          );
+                          _swAddressBottoSheet(false, -1);
                         },
                         child: Container(
                             height: 20,
@@ -730,206 +388,8 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                                           userCountryController.text = userAddressData[index].country!;
                                           userPhoneController.text = userAddressData[index].phone!;
                                           //updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                          showModalBottomSheet(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            builder: (context) {
-                                              return SingleChildScrollView(
-                                                child: Padding(
-                                                  padding: MediaQuery.of(context).viewInsets,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(
-                                                      left: 20,
-                                                      right: 20,
-                                                      top: 20,
-                                                      bottom: 10,
-                                                    ),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: <Widget>[
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        TextFormField(
-                                                          controller: userAddressController,
-                                                          autofocus: true,
-                                                          onChanged: (value) {},
-                                                          decoration: InputDecoration(
-                                                            hintText: 'Address',
-                                                            fillColor: Colors.grey[100],
-                                                            filled: true,
-                                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                                            enabledBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            focusedBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        TextFormField(
-                                                          controller: userCityController,
-                                                          autofocus: true,
-                                                          onChanged: (value) {},
-                                                          decoration: InputDecoration(
-                                                            hintText: 'City',
-                                                            fillColor: Colors.grey[100],
-                                                            filled: true,
-                                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                                            enabledBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            focusedBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        TextFormField(
-                                                          controller: userPostalCodeController,
-                                                          autofocus: true,
-                                                          onChanged: (value) {},
-                                                          decoration: InputDecoration(
-                                                            hintText: 'Postal code',
-                                                            fillColor: Colors.grey[100],
-                                                            filled: true,
-                                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                                            enabledBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            focusedBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        TextFormField(
-                                                          controller: userCountryController,
-                                                          autofocus: true,
-                                                          onChanged: (value) {},
-                                                          decoration: InputDecoration(
-                                                            hintText: 'Country',
-                                                            fillColor: Colors.grey[100],
-                                                            filled: true,
-                                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                                            enabledBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            focusedBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        TextFormField(
-                                                          controller: userPhoneController,
-                                                          keyboardType: TextInputType.phone,
-                                                          autofocus: true,
-                                                          onChanged: (value) {},
-                                                          decoration: InputDecoration(
-                                                            hintText: 'Phone',
-                                                            fillColor: Colors.grey[100],
-                                                            filled: true,
-                                                            contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                                                            enabledBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            focusedBorder: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                            border: OutlineInputBorder(
-                                                                borderRadius: BorderRadius.circular(10.0),
-                                                                borderSide: BorderSide(color: Colors.white)),
-                                                          ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            Expanded(
-                                                              child: ElevatedButton(
-                                                                style: ElevatedButton.styleFrom(
-                                                                    primary: Color(0xFF9900FF), //background color of button
-                                                                    //side: BorderSide(width:3, color:Colors.brown), //border width and color
-                                                                    elevation: 1, //elevation of button
-                                                                    shape: RoundedRectangleBorder(
-                                                                        //to set border radius to button
-                                                                        borderRadius: BorderRadius.circular(30)),
-                                                                    padding: EdgeInsets.all(10) //content padding inside button
-                                                                    ),
-                                                                onPressed: () {
-                                                                  Navigator.pop(context);
-                                                                },
-                                                                child: const Text(
-                                                                  'Cancel',
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            const SizedBox(
-                                                              width: 20,
-                                                            ),
-                                                            Expanded(
-                                                              child: ElevatedButton(
-                                                                style: ElevatedButton.styleFrom(
-                                                                    primary: Color(0xFF9900FF), //background color of button
-                                                                    //side: BorderSide(width:3, color:Colors.brown), //border width and color
-                                                                    elevation: 1, //elevation of button
-                                                                    shape: RoundedRectangleBorder(
-                                                                        //to set border radius to button
-                                                                        borderRadius: BorderRadius.circular(30)),
-                                                                    padding: EdgeInsets.all(10) //content padding inside button
-                                                                    ),
-                                                                onPressed: () {
-                                                                  Navigator.pop(context);
-                                                                  updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                                                  /*addUserAddress(
-                                                                      "${box.read(userID)}",
-                                                                      userAddressController.text,
-                                                                      userCountryController.text,
-                                                                      userCityController.text,
-                                                                      userPostalCodeController.text,
-                                                                      userPhoneController.text)*/
-                                                                },
-                                                                child: const Text(
-                                                                  'Save',
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
+                                          print("ADDR_ID: ${userAddressData[index].id}");
+                                          _swAddressBottoSheet(true, userAddressData[index].id);
                                         },
                                         child: Container(
                                           height: 15,
@@ -1572,6 +1032,191 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
           ],
         ),
       ),
+    );
+  }
+
+  _swAddressBottoSheet(bool isUpdate, int addrId) {
+    return showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 10,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: userAddressController,
+                    autofocus: true,
+                    onChanged: (value) {},
+                    decoration: InputDecoration(
+                      hintText: 'Address',
+                      fillColor: Colors.grey[100],
+                      filled: true,
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      focusedBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: userCityController,
+                    autofocus: true,
+                    onChanged: (value) {},
+                    decoration: InputDecoration(
+                      hintText: 'City',
+                      fillColor: Colors.grey[100],
+                      filled: true,
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      focusedBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: userPostalCodeController,
+                    autofocus: true,
+                    onChanged: (value) {},
+                    decoration: InputDecoration(
+                      hintText: 'Postal code',
+                      fillColor: Colors.grey[100],
+                      filled: true,
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      focusedBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: userCountryController,
+                    autofocus: true,
+                    onChanged: (value) {},
+                    decoration: InputDecoration(
+                      hintText: 'Country',
+                      fillColor: Colors.grey[100],
+                      filled: true,
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      focusedBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: userPhoneController,
+                    keyboardType: TextInputType.phone,
+                    autofocus: true,
+                    onChanged: (value) {},
+                    decoration: InputDecoration(
+                      hintText: 'Phone',
+                      fillColor: Colors.grey[100],
+                      filled: true,
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                      enabledBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      focusedBorder:
+                          OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0), borderSide: BorderSide(color: Colors.white)),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xFF9900FF), //background color of button
+                              //side: BorderSide(width:3, color:Colors.brown), //border width and color
+                              elevation: 1, //elevation of button
+                              shape: RoundedRectangleBorder(
+                                  //to set border radius to button
+                                  borderRadius: BorderRadius.circular(30)),
+                              padding: EdgeInsets.all(10) //content padding inside button
+                              ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Cancel',
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xFF9900FF), //background color of button
+                              //side: BorderSide(width:3, color:Colors.brown), //border width and color
+                              elevation: 1, //elevation of button
+                              shape: RoundedRectangleBorder(
+                                  //to set border radius to button
+                                  borderRadius: BorderRadius.circular(30)),
+                              padding: EdgeInsets.all(10) //content padding inside button
+                              ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            addUserAddress(
+                              "${box.read(userID)}",
+                              userAddressController.text,
+                              userCountryController.text,
+                              userCityController.text,
+                              userPostalCodeController.text,
+                              userPhoneController.text,
+                              isUpdate,
+                              addrId,
+                            );
+                          },
+                          child: const Text(
+                            'Save',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

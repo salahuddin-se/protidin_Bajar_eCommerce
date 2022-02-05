@@ -8,11 +8,9 @@ import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:customer_ui/dataModel/breat_biscuit.dart';
 import 'package:customer_ui/dataModel/product_details_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 

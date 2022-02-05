@@ -23,7 +23,9 @@ class CartItemsController extends GetxController {
 
     if (res.statusCode == 200 || res.statusCode == 201) {
       var dataMap = jsonDecode(res.body);
-      final cartModel = dataMap.map((json) => CartDetailsModel.fromJson(json)).toList();
+      final List<CartDetailsModel> cartModel = List<CartDetailsModel>.from(dataMap.map((json) => CartDetailsModel.fromJson(json)));
+
+      if (cartModel.isEmpty) cartLength.value = 0;
 
       for (var element in cartModel) {
         for (var element2 in element.cartItems) {
@@ -42,9 +44,10 @@ class CartItemsController extends GetxController {
               quantity: element2.quantity,
               lowerLimit: element2.lowerLimit,
               upperLimit: element2.upperLimit));
-          cartLength.value = cartItemsList.length;
+
           box.write(cart_length, cartLength);
           log("total length ${cartItemsList.length}");
+          cartLength.value = cartItemsList.length;
         }
         //log("cart items inside model length ${element.cartItems.length}");
       }

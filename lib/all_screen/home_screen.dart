@@ -18,6 +18,7 @@ import 'package:customer_ui/welcomeScreen/sigininform.dart';
 import 'package:customer_ui/widgets/category_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
@@ -41,6 +42,7 @@ class CategoryHomeScreen extends StatefulWidget {
 class _MyHomePageState extends State<CategoryHomeScreen> {
   var value;
   var Cart;
+  bool isLocationChanged = false;
 
   Future<dynamic> buildShowDialog(BuildContext context, List<String> areaName, List<String> cityName) {
     Widget okButton = FlatButton(
@@ -153,6 +155,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                               onChanged: (String? value) {
                                 setState(() {
                                   selectAreaName = value!;
+                                  isLocationChanged = true;
                                   log("Area name is $selectAreaName");
                                 });
                               },
@@ -176,7 +179,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                       InkWell(
                         onTap: () {
                           Navigator.of(context).pop();
-                          fetchShop(selectAreaName);
+                          fetchShop(selectAreaName).then((value) {});
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width / 1.8,
@@ -198,19 +201,30 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
         });
   }
 
+  CategoryContainer userService = CategoryContainer(
+    categoryName: '',
+    large_Banner: '',
+    add_banner: '',
+    nameNo: '',
+  );
+
   @override
   void initState() {
     // TODO: implement initState
     log("------USER TOKEN IS------ :${box.read(userToken)}");
+    Clipboard.setData(ClipboardData(text: box.read(userToken)));
     controller.getCartName();
     getCityName();
     getCategory();
     getSliderSearch();
     getOneTo99Data();
+
+    //fetchProducts(areaName);
     // getLogoutResponse();
   }
 
   var sliderData = [];
+
   Future<void> getSliderSearch() async {
     String sliderURl = "https://test.protidin.com.bd/api/v2/sliders";
 
@@ -255,6 +269,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     } else {
       showToast("Something went wrong", context: context);
     }
+
     /////////
     //box.write(add_carts, addToCart(, box.read(userID), 1));
     ////////
@@ -305,6 +320,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   ///
 
   var productData = [];
+
   Future<void> getProductBySearch({required String name}) async {
     String searchProductURl = "https://test.protidin.com.bd/api/v2/products/search";
 
@@ -377,7 +393,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   }
 
   Future fetchSellers(String areaName) async {
-    //_areaName = areaName;
     _sellers.clear();
     var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/sellers?page=1&name=''"));
     log("sellers res: " + response.body);
@@ -400,13 +415,16 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
             //await getCategoryData(name: widget.na)
 
-            setState(() {});
+            setState(() {
+              isLocationChanged = false;
+            });
           }
         }
       }
     }
-    //fetchProducts();
   }
+
+  ///
 
   ///
 
@@ -514,6 +532,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   var categoryProducts = [];
   List<ProductsData> productsData = [];
+
   Future<void> getProductsAfterTap(link) async {
     log("user id ${box.read(user_Id)}");
     log("web store id ${box.read(webStoreId)}");
@@ -600,7 +619,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     } else {
       //log("data invalid");
     }
-
     // log("after decode $dataMap");
   }
 
@@ -1518,64 +1536,90 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(
-              categoryName: "Grocery",
-              nameNo: '4',
-              large_Banner: groceryLargeBanner,
-              add_banner: groceryAddBanner,
-            ),
+
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Grocery",
+                    nameNo: '4',
+                    large_Banner: groceryLargeBanner,
+                    add_banner: groceryAddBanner,
+                  ),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(
-                categoryName: "Dairy & Beverage", nameNo: '7', large_Banner: dairyBeverageLargeBanner, add_banner: dairyBeverageAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Dairy & Beverage",
+                    nameNo: '7',
+                    large_Banner: dairyBeverageLargeBanner,
+                    add_banner: dairyBeverageAddBanner),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(
-                categoryName: "Mother & Baby", nameNo: '8', large_Banner: motherBabyLargeBanner, add_banner: motherBabyAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Mother & Baby", nameNo: '8', large_Banner: motherBabyLargeBanner, add_banner: motherBabyAddBanner),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(
-                categoryName: "Fruits & Vegetables", nameNo: '9', large_Banner: fruitsVegLargeBanner, add_banner: fruitsVegAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Fruits & Vegetables", nameNo: '9', large_Banner: fruitsVegLargeBanner, add_banner: fruitsVegAddBanner),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(
-                categoryName: "Personal Care", nameNo: '10', large_Banner: personalCareLargeBanner, add_banner: personalCareAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Personal Care", nameNo: '10', large_Banner: personalCareLargeBanner, add_banner: personalCareAddBanner),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(
-                categoryName: "Bread Biscuit & Snacks", nameNo: '11', large_Banner: breadLargeBanner, add_banner: breadAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Bread Biscuit & Snacks", nameNo: '11', large_Banner: breadLargeBanner, add_banner: breadAddBanner),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(categoryName: "Household", nameNo: '13', large_Banner: householdLargeBanner, add_banner: householdAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Household", nameNo: '13', large_Banner: householdLargeBanner, add_banner: householdAddBanner),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(
-                categoryName: "Chocolate & Sweets", nameNo: '46', large_Banner: chocolateLargeBanner, add_banner: chocolateAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Chocolate & Sweets", nameNo: '46', large_Banner: chocolateLargeBanner, add_banner: chocolateAddBanner),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(categoryName: "Toys & Gift", nameNo: '14', large_Banner: toysGiftLargeBanner, add_banner: toysGiftAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Toys & Gift", nameNo: '14', large_Banner: toysGiftLargeBanner, add_banner: toysGiftAddBanner),
 
             SizedBox(
               height: 30,
             ),
-            CategoryContainer(
-                categoryName: "Stationery", nameNo: '199', large_Banner: stationaryLargeBanner, add_banner: stationaryAddBanner),
+            isLocationChanged
+                ? Container()
+                : CategoryContainer(
+                    categoryName: "Stationery", nameNo: '199', large_Banner: stationaryLargeBanner, add_banner: stationaryAddBanner),
 
             SizedBox(
               height: 30,
