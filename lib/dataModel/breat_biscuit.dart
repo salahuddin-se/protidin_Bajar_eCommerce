@@ -69,7 +69,7 @@ class ProductsData {
     id = json['id'];
     name = json['name'];
     shopName = json['shop_name'];
-    userId = json['user-id'];
+    userId = json['user_id'];
     erpId = json['erp_id'];
     thumbnailImage = json['thumbnail_image'];
     hasDiscount = json['has_discount'];

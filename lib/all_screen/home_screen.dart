@@ -43,6 +43,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   var value;
   var Cart;
   bool isLocationChanged = false;
+  bool isCategoryLoaded = false;
+  String newArea = "";
 
   Future<dynamic> buildShowDialog(BuildContext context, List<String> areaName, List<String> cityName) {
     Widget okButton = FlatButton(
@@ -88,7 +90,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: DropDown(
-                                items: cityName,
+                                items: [cityName[0]],
                                 hint: Text(
                                   "",
                                 ),
@@ -153,11 +155,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                 ),
                               ),
                               onChanged: (String? value) {
-                                setState(() {
-                                  selectAreaName = value!;
-                                  isLocationChanged = true;
-                                  log("Area name is $selectAreaName");
-                                });
+                                newArea = value!;
                               },
                             ),
                           ),
@@ -178,8 +176,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                           )),
                       InkWell(
                         onTap: () {
+                          setState(() {
+                            selectAreaName = newArea;
+                            isLocationChanged = true;
+                            log("Area name is $selectAreaName");
+                          });
                           Navigator.of(context).pop();
-                          fetchShop(selectAreaName).then((value) {});
+                          fetchShop(selectAreaName).then((value) {
+                            getCategory();
+                          });
                         },
                         child: Container(
                           width: MediaQuery.of(context).size.width / 1.8,
@@ -521,9 +526,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
         ///
 
       }
+      setState(() {
+        isCategoryLoaded = true;
+      });
+      getProductsAfterTap(categoryDataModel.data[0].links.products).then((value) {
+        setState(() {
+          isCategoryLoaded = false;
+        });
+      });
 
-      await getProductsAfterTap(categoryDataModel.data[0].links.products);
-      setState(() {});
       //log("data length ${categoryData.length}");
     } else {}
 
@@ -534,8 +545,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   List<ProductsData> productsData = [];
 
   Future<void> getProductsAfterTap(link) async {
-    log("user id ${box.read(user_Id)}");
-    log("web store id ${box.read(webStoreId)}");
+    categoryProducts.clear();
+    setState(() {
+      isCategoryLoaded = true;
+    });
+    log("new user id ${box.read(user_Id)}");
+    log("new web store id ${box.read(webStoreId)}");
     // log("calling 2");
     log("shop by cat link $link"); //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
     relatedProductsLink = link;
@@ -546,32 +561,40 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     if (biscuitSweetsDataMap["success"] == true) {
       //log("category data after tap $biscuitSweetsDataMap");
 
+      var biscuitSweetsDataModel = BreadBiscuit.fromJson(biscuitSweetsDataMap);
+      List<ProductsData> prodData = biscuitSweetsDataModel.data;
+
+      productsData = prodData.where((element) => element.userId == box.read(user_Id) || element.userId == box.read(webStoreId)).toList();
+      // for (var ele in biscuitSweetsDataModel.data) {
+      //   productsData.clear();
+      //
+      //   log("element user_id: ${ele.userId == box.read(user_Id) || ele.userId == box.read(webStoreId)}");
+      //   // log("seller user_id: ${ele.userId == box.read(webStoreId)}");
+      //   if (ele.userId == box.read(user_Id) || ele.userId == box.read(webStoreId)) {
+      //     productsData.add(ProductsData(
+      //
+      //         ///name: ele.name,
+      //         name: ele.name,
+      //         thumbnailImage: ele.thumbnailImage,
+      //         baseDiscountedPrice: ele.baseDiscountedPrice,
+      //         shopName: ele.shopName,
+      //         basePrice: ele.basePrice,
+      //         unit: ele.unit,
+      //         id: ele.id,
+      //         links: ele.links!,
+      //         discount: ele.discount!,
+      //         hasDiscount: ele.hasDiscount,
+      //         userId: ele.userId));
+      //   }
+      // }
+      // Future.delayed(Duration(seconds: 3), () {
       setState(() {
-        var biscuitSweetsDataModel = BreadBiscuit.fromJson(biscuitSweetsDataMap);
-
-        categoryProducts = biscuitSweetsDataModel.data;
-
-        for (var ele in biscuitSweetsDataModel.data) {
-          if (ele.userId == box.read(user_Id) || ele.userId == box.read(webStoreId)) {
-            productsData.add(ProductsData(
-
-                ///name: ele.name,
-                name: ele.name,
-                thumbnailImage: ele.thumbnailImage,
-                baseDiscountedPrice: ele.baseDiscountedPrice,
-                shopName: ele.shopName,
-                basePrice: ele.basePrice,
-                unit: ele.unit,
-                id: ele.id,
-                links: ele.links!,
-                discount: ele.discount!,
-                hasDiscount: ele.hasDiscount,
-                userId: ele.userId));
-          }
-        }
-
-        //relatedProductsLink=ca
+        categoryProducts = productsData;
+        isCategoryLoaded = false;
       });
+      // });
+
+      //relatedProductsLink=ca
       //log("categoryProducts data length ${categoryProducts.length}");
     } else {
       //log("data invalid");
@@ -1112,175 +1135,188 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                       ),
 
                       ///
-                      Container(
-                        height: MediaQuery.of(context).size.height / 3,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          itemCount: categoryProducts.length,
-                          itemBuilder: (_, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Container(
-                                decoration: BoxDecoration(color: Color(0xFFF1EDF2), borderRadius: BorderRadius.circular(15.0)),
-                                width: MediaQuery.of(context).size.width / 2.34,
-                                child: Column(
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width / 5,
-                                        height: MediaQuery.of(context).size.height / 41,
-                                        margin: EdgeInsets.only(top: 10),
-                                        decoration: BoxDecoration(
-                                          color: categoryProducts[index].hasDiscount == true ? Colors.green : Color(0xFFF1EDF2),
-                                          borderRadius:
-                                              BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
-                                        ),
-                                        //
-                                        child: Center(
-                                          child: categoryProducts[index].hasDiscount == true
-                                              ? Text(
-                                                  "-৳ ${categoryProducts[index].discount.toString()}",
-                                                  style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
-                                                )
-                                              : Text(
-                                                  //"15% OFF",
-                                                  "",
-                                                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
-                                                ),
-                                        ),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => GroceryDetails(
-                                                      detailsLink: categoryProducts[index].links.details,
-                                                      relatedProductLink: relatedProductsLink,
-                                                    )));
-                                      },
-                                      child: Container(
-                                        child: Image.network(imagePath + categoryProducts[index].thumbnailImage),
-                                        height: MediaQuery.of(context).size.height / 8,
-                                        width: MediaQuery.of(context).size.width / 2.34,
-                                      ),
-                                    ),
-                                    FittedBox(
-                                      child: Container(
-                                        ///height: height! * 0.08,
-                                        width: MediaQuery.of(context).size.width / 2.36,
-                                        height: MediaQuery.of(context).size.height / 16,
-                                        child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-                                          child: Text(
-                                            categoryProducts[index].name,
-                                            style: TextStyle(
-                                              color: Color(0xFF515151),
-                                              fontSize: 12.5,
-                                              fontWeight: FontWeight.w600,
-                                              fontFamily: "CeraProBold",
-                                            ),
-                                            maxLines: 2,
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        height: MediaQuery.of(context).size.height / 38,
-                                        child: Text(
-                                          categoryProducts[index].unit,
-                                          style: TextStyle(color: Colors.grey.withOpacity(0.9)),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      child: Center(
-                                        child: Container(
-                                          //height: MediaQuery.of(context).size.height/32,
-                                          height: MediaQuery.of(context).size.height / 31.5,
-                                          width: MediaQuery.of(context).size.width / 2.34,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Container(
-                                                child: Image.asset("assets/p.png"),
-                                                height: 20,
-                                                width: 22,
-                                              ),
-                                              Text(categoryProducts[index].baseDiscountedPrice.toString(),
-                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
-                                              Text(categoryProducts[index].basePrice.toString(),
-                                                  style: TextStyle(
-                                                      color: Color(0xFFA299A8),
-                                                      fontSize: 12,
-                                                      fontWeight: FontWeight.w400,
-                                                      decoration: TextDecoration.lineThrough)),
-                                              Padding(
-                                                padding: const EdgeInsets.only(left: 10),
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  addToCart(categoryProducts[index].id, box.read(userID), 1);
-                                                  //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
-                                                },
-                                                child: Container(
-                                                  height: 25,
-                                                  width: 25,
-                                                  decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
-                                                  child: Center(
-                                                    child: Image.asset("assets/pi.png"),
-                                                  ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      //height: height! * 0.03,
-                                      //height: MediaQuery.of(context).size.height/26,
-                                      height: MediaQuery.of(context).size.height / 21,
+                      isCategoryLoaded || isLocationChanged
+                          ? Container(
+                              height: MediaQuery.of(context).size.height / 3,
+                            )
+                          : Container(
+                              height: MediaQuery.of(context).size.height / 3,
+                              child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: categoryProducts.length,
+                                itemBuilder: (_, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(color: Color(0xFFF1EDF2), borderRadius: BorderRadius.circular(15.0)),
                                       width: MediaQuery.of(context).size.width / 2.34,
-                                      decoration: BoxDecoration(
-                                          color: Colors.lightGreen[100],
-                                          borderRadius:
-                                              BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              child: Image.asset("assets/img_42.png"),
-                                              height: 17,
-                                              width: 15,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(top: 2),
-                                              child: Text(
-                                                "  Earning +৳18",
-                                                style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                      child: Column(
+                                        children: [
+                                          Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Container(
+                                              width: MediaQuery.of(context).size.width / 5,
+                                              height: MediaQuery.of(context).size.height / 41,
+                                              margin: EdgeInsets.only(top: 10),
+                                              decoration: BoxDecoration(
+                                                color: categoryProducts[index].hasDiscount == true ? Colors.green : Color(0xFFF1EDF2),
+                                                borderRadius:
+                                                    BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
+                                              ),
+                                              //
+                                              child: Center(
+                                                child: categoryProducts[index].hasDiscount == true
+                                                    ? Text(
+                                                        "-৳ ${categoryProducts[index].discount.toString()}",
+                                                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                                                      )
+                                                    : Text(
+                                                        //"15% OFF",
+                                                        "",
+                                                        style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                                      ),
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => GroceryDetails(
+                                                            detailsLink: categoryProducts[index].links.details,
+                                                            relatedProductLink: relatedProductsLink,
+                                                          )));
+                                            },
+                                            child: Container(
+                                              child: Image.network(imagePath + categoryProducts[index].thumbnailImage),
+                                              height: MediaQuery.of(context).size.height / 8,
+                                              width: MediaQuery.of(context).size.width / 2.34,
+                                            ),
+                                          ),
+                                          FittedBox(
+                                            child: Container(
+                                              ///height: height! * 0.08,
+                                              width: MediaQuery.of(context).size.width / 2.36,
+                                              height: MediaQuery.of(context).size.height / 16,
+                                              child: Padding(
+                                                padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+                                                child: Text(
+                                                  categoryProducts[index].name,
+                                                  style: TextStyle(
+                                                    color: Color(0xFF515151),
+                                                    fontSize: 12.5,
+                                                    fontWeight: FontWeight.w600,
+                                                    fontFamily: "CeraProBold",
+                                                  ),
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Center(
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.height / 38,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    categoryProducts[index].unit,
+                                                    style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                                  ),
+                                                  Text(
+                                                    categoryProducts[index].userId.toString(),
+                                                    style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                            child: Center(
+                                              child: Container(
+                                                //height: MediaQuery.of(context).size.height/32,
+                                                height: MediaQuery.of(context).size.height / 31.5,
+                                                width: MediaQuery.of(context).size.width / 2.34,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                  children: [
+                                                    Container(
+                                                      child: Image.asset("assets/p.png"),
+                                                      height: 20,
+                                                      width: 22,
+                                                    ),
+                                                    Text(categoryProducts[index].baseDiscountedPrice.toString(),
+                                                        style:
+                                                            TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
+                                                    Text(categoryProducts[index].basePrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(left: 10),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        addToCart(categoryProducts[index].id, box.read(userID), 1);
+                                                        //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+                                                      },
+                                                      child: Container(
+                                                        height: 25,
+                                                        width: 25,
+                                                        decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
+                                                        child: Center(
+                                                          child: Image.asset("assets/pi.png"),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            //height: height! * 0.03,
+                                            //height: MediaQuery.of(context).size.height/26,
+                                            height: MediaQuery.of(context).size.height / 21,
+                                            width: MediaQuery.of(context).size.width / 2.34,
+                                            decoration: BoxDecoration(
+                                                color: Colors.lightGreen[100],
+                                                borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Container(
+                                                    child: Image.asset("assets/img_42.png"),
+                                                    height: 17,
+                                                    width: 15,
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(top: 2),
+                                                    child: Text(
+                                                      "  Earning +৳18",
+                                                      style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    )
-                                  ],
-                                ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            ),
 
                       ///
 
