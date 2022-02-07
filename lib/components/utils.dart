@@ -23,3 +23,5 @@ const userType = "USER_TYPE";
 const add_carts = "ADD_CARTS";
 const userAvatar = "USER_AVATAR";
 const userID = "USER_ID";
+const cartList = "CART_LIST";
+const bool checkPayments = false;

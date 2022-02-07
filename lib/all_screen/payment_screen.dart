@@ -1,10 +1,11 @@
-import 'dart:async';
 import 'dart:developer';
 
-import 'package:customer_ui/all_screen/home_screen.dart';
 import 'package:customer_ui/components/styles.dart';
+import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import 'home_screen.dart';
 import 'ongoing_orders.dart';
 
 //import 'Language.dart';
@@ -32,10 +33,25 @@ class Payment_Screen extends StatefulWidget {
 }
 
 class _Payment_ScreenState extends State<Payment_Screen> {
+  var controller = Get.put(CartItemsController());
+
   @override
+  /*
+  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CurrentBookingDetails(request: booking)),
+                    ).then((value) => setState(() {}));
+                    print("refresh done ");
+                  });
+   */
+
   void initState() {
-    Timer(Duration(seconds: 5), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
+    Future.delayed(Duration(seconds: 3), () {
+      controller.getCartName().then((value) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
+      });
     });
     super.initState();
     // TODO: implement initState
@@ -455,14 +471,26 @@ class _Payment_ScreenState extends State<Payment_Screen> {
 }
 
 /*
+import 'dart:async';
 import 'dart:developer';
 
+import 'package:customer_ui/all_screen/home_screen.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
 
 import 'ongoing_orders.dart';
-//import 'Language.dart';
 
+//import 'Language.dart';
+/*
+ @override
+void initState() {
+ Timer(Duration(seconds: 3), (){
+Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>
+ HomeScreen()));
+});
+ super.initState();
+}
+*/
 class Payment_Screen extends StatefulWidget {
   String? orderNo = "";
   String grandTotal = "";
@@ -479,6 +507,10 @@ class Payment_Screen extends StatefulWidget {
 class _Payment_ScreenState extends State<Payment_Screen> {
   @override
   void initState() {
+    Timer(Duration(seconds: 5), () {
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
+    });
+    super.initState();
     // TODO: implement initState
     log("order no ${widget.orderNo} grand total ${widget.grandTotal} address ${widget.address}");
   }
@@ -571,7 +603,7 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                 alignment: Alignment.center,
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrder()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => OngoingOrder()));
                   },
                   child: Container(
                     decoration: BoxDecoration(

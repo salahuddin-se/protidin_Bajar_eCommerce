@@ -13,6 +13,7 @@ class CartItemsController extends GetxController {
 
   Future<void> getCartName() async {
     cartItemsList.clear();
+    box.write(cartList, cartItemsList);
     log("cart length ${cartLength.value}");
     log("-----get cart items---with user ID ${box.read(userID)}--");
 
@@ -73,6 +74,7 @@ class CartItemsController extends GetxController {
 
   Future<void> getCartName() async {
     cartItemsList.clear();
+    log("cart length ${cartLength.value}");
     log("-----get cart items---with user ID ${box.read(userID)}--");
 
     var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/${box.read(userID)}"),
@@ -82,9 +84,10 @@ class CartItemsController extends GetxController {
 
     if (res.statusCode == 200 || res.statusCode == 201) {
       var dataMap = jsonDecode(res.body);
-      final cartModel = dataMap.map((json) => CartDetailsModel.fromJson(json)).toList();
+      final List<CartDetailsModel> cartModel = List<CartDetailsModel>.from(dataMap.map((json) => CartDetailsModel.fromJson(json)));
 
-      //log("cart items ${cartModel.length}");
+      if (cartModel.isEmpty) cartLength.value = 0;
+
       for (var element in cartModel) {
         for (var element2 in element.cartItems) {
           cartItemsList.add(CartItems(
@@ -102,9 +105,10 @@ class CartItemsController extends GetxController {
               quantity: element2.quantity,
               lowerLimit: element2.lowerLimit,
               upperLimit: element2.upperLimit));
-          cartLength.value = cartItemsList.length;
+
           box.write(cart_length, cartLength);
           log("total length ${cartItemsList.length}");
+          cartLength.value = cartItemsList.length;
         }
         //log("cart items inside model length ${element.cartItems.length}");
       }
@@ -112,5 +116,4 @@ class CartItemsController extends GetxController {
   }
 }
 
-///List<String> streetsList = new List<String>.from(streetsFromJson);
 */

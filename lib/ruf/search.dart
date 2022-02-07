@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:customer_ui/all_screen/product_details.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/dataModel/breat_biscuit.dart';
+import 'package:customer_ui/dataModel/category_data_model.dart';
+import 'package:customer_ui/ruf/details.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -21,7 +23,7 @@ class _SearchScreenState extends State<SearchScreen> {
       if (_filter.text.isEmpty) {
         setState(() {
           _searchText = "";
-          filteredNames = names;
+          filteredNames = [];
         });
       } else {
         setState(() {
@@ -35,8 +37,9 @@ class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _filter = TextEditingController();
   final dio = Dio(); // for http requests
   String _searchText = "";
-  List names = []; // names we get from API
-  List filteredNames = []; // names filtered by search text
+  // List<ProductsData> names = []; // names we get from API
+  List<ProductsData> filteredNames = [];
+  List<Data> filteredCategories = []; // names filtered by search text
   Icon _searchIcon = Icon(Icons.search);
   Widget _appBarTitle = Text('Search Example');
 
@@ -45,68 +48,87 @@ class _SearchScreenState extends State<SearchScreen> {
     final response12 =
         await get(Uri.parse("https://test.protidin.com.bd/api/v2/products/category/4"), headers: {"Accept": "application/json"});
 
+    final catResponse = await get(Uri.parse("https://test.protidin.com.bd/api/v2/categories"), headers: {"Accept": "application/json"});
+
+    List<ProductsData> tempList = [];
+    List<Data> cateList = [];
+
     var searchDataMap = jsonDecode(response12.body);
-    if (searchDataMap["success"] == true) {}
-    List tempList = [];
+    if (searchDataMap["success"] == true) {
+      setState(() {
+        var searchProduct = BreadBiscuit.fromJson(searchDataMap);
+        // names = tempList;
+        for (int i = 0; i < searchProduct.data.length; i++) {
+          tempList.add(searchProduct.data[i]);
+        }
+        filteredNames = tempList;
+        //_filter.clear();
+      });
+    }
 
-    setState(() {
-      var searchProduct = BreadBiscuit.fromJson(searchDataMap);
-      names = tempList;
-      filteredNames = names;
-      for (int i = 0; i < searchProduct.data.length; i++) {
-        tempList.add(searchProduct.data[i]);
-      }
-      //_filter.clear();
-    });
-  }
-
-  //Step 2.2
-  void _searchPressed() {
-    setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = Icon(Icons.close);
-        this._appBarTitle = TextField(
-          controller: _filter,
-          decoration: InputDecoration(prefixIcon: Icon(Icons.search), hintText: 'Search...'),
-        );
-        // _filter.clear();
-      } else {
-        this._searchIcon = Icon(Icons.search);
-        this._appBarTitle = Text('Search Example');
-        filteredNames = names;
-        // _filter.clear();
-      }
-    });
-    // _filter.clear();
-    return _getNames();
+    var searchCategoryMap = jsonDecode(catResponse.body);
+    if (searchCategoryMap["success"] == true) {
+      setState(() {
+        var searchCategory = CategoryDataModel.fromJson(searchCategoryMap);
+        cateList.addAll(searchCategory.data);
+        // for (int i = 0; i < searchCategory.data.length; i++) {
+        //   cateList.add(searchCategory.data);
+        // }
+        filteredCategories = cateList;
+        //_filter.clear();
+      });
+    }
   }
 
   //Step 4
   Widget _buildList() {
     if (!(_searchText.isEmpty)) {
-      List tempList = [];
+      List<ProductsData> tempList = [];
       for (int i = 0; i < filteredNames.length; i++) {
-        if (filteredNames[i].name.toLowerCase().contains(_searchText.toLowerCase())) {
+        if (filteredNames[i].name!.toLowerCase().contains(_searchText.toLowerCase())) {
           tempList.add(filteredNames[i]);
         }
       }
       filteredNames = tempList;
     }
-
-    ///oneTwoNinentyNineData[index].discount.toString()
     return ListView.builder(
-      itemCount: names == null ? 0 : filteredNames.length,
+      itemCount: filteredNames.length,
       itemBuilder: (_, int index) {
         return ListTile(
           title: Text(filteredNames[index].name.toString()),
           onTap: () {
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => GroceryDetails(
-                          detailsLink: filteredNames[index].links.details,
-                          relatedProductLink: "",
-                        )));
+              context,
+              MaterialPageRoute(
+                builder: (context) => GroceryDetails(
+                  detailsLink: filteredNames[index].links!.details!,
+                  relatedProductLink: "",
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget getCatList() {
+    if (!(_searchText.isEmpty)) {
+      List<Data> tempList = [];
+      for (int i = 0; i < filteredCategories.length; i++) {
+        if (filteredCategories[i].name!.toLowerCase().contains(_searchText.toLowerCase())) {
+          tempList.add(filteredCategories[i]);
+        }
+      }
+      filteredCategories = tempList;
+    }
+    return ListView.builder(
+      itemCount: filteredCategories.length,
+      itemBuilder: (_, int index) {
+        return ListTile(
+          title: Text(filteredCategories[index].name.toString()),
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryProducts(data: filteredCategories[index])));
           },
         );
       },
@@ -164,11 +186,19 @@ class _SearchScreenState extends State<SearchScreen> {
                   height: 20.0,
                 ),
                 Text(
+                  "Categories",
+                  style: TextStyle(fontSize: 18.0, color: kBlackColor, fontWeight: FontWeight.w500),
+                ),
+                Container(height: filteredCategories.length >= 5 ? 400 : 100, child: getCatList()),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
                   "Products for you",
                   style: TextStyle(fontSize: 18.0, color: kBlackColor, fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  height: 600,
+                  height: filteredNames.length >= 5 ? 400 : 100,
                   child: _buildList(),
                 )
               ],

@@ -30,7 +30,7 @@ Drawer buildDrawerClass(BuildContext context, double block, {VoidCallback? callb
                     height: 60,
                     width: 60,
                     child: Image.asset(
-                      "assets/img_135.png",
+                      "assets/img_142.png",
                     ),
                   ),
                   Padding(

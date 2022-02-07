@@ -211,7 +211,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    "${box.read(userPhone)}",
+                                    /// "${box.read(userPhone)}",
+                                    box.read(userPhone) ?? box.read(userEmail),
+
                                     style: TextStyle(
                                       color: Colors.grey,
                                       fontSize: 14,
