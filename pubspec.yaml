@@ -49,8 +49,11 @@ dependencies:
   get_storage: ^2.0.3
 
   shared_preferences: ^0.5.1+1
+  infinite_scroll_pagination: ^3.1.0
 
   toast: ^0.1.5
+  path: ^1.8.0
+  image_picker: ^0.8.4+8
 
 
 dev_dependencies:
@@ -100,11 +103,13 @@ flutter:
          - asset: fonts/CeraPro-bold.ttf
            #- asset: fonts/Schyler-Italic.ttf
            style: normal
-       #- family: Trajan Pro
-         #fonts:
-         #- asset: fonts/TrajanPro.ttf
-         #- asset: fonts/TrajanPro_Bold.ttf
-         #weight: 700*/
+     - family: CeraProMedium
+       fonts:
+         - asset: fonts/CeraProMedium.ttf
+           #- asset: fonts/Schyler-Italic.ttf
+           style: normal
+
+
 
 
   # For details regarding fonts from package dependencies,

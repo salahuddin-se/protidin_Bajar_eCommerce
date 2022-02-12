@@ -22,6 +22,7 @@ class _DetailsState extends State<Details> {
     // TODO: implement initState
     log("link ${widget.link}");
   }
+
   /*
 Future<void> getrelatedData() async {
     final response2 = await get(Uri.parse(widget.relatedProductLink), headers: {"Accept": "application/json"});

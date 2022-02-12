@@ -5,7 +5,7 @@
 
 import 'dart:convert';
 
-SellerResponse sellerResponseFromJson(String str) => SellerResponse.fromJson(json.decode(str));
+SellerResponse sellerResponseFromJson(String str) => SellerResponse.fromJson(jsonDecode(str));
 
 String sellerResponseToJson(SellerResponse data) => json.encode(data.toJson());
 
@@ -23,18 +23,18 @@ class SellerResponse {
   int? status;
 
   factory SellerResponse.fromJson(Map<String, dynamic> json) => SellerResponse(
-    sellers: List<Seller>.from(json["data"].map((x) => Seller.fromJson(x))),
-    meta: json["meta"] == null ? null :  Meta.fromJson(json["meta"]),
-    success: json["success"],
-    status: json["status"],
-  );
+        sellers: List<Seller>.from(json["data"].map((x) => Seller.fromJson(x))),
+        meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
+        success: json["success"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "data": List<dynamic>.from(sellers!.map((x) => x.toJson())),
-    "meta": meta == null ? null : meta!.toJson(),
-    "success": success,
-    "status": status,
-  };
+        "data": List<dynamic>.from(sellers!.map((x) => x.toJson())),
+        "meta": meta == null ? null : meta!.toJson(),
+        "success": success,
+        "status": status,
+      };
 }
 
 class Seller {
@@ -56,20 +56,20 @@ class Seller {
 
   Seller(
       {this.id,
-        this.userId,
-        this.type,
-        this.webStoreId,
-        this.cityId,
-        this.area,
-        this.verificationStatus,
-        this.verificationInfo,
-        this.cashOnDeliveryStatus,
-        this.adminToPay,
-        this.bankName,
-        this.bankAccName,
-        this.bankAccNo,
-        this.bankRoutingNo,
-        this.bankPaymentStatus});
+      this.userId,
+      this.type,
+      this.webStoreId,
+      this.cityId,
+      this.area,
+      this.verificationStatus,
+      this.verificationInfo,
+      this.cashOnDeliveryStatus,
+      this.adminToPay,
+      this.bankName,
+      this.bankAccName,
+      this.bankAccNo,
+      this.bankRoutingNo,
+      this.bankPaymentStatus});
 
   Seller.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -130,22 +130,22 @@ class Meta {
   int? total;
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-    currentPage: json["current_page"],
-    from: json["from"],
-    lastPage: json["last_page"],
-    path: json["path"],
-    perPage: json["per_page"],
-    to: json["to"],
-    total: json["total"],
-  );
+        currentPage: json["current_page"],
+        from: json["from"],
+        lastPage: json["last_page"],
+        path: json["path"],
+        perPage: json["per_page"],
+        to: json["to"],
+        total: json["total"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "current_page": currentPage,
-    "from": from,
-    "last_page": lastPage,
-    "path": path,
-    "per_page": perPage,
-    "to": to,
-    "total": total,
-  };
+        "current_page": currentPage,
+        "from": from,
+        "last_page": lastPage,
+        "path": path,
+        "per_page": perPage,
+        "to": to,
+        "total": total,
+      };
 }

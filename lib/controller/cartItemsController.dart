@@ -11,13 +11,15 @@ class CartItemsController extends GetxController {
 
   var cartItemsList = [].obs;
 
+  String testString = "Hello Text";
+
   Future<void> getCartName() async {
     cartItemsList.clear();
     box.write(cartList, cartItemsList);
     log("cart length ${cartLength.value}");
     log("-----get cart items---with user ID ${box.read(userID)}--");
 
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/${box.read(userID)}"),
+    var res = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/${box.read(userID)}"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
     // log("Response ${res.body}");
     log("Response code ${res.statusCode}");
@@ -49,6 +51,11 @@ class CartItemsController extends GetxController {
           box.write(cart_length, cartLength);
           log("total length ${cartItemsList.length}");
           cartLength.value = cartItemsList.length;
+
+          ///
+          // box.write(cart_length, cartLength.value);
+          ///
+
         }
         //log("cart items inside model length ${element.cartItems.length}");
       }

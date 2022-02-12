@@ -1,97 +1,62 @@
-/*import 'dart:convert';
 import 'dart:developer';
 
-import 'package:customer_ui/HomePage/offer/grocery.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
-import 'package:customer_ui/dataModel/breat_biscuit.dart';
-import 'package:customer_ui/dataModel/category_data_model.dart';
-import 'package:customer_ui/dataModel/chocolate_sweet_data_model.dart';
-import 'package:customer_ui/dataModel/grocery_product.dart';
+import 'package:customer_ui/dataModel/product_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
-
-/*var screenTwoName="";
-var screenTwoAddress="";
-var screenTwoProfession="";
-
-ScreenTwo({required this.screenTwoName,required this.screenTwoAddress,required this.screenTwoProfession});*/
+import 'grocery.dart';
 
 class AllGrocery extends StatefulWidget {
-  const AllGrocery({Key? key}) : super(key: key);
+  const AllGrocery({Key? key, required this.link}) : super(key: key);
+
+  final String link;
 
   @override
   _AllGroceryState createState() => _AllGroceryState();
 }
 
 class _AllGroceryState extends State<AllGrocery> {
+  List<Product> listOfProducts = [];
 
+  Future fetchProducts(link2) async {
+    listOfProducts.clear();
+    log("tap link $link2");
+    log("user id ${box.read(user_Id)}");
+    log("web store id ${box.read(webStoreId)}");
+
+    var response = await get(Uri.parse(link2));
+    var productResponse = productMiniResponseFromJson(response.body);
+
+    for (var ele in productResponse.products!) {
+      if (ele.user_id == box.read(user_Id) || ele.user_id == box.read(webStoreId)) {
+        log(" name  ${ele.name}");
+        listOfProducts.add(Product(
+            name: ele.name,
+            thumbnail_image: ele.thumbnail_image,
+            base_discounted_price: ele.base_discounted_price,
+            shop_name: ele.shop_name,
+            base_price: ele.base_price,
+            unit: ele.unit,
+            id: ele.id,
+            links: ele.links!,
+            discount: ele.discount!,
+            has_discount: ele.has_discount,
+            user_id: ele.user_id));
+        log("product length ${listOfProducts.length}");
+        setState(() {});
+      }
+    }
+  }
 
   @override
   void initState() {
     // TODO: implement initState
-    getGroceryProduct();
-
+    super.initState();
+    fetchProducts(widget.link);
   }
-
-  //var groceryProducts = [];
-  List<GroceryProduct> groceryProducts = [];
-
-  Future<void> getGroceryProduct() async {
-    log("grocery data calling");
-    //String groceryURl = "https://test.protidin.com.bd/api/v2/sub-categories/4";
-    String groceryURl = "https://test.protidin.com.bd/api/v2/products/category/4";
-
-    final response3 = await get(Uri.parse(groceryURl), headers: {"Accept": "application/json"});
-
-    var groceryDataMap = jsonDecode(response3.body);
-
-    if (groceryDataMap["success"] == true) {
-      log("data valid");
-      /*
-      var categoryDataModel = CategoryDataModel.fromJson(groceryDataMap);
-      groceryData = categoryDataModel.data;
-      groceryItemData = categoryDataModel.data[0].name;
-       */
-      var groceryProductDataModel = GroceryProduct.fromJson(groceryDataMap);
-      groceryProducts = groceryProductDataModel.data.cast<GroceryProduct>();
-      setState(() {});
-      log("grocery data length ${groceryProducts.length}");
-    } else {
-      log("data invalid");
-    }
-
-    // log("after decode $dataMap");
-  }
-
-
-  /*var groceryProducts = [];
-
-  Future<void> getGroceryProductsAfterTap(link2) async {
-    log("calling after tap");
-    //String biscuitSweetsURl = "https://test.protidin.com.bd/api/v2/products/category/46";
-
-    final response7 = await get(Uri.parse(link2), headers: {"Accept": "application/json"});
-
-    var groceryItemDataMap = jsonDecode(response7.body);
-
-    if (groceryItemDataMap["success"] == true) {
-      //log("category data after tap $biscuitSweetsDataMap");
-
-      setState(() {
-        var groceryData = BiacuitSweets.fromJson(groceryItemDataMap);
-        groceryProducts = groceryData.data;
-      });
-      log("after tap grocery data length ${groceryProducts.length}");
-    } else {
-      log("data invalid");
-    }
-
-    // log("after decode $dataMap");
-  }*/
-
 
   @override
   Widget build(BuildContext context) {
@@ -103,132 +68,99 @@ class _AllGroceryState extends State<AllGrocery> {
       body: SizedBox(
         height: height,
         width: width,
-        child: ListView.builder(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            itemCount: groceryProducts.length,
-            itemBuilder: (_, index) {
-              return Column(
-                children: [
-                  Container(
-                    //height: height * 0.15,
-                    width: width,
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    child: Row(
-                      children: [
-                        InkWell(
-                            /*onTap: () {
-                              // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
-                            },*/
-                          child: groceryProducts[index].isEmpty
-                              ?
-
-                          //Text("OK"):
-                          Image.asset("assets/app_logo.png")
-                              : Image.network(
-                            imagePath + fruitBeverageData[index].mobileBanner,
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                groceryProducts[index].name,
-                                style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w500),
-                                maxLines: 2,
-                              ),
-                              sized5,
-                              Container(
-                                height: height * 0.03,
-                                margin: EdgeInsets.only(top: 10),
-                                width: width * 0.15,
-                                decoration: BoxDecoration(color: Colors.green),
-                                child: Center(
-                                  child: Text(
-                                    "15% Off",
-                                    style: TextStyle(color: Colors.white, fontSize: block * 3, fontWeight: FontWeight.bold),
-                                  ),
-                                ),
-                              ),
-                              sized5,
-                              Row(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(groceryProducts[index].,
-                                          style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.bold)),
-                                      SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(
-                                          groceryProducts[index].basePrice.toString(),
-                                        style: TextStyle(
-                                            color: kBlackColor,
-                                            fontSize: block * 4,
-                                            fontWeight: FontWeight.w300,
-                                            decoration: TextDecoration.lineThrough),
-                                      )
-                                    ],
-                                  ),
-                                  Expanded(child: Container()),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
-                                    decoration: BoxDecoration(
-                                      color: kPrimaryColor,
-                                      borderRadius: BorderRadius.circular(20.0),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        Text("Add", style: TextStyle(color: kWhiteColor, fontSize: block * 4, fontWeight: FontWeight.bold)),
-                                        Icon(
-                                          Icons.add,
-                                          color: kWhiteColor,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Divider(
-                    color: kBlackColor,
-                    thickness: 0.3,
-                  )
-                ],
-              );
-            }
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              sized20,
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    return TabProductItemWidget(
+                      width: width,
+                      block: block,
+                      height: height,
+                      //Image.network(imagePath + listOfProducts[index].thumbnail_image.toString()),
+                      image: imagePath + listOfProducts[index].thumbnail_image.toString(),
+                      productName: listOfProducts[index].name.toString(),
+                      discountPrice: listOfProducts[index].base_price,
+                      actualPrice: listOfProducts[index].base_discounted_price,
+                      id: listOfProducts[index].id,
+                      off: listOfProducts[index].discount.toString(),
+                    );
+                  },
+                  itemCount: listOfProducts.length,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-}*/
+}
 
-import 'package:customer_ui/all_screen/grocery.dart';
+/*
+
+import 'dart:developer';
+
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
+import 'package:customer_ui/components/utils.dart';
+import 'package:customer_ui/dataModel/product_response.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+
+import 'grocery.dart';
 
 class AllGrocery extends StatefulWidget {
-  const AllGrocery({Key? key}) : super(key: key);
+  const AllGrocery({Key? key, required this.link}) : super(key: key);
+
+  final String link;
 
   @override
   _AllGroceryState createState() => _AllGroceryState();
 }
 
 class _AllGroceryState extends State<AllGrocery> {
+  List<Product> listOfProducts = [];
+  Future fetchProducts(link2) async {
+    listOfProducts.clear();
+    log("tap link $link2");
+    log("user id ${box.read(user_Id)}");
+    log("web store id ${box.read(webStoreId)}");
+
+    var response = await get(Uri.parse(link2));
+    var productResponse = productMiniResponseFromJson(response.body);
+
+    for (var ele in productResponse.products!) {
+      if (ele.user_id == box.read(user_Id) || ele.user_id == box.read(webStoreId)) {
+        log(" name  ${ele.name}");
+        listOfProducts.add(Product(
+            name: ele.name,
+            thumbnail_image: ele.thumbnail_image,
+            base_discounted_price: ele.base_discounted_price,
+            shop_name: ele.shop_name,
+            base_price: ele.base_price,
+            unit: ele.unit,
+            id: ele.id,
+            links: ele.links!,
+            discount: ele.discount!,
+            has_discount: ele.has_discount,
+            user_id: ele.user_id));
+        log("product length ${listOfProducts.length}");
+        setState(() {});
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchProducts(widget.link);
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -250,9 +182,13 @@ class _AllGroceryState extends State<AllGrocery> {
                   Row(
                     children: const [
                       Icon(Icons.filter_list_outlined),
-                      SizedBox(width: 5,),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Text("Top Deal"),
-                      SizedBox(width: 5,),
+                      SizedBox(
+                        width: 5,
+                      ),
                       Icon(Icons.keyboard_arrow_down)
                     ],
                   ),
@@ -261,38 +197,22 @@ class _AllGroceryState extends State<AllGrocery> {
               ),
               sized20,
               Expanded(
-                child: ListView(
-                  children: [
-                    TabProductItemWidget(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    return TabProductItemWidget(
                       width: width,
                       block: block,
                       height: height,
-                      image: "assets/lays.png",
-                      productName: "Lays Premium Chips Orange Flavor- 65g",
+                      image: '',
+                      productName: listOfProducts[index].name.toString(),
                       actualPrice: "BDT 130",
                       discountPrice: "BDT 110",
-                    ),
-                    TabProductItemWidget(
-                      width: width,
-                      block: block,
-                      height: height,
-                      image: "assets/dove.png",
-                      productName: "Dove Alovera Moyesture Lotions - 500g",
-                      actualPrice: "BDT 550",
-                      discountPrice: "BDT 410",
-                    ),
-                    TabProductItemWidget(
-                      width: width,
-                      block: block,
-                      height: height,
-                      image: "assets/oil.png",
-                      productName: "Aci Pure 100% Healthy Soyabin Oil - 5 litre",
-                      actualPrice: "BDT 650",
-                      discountPrice: "BDT 590",
-                    )
-                  ],
+                    );
+                  },
+                  itemCount: listOfProducts.length,
                 ),
-              )
+              ),
+
             ],
           ),
         ),
@@ -300,3 +220,6 @@ class _AllGroceryState extends State<AllGrocery> {
     );
   }
 }
+
+
+*/

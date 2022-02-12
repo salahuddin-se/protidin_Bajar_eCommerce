@@ -69,8 +69,11 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
     }
   }
 
-  Future<void> addUserAddress(userID, address, country, city, postalCode, phone, bool isUpdate, int addressId) async {
-    String targetUrl = isUpdate ? "https://test.protidin.com.bd/api/v2/update-address-in-cart" : addUserAddressAPI;
+  Future<void> addUserAddress(userID, address, country, city, postalCode, phone, bool isUpdate, addressId) async {
+    String targetUrl = isUpdate ? "http://test.protidin.com.bd:88/api/v2/update-address-in-cart" : addUserAddressAPI;
+
+    log("new address id $addressId");
+    log("target url $targetUrl");
 
     var bodyData = isUpdate
         ? jsonEncode(<String, dynamic>{
@@ -149,10 +152,9 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
   ///
   ///var paymentModel = [];
   var paymentData = [];
-  bool isLoading = false;
 
   Future<void> getPaymentTypes() async {
-    var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/payment-types"), headers: <String, String>{
+    var response = await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/payment-types"), headers: <String, String>{
       'Accept': 'application/json',
     });
 
@@ -170,7 +172,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
     log("address ID $addressID");
     var jsonBody = (<String, dynamic>{"user_id": userId.toString(), "address_id": addressID.toString()});
 
-    var res = await post(Uri.parse("https://test.protidin.com.bd/api/v2/update-address-in-cart"),
+    var res = await post(Uri.parse("http://test.protidin.com.bd:88/api/v2/update-address-in-cart"),
         headers: <String, String>{'Accept': 'application/json', 'Authorization': 'Bearer ${box.read(userToken)}'}, body: jsonBody);
 
     log("update address in cart ${res.body}");
@@ -527,147 +529,147 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
             ),
 
             ///Preferred delivery slot
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.15),
-                    spreadRadius: 5, //spread radius
-                    blurRadius: 5, // blur radius
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              width: MediaQuery.of(context).size.width / 1.1,
-              height: 130,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                  ),
-                  Align(
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 15.0),
-                        child: const Text(
-                          "Preferred delivery slot",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
-                        ),
-                      )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Container(
-                              width: MediaQuery.of(context).size.width / 2.5,
-                              child: const Text(
-                                "Delivered date :",
-                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-                              ),
-                            )),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                                width: MediaQuery.of(context).size.width / 2.5,
-                                child: const Text(
-                                  "Time slot :",
-                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-                                ))),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width / 2.5,
-                          height: 40,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              // Red border with the width is equal to 5
-                              border: Border.all(width: 1, color: Colors.black)),
-                          child: Row(
-                            children: [
-                              Container(
-                                height: 20,
-                                //width: 200,
-                                child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(4, 0, 7, 0),
-                                  child: Text(
-                                    "Today, 23 Sep ",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                height: 15,
-                                width: 15,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 0),
-                                  child: Image.asset(
-                                    "assets/ca.png",
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 2.5,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            // Red border with the width is equal to 5
-                            border: Border.all(width: 1, color: Colors.black)),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(5, 0, 8, 0),
-                              //width: 200,
-                              child: Text(
-                                "Tap to choose",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: 15,
-                              width: 15,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 0),
-                                child: Image.asset(
-                                  "assets/dr.png",
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ]),
-                  )
-                ],
-              ),
-            ),
+            // Container(
+            //   decoration: BoxDecoration(
+            //     color: Colors.white,
+            //     borderRadius: BorderRadius.circular(15),
+            //     boxShadow: [
+            //       BoxShadow(
+            //         color: Colors.grey.withOpacity(0.15),
+            //         spreadRadius: 5, //spread radius
+            //         blurRadius: 5, // blur radius
+            //         offset: Offset(0, 3),
+            //       ),
+            //     ],
+            //   ),
+            //   width: MediaQuery.of(context).size.width / 1.1,
+            //   height: 130,
+            //   child: Column(
+            //     children: [
+            //       Padding(
+            //         padding: const EdgeInsets.only(top: 15),
+            //       ),
+            //       Align(
+            //           alignment: Alignment.centerLeft,
+            //           child: Padding(
+            //             padding: const EdgeInsets.only(left: 15.0),
+            //             child: const Text(
+            //               "Preferred delivery slot",
+            //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+            //             ),
+            //           )),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+            //         children: [
+            //           Padding(
+            //             padding: const EdgeInsets.only(left: 10.0),
+            //             child: Align(
+            //                 alignment: Alignment.centerLeft,
+            //                 child: Container(
+            //                   width: MediaQuery.of(context).size.width / 2.5,
+            //                   child: const Text(
+            //                     "Delivered date :",
+            //                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+            //                   ),
+            //                 )),
+            //           ),
+            //           Padding(
+            //             padding: const EdgeInsets.only(left: 10.0),
+            //             child: Align(
+            //                 alignment: Alignment.centerRight,
+            //                 child: Container(
+            //                     width: MediaQuery.of(context).size.width / 2.5,
+            //                     child: const Text(
+            //                       "Time slot :",
+            //                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+            //                     ))),
+            //           ),
+            //         ],
+            //       ),
+            //       SizedBox(
+            //         height: 10,
+            //       ),
+            //       Container(
+            //         child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            //           Padding(
+            //             padding: const EdgeInsets.only(left: 8.0),
+            //             child: Container(
+            //               width: MediaQuery.of(context).size.width / 2.5,
+            //               height: 40,
+            //               decoration: BoxDecoration(
+            //                   color: Colors.white,
+            //                   // Red border with the width is equal to 5
+            //                   border: Border.all(width: 1, color: Colors.black)),
+            //               child: Row(
+            //                 children: [
+            //                   Container(
+            //                     height: 20,
+            //                     //width: 200,
+            //                     child: Padding(
+            //                       padding: const EdgeInsets.fromLTRB(4, 0, 7, 0),
+            //                       child: Text(
+            //                         "Today, 23 Sep ",
+            //                         style: TextStyle(
+            //                           color: Colors.black,
+            //                           fontSize: 14,
+            //                           fontWeight: FontWeight.w600,
+            //                         ),
+            //                       ),
+            //                     ),
+            //                   ),
+            //                   Container(
+            //                     height: 15,
+            //                     width: 15,
+            //                     child: Padding(
+            //                       padding: const EdgeInsets.only(left: 0),
+            //                       child: Image.asset(
+            //                         "assets/ca.png",
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ),
+            //           ),
+            //           Container(
+            //             width: MediaQuery.of(context).size.width / 2.5,
+            //             height: 40,
+            //             decoration: BoxDecoration(
+            //                 color: Colors.white,
+            //                 // Red border with the width is equal to 5
+            //                 border: Border.all(width: 1, color: Colors.black)),
+            //             child: Row(
+            //               children: [
+            //                 Padding(
+            //                   padding: const EdgeInsets.fromLTRB(5, 0, 8, 0),
+            //                   //width: 200,
+            //                   child: Text(
+            //                     "Tap to choose",
+            //                     style: TextStyle(
+            //                       color: Colors.black,
+            //                       fontSize: 14,
+            //                       fontWeight: FontWeight.w600,
+            //                     ),
+            //                   ),
+            //                 ),
+            //                 Container(
+            //                   height: 15,
+            //                   width: 15,
+            //                   child: Padding(
+            //                     padding: const EdgeInsets.only(top: 0),
+            //                     child: Image.asset(
+            //                       "assets/dr.png",
+            //                     ),
+            //                   ),
+            //                 ),
+            //               ],
+            //             ),
+            //           ),
+            //         ]),
+            //       )
+            //     ],
+            //   ),
+            // ),
 
             SizedBox(
               height: 20,
@@ -688,10 +690,12 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                 ],
               ),
               width: MediaQuery.of(context).size.width / 1.1,
-              height: 785,
+
+              ///height: 785,
+              height: 400,
               child: Column(children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 15),
+                  padding: const EdgeInsets.only(top: 34),
                 ),
 
                 Align(
@@ -722,21 +726,6 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                               ? Row(
                                   children: [
                                     Container(
-                                      height: 15,
-                                      width: 15,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: Colors.black),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width * 3 / 5,
-                                      child: ListTile(
-                                        title: Text(
-                                          paymentData[index].payment_type_key,
-                                          style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
                                       height: 40,
                                       width: MediaQuery.of(context).size.width / 7,
                                       child: Padding(
@@ -745,6 +734,24 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                                           paymentData[index].image,
                                         ),
                                       ),
+                                    ),
+                                    Container(
+                                      width: MediaQuery.of(context).size.width * 3 / 5,
+                                      child: ListTile(
+                                        title: Padding(
+                                          padding: const EdgeInsets.only(left: 15.0),
+                                          child: Text(
+                                            paymentData[index].payment_type_key,
+                                            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      height: 15,
+                                      width: 15,
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: Colors.black),
                                     ),
                                   ],
                                 )
@@ -758,21 +765,6 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                                   child: Row(
                                     children: [
                                       Container(
-                                        height: 15,
-                                        width: 15,
-                                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
-                                      ),
-                                      Container(
-                                        width: MediaQuery.of(context).size.width * 3 / 5,
-                                        child: ListTile(
-                                          title: Text(
-                                            ///payment_type_key
-                                            paymentData[index].payment_type_key,
-                                            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
                                         height: 40,
                                         width: MediaQuery.of(context).size.width / 7,
                                         child: Padding(
@@ -782,6 +774,24 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                                           ),
                                         ),
                                       ),
+                                      Container(
+                                        width: MediaQuery.of(context).size.width * 3 / 5,
+                                        child: ListTile(
+                                          title: Padding(
+                                            padding: const EdgeInsets.only(left: 15.0),
+                                            child: Text(
+                                              ///payment_type_key
+                                              paymentData[index].payment_type_key,
+                                              style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: 15,
+                                        width: 15,
+                                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
+                                      ),
                                     ],
                                   ),
                                 );
@@ -790,7 +800,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                 ),
 
                 SizedBox(
-                  height: 20,
+                  height: 10,
                 ),
 
                 ///card image
@@ -992,24 +1002,9 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
             ),
 
             GestureDetector(
-              onTap: isLoading
-                  ? () {}
-                  : () {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      orderCreate(
-                        "${box.read(userID)}",
-                        widget.ownerId,
-                        paymentType,
-                        selectedAddress,
-                        widget.grandTotal,
-                      ).then((value) {
-                        setState(() {
-                          isLoading = false;
-                        });
-                      });
-                    },
+              onTap: () {
+                orderCreate("${box.read(userID)}", widget.ownerId, paymentType, selectedAddress, widget.grandTotal);
+              },
               child: Container(
                 width: MediaQuery.of(context).size.width / 1,
                 height: 56,
@@ -1030,20 +1025,18 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                   ],
                 ),
                 child: Center(
-                  child: isLoading
-                      ? CircularProgressIndicator(color: Colors.white,)
-                      : Column(
-                          children: [
-                            Text(
-                              widget.grandTotal,
-                              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
-                            ),
-                            Text(
-                              "Place Order",
-                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
-                            ),
-                          ],
-                        ),
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.grandTotal,
+                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+                      ),
+                      Text(
+                        "place order",
+                        style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

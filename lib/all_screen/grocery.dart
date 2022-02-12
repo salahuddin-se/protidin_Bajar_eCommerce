@@ -1,77 +1,18 @@
+import 'dart:convert';
+import 'dart:developer';
 
-import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
+import 'package:customer_ui/components/utils.dart';
+import 'package:customer_ui/controller/cartItemsController.dart';
+import 'package:customer_ui/dataModel/product_response.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
-class Grocery extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    var width = SizeConfig.screenWidth;
-    var height = SizeConfig.screenHeight;
-    var block = SizeConfig.block;
-    return Scaffold(
-      body: SizedBox(
-        height: height,
-        width: width,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("454 offer found"),
-                  Row(
-                    children: [Icon(Icons.filter_list_outlined), Text("Discount")],
-                  ),
-                  Icon(Icons.category_outlined)
-                ],
-              ),
-              sized20,
-              Expanded(
-                //flex: 3,
-                child: ListView(
-                  children: [
-                    TabProductItemWidget(
-                      width: width,
-                      block: block,
-                      height: height,
-                      image: "assets/lays.png",
-                      productName: "Lays Premium Chips Orange Flavor- 65g",
-                      actualPrice: "BDT 130",
-                      discountPrice: "BDT 110",
-                    ),
-                    TabProductItemWidget(
-                      width: width,
-                      block: block,
-                      height: height,
-                      image: "assets/dove.png",
-                      productName: "Dove Alovera Moyesture Lotions - 500g",
-                      actualPrice: "BDT 550",
-                      discountPrice: "BDT 410",
-                    ),
-                    TabProductItemWidget(
-                      width: width,
-                      block: block,
-                      height: height,
-                      image: "assets/oil.png",
-                      productName: "Aci Pure 100% Healthy Soyabin Oil - 5 litre",
-                      actualPrice: "BDT 650",
-                      discountPrice: "BDT 590",
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class TabProductItemWidget extends StatelessWidget {
+class TabProductItemWidget extends StatefulWidget {
   const TabProductItemWidget({
     Key? key,
     required this.width,
@@ -82,6 +23,7 @@ class TabProductItemWidget extends StatelessWidget {
     this.off,
     this.actualPrice,
     this.discountPrice,
+    this.id,
   }) : super(key: key);
 
   final double width;
@@ -92,6 +34,78 @@ class TabProductItemWidget extends StatelessWidget {
   final String? off;
   final String? actualPrice;
   final String? discountPrice;
+  final int? id;
+
+  @override
+  State<TabProductItemWidget> createState() => _TabProductItemWidgetState();
+}
+
+class _TabProductItemWidgetState extends State<TabProductItemWidget> {
+  var controller2 = Get.put(CartItemsController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    ///fetchProducts("link2");
+  }
+
+  Future<void> addToCart(
+    id,
+    userId,
+    quantity,
+  ) async {
+    log("user id $userId");
+    var res = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/add"),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
+        body: jsonEncode(<String, dynamic>{
+          "id": id.toString(),
+          "variant": "",
+          "user_id": userId,
+          "quantity": quantity,
+        }));
+
+    if (res.statusCode == 200 || res.statusCode == 201) {
+      showToast("Cart Added Successfully", context: context);
+
+      ///await updateAddressInCart(userId);
+      await controller2.getCartName();
+    } else {
+      showToast("Something went wrong", context: context);
+    }
+  }
+
+  List<Product> listOfProducts = [];
+  Future fetchProducts(link2) async {
+    listOfProducts.clear();
+    log("tap link $link2");
+    log("user id ${box.read(user_Id)}");
+    log("web store id ${box.read(webStoreId)}");
+
+    var response = await get(Uri.parse(link2));
+    var productResponse = productMiniResponseFromJson(response.body);
+
+    for (var ele in productResponse.products!) {
+      if (ele.user_id == box.read(user_Id) || ele.user_id == box.read(webStoreId)) {
+        log(" name  ${ele.name}");
+        listOfProducts.add(Product(
+            name: ele.name,
+            thumbnail_image: ele.thumbnail_image,
+            base_discounted_price: ele.base_discounted_price,
+            shop_name: ele.shop_name,
+            base_price: ele.base_price,
+            unit: ele.unit,
+            id: ele.id,
+            links: ele.links!,
+            discount: ele.discount!,
+            has_discount: ele.has_discount,
+            user_id: ele.user_id));
+        log("product length ${listOfProducts.length}");
+        setState(() {});
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,7 +113,7 @@ class TabProductItemWidget extends StatelessWidget {
       children: [
         Container(
           //height: height * 0.15,
-          width: width,
+          width: widget.width,
           padding: EdgeInsets.symmetric(horizontal: 10.0),
           child: Row(
             children: [
@@ -107,8 +121,7 @@ class TabProductItemWidget extends StatelessWidget {
                   onTap: () {
                     // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
                   },
-                  child: Image.asset(image!)
-              ),
+                  child: Container(width: MediaQuery.of(context).size.width / 3, child: Image.network(widget.image!))),
               SizedBox(
                 width: 10,
               ),
@@ -118,63 +131,104 @@ class TabProductItemWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      productName!,
-                      style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w500),
+                      widget.productName!,
+                      style: TextStyle(color: kBlackColor, fontSize: widget.block * 4, fontWeight: FontWeight.w500),
                       maxLines: 2,
                     ),
                     sized5,
-                    Container(
-                      height: height * 0.03,
-                      margin: EdgeInsets.only(top: 10),
-                      width: width * 0.15,
-                      decoration: BoxDecoration(color: Colors.green),
-                      child: Center(
-                        child: Text(
-                          "$off Off",
-                          style: TextStyle(color: Colors.white, fontSize: block * 3, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ),
+                    widget.discountPrice == widget.actualPrice
+                        ? Text("")
+                        : Container(
+                            height: widget.height * 0.03,
+                            margin: EdgeInsets.only(top: 10),
+                            width: widget.width * 0.15,
+                            decoration: BoxDecoration(color: Colors.green),
+                            child: Center(
+                              child: Text(
+                                "${widget.off.toString()}TK OFF",
+                                style: TextStyle(color: Colors.white, fontSize: widget.block * 3, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
                     sized5,
                     Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Row(
-                          children: [
-                            Text(discountPrice!,
-                                style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.bold)),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              actualPrice!,
-                              style: TextStyle(
-                                  color: kBlackColor,
-                                  fontSize: block * 4,
-                                  fontWeight: FontWeight.w300,
-                                  decoration: TextDecoration.lineThrough),
-                            )
-                          ],
-                        ),
-                        Expanded(child: Container()),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
-                          decoration: BoxDecoration(
-                            color: kPrimaryColor,
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
+                          //width: MediaQuery.of(context).size.width / 3,
                           child: Row(
                             children: [
-                              Text("Add", style: TextStyle(color: kWhiteColor, fontSize: block * 4, fontWeight: FontWeight.bold)),
-                              Icon(
-                                Icons.add,
-                                color: kWhiteColor,
-                              )
+                              Container(
+                                width: MediaQuery.of(context).size.width / 7,
+                                child: Text(
+                                  widget.actualPrice!,
+                                  style: TextStyle(
+                                    color: kBlackColor,
+                                    fontSize: widget.block * 4.5,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                              //Padding(padding: const EdgeInsets.only(left: 5)),
+                              widget.discountPrice == widget.actualPrice
+                                  ? Container(width: MediaQuery.of(context).size.width / 6, child: Text(""))
+                                  : Container(
+                                      width: MediaQuery.of(context).size.width / 7,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(right: 15.0),
+                                        child: Text(widget.discountPrice!,
+                                            style: TextStyle(
+                                                color: kBlackColor,
+                                                fontSize: widget.block * 4,
+                                                fontWeight: FontWeight.w300,
+                                                decoration: TextDecoration.lineThrough)),
+                                      ),
+                                    ),
                             ],
                           ),
                         ),
-                        SizedBox(
-                          width: 20,
+
+                        InkWell(
+                          onTap: () {
+                            ///
+                            addToCart(widget.id, box.read(userID), 1);
+
+                            ///
+                            //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+                          },
+                          child: Container(
+                            width: MediaQuery.of(context).size.width / 5.5,
+                            height: 28,
+                            //padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
+                            decoration: BoxDecoration(
+                              color: kPrimaryColor,
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                    width: 30,
+                                    height: 15,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 2.0),
+                                      child: Text("Add",
+                                          style: TextStyle(color: kWhiteColor, fontSize: widget.block * 3.5, fontWeight: FontWeight.bold)),
+                                    )),
+                                Icon(
+                                  Icons.add,
+                                  color: kWhiteColor,
+                                  size: 20,
+                                )
+                              ],
+                            ),
+                          ),
                         ),
+
+                        Padding(
+                          padding: const EdgeInsets.only(left: 0.0),
+                        )
+                        //Expanded(child: Container()),
                       ],
                     )
                   ],
@@ -186,7 +240,7 @@ class TabProductItemWidget extends StatelessWidget {
         Divider(
           color: kBlackColor,
           thickness: 0.3,
-        )
+        ),
       ],
     );
   }

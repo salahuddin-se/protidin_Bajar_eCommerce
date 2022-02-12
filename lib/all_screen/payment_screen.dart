@@ -8,17 +8,6 @@ import 'package:get/get.dart';
 import 'home_screen.dart';
 import 'ongoing_orders.dart';
 
-//import 'Language.dart';
-/*
- @override
-void initState() {
- Timer(Duration(seconds: 3), (){
-Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>
- HomeScreen()));
-});
- super.initState();
-}
-*/
 class Payment_Screen extends StatefulWidget {
   String? orderNo = "";
   String grandTotal = "";

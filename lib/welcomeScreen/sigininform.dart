@@ -388,7 +388,8 @@ class _MyHomePageState extends State<SignInPage> {
       box.write(userID, userDataModel.user.id);
       box.write(userName, userDataModel.user.name);
       box.write(userEmail, userDataModel.user.email);
-      box.write(userAvatar, userDataModel.user.avatar);
+      log("User AVATAR: ${userDataModel.user.avatarOriginal}");
+      box.write(userAvatar, userDataModel.user.avatarOriginal);
       box.write(userPhone, userDataModel.user.phone);
       Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
 
@@ -475,7 +476,16 @@ class _MyHomePageState extends State<SignInPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30.0),
                 child: TextFormField(
+                  /*
                   autofocus: false,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                   */
+                  autofocus: false,
+                  obscureText: true,
+                  enableSuggestions: false,
+                  autocorrect: false,
                   controller: userPassController,
                   validator: (String? value) {
                     if (value!.isEmpty) {

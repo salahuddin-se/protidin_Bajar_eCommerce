@@ -57,7 +57,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     quantity,
   ) async {
     log("user id $userId");
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/add"),
+    var res = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/add"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{
           "id": id.toString(),
@@ -85,7 +85,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
   var bestProducts = [];
   Future<void> getBestSellersProduct() async {
-    var res = await http.get(Uri.parse("https://test.protidin.com.bd/api/v2/products/best-seller"),
+    var res = await http.get(Uri.parse("http://test.protidin.com.bd:88/api/v2/products/best-seller"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'});
 
     log("cart Summary response= " + res.body);
@@ -101,7 +101,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
   ///
 
   Future<void> changeQuantity(id, userId, quantity) async {
-    var res2 = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/change-quantity"),
+    var res2 = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/change-quantity"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{"id": id, "variant": "", "user_id": userId, "quantity": quantity}));
 
@@ -244,7 +244,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                               },
                               child: Container(
                                 height: 120,
-                                width: MediaQuery.of(context).size.width / 3,
+                                width: MediaQuery.of(context).size.width / 2.5,
                                 child: Image.network(
                                   imagePath + controller.cartItemsList[index].productThumbnailImage,
                                 ),
@@ -292,7 +292,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                           padding: const EdgeInsets.all(0),
                                           child: Center(
                                             child: Text(
-                                              "20% Offer",
+                                              "15% OFF",
                                               style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
                                             ),
                                           ),
@@ -358,7 +358,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                       ),
                                       child: Center(
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment: MainAxisAlignment.start,
                                           children: <Widget>[
                                             FittedBox(
                                               child: Container(
@@ -548,36 +548,38 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                         Padding(
                                           padding: const EdgeInsets.only(left: 0.0),
                                         ),
-                                        Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: Align(
-                                            alignment: Alignment.centerLeft,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                //color: Colors.indigo[100],
-                                                borderRadius: BorderRadius.circular(5),
+                                        bestProducts[index].discount == 0
+                                            ? Text("")
+                                            : Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Align(
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      //color: Colors.indigo[100],
+                                                      borderRadius: BorderRadius.circular(5),
 
-                                                boxShadow: const [
-                                                  BoxShadow(
-                                                    color: Colors.green,
-                                                  ),
-                                                ],
-                                              ),
-                                              //color: Colors.green,
-                                              height: 20,
-                                              width: 70,
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(0),
-                                                child: Center(
-                                                  child: Text(
-                                                    "20% Off",
-                                                    style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900),
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          color: Colors.green,
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    //color: Colors.green,
+                                                    height: 20,
+                                                    width: 70,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(0),
+                                                      child: Center(
+                                                        child: Text(
+                                                          "${bestProducts[index].discount.toString()}TK OFF",
+                                                          style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w900),
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                        ),
                                         //Padding(padding: const EdgeInsets.only(left: 75.0),),
                                       ],
                                     ),
@@ -611,7 +613,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                   Align(
                                     alignment: Alignment.center,
                                     child: Container(
-                                      height: 35,
+                                      height: 45,
                                       width: 110,
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(5, 4, 5, 0),
@@ -632,7 +634,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                     alignment: Alignment.center,
                                     child: Container(
                                       height: 20,
-                                      width: 50,
+                                      width: 60,
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
                                         child: Text(

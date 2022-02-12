@@ -4,7 +4,7 @@ import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
 
 import 'HomePage/drawer_class.dart';
-import 'HomePage/grocer_offer/grocery_offer_page.dart';
+import 'HomePage/grocer_offer/category_wise_separate.dart';
 import 'all_screen/category_home_screen.dart';
 import 'all_screen/profile_screen.dart';
 import 'OthersPage/cart_detailspage.dart';

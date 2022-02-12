@@ -1,5 +1,4 @@
-class OneToNinentyNineDataModel{
-
+class OneToNinentyNineDataModel {
   String? basePrice;
   String? image;
   String? disCountPrice;
@@ -9,6 +8,5 @@ class OneToNinentyNineDataModel{
   int? sale;
   int? discount;
 
-
-  OneToNinentyNineDataModel({this.basePrice,this.image,this.disCountPrice,this.unit,this.name,this.id,this.sale,this.discount});
+  OneToNinentyNineDataModel({this.basePrice, this.image, this.disCountPrice, this.unit, this.name, this.id, this.sale, this.discount});
 }

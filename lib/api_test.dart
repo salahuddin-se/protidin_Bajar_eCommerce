@@ -23,7 +23,7 @@ class _ApiClassState extends State<ApiClass> {
   var purchaseData = [];
   Future<dynamic> getAiResonse() async {
     ///final response6 = await get(Uri.parse(purchaseHistoryAPI + "/" + box.read(userID)), headers: {"Accept": "application/json"});
-    final response6 = await get(Uri.parse("https://api.publicapis.org/entries"), headers: {"Accept": "application/json"});
+    final response6 = await get(Uri.parse("http://api.publicapis.org/entries"), headers: {"Accept": "application/json"});
 
     log("Histoty Resposne ${response6.body}");
 

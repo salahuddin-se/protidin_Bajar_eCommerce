@@ -1,5 +1,4 @@
 import 'package:customer_ui/all_screen/cart_detailspage.dart';
-import 'package:customer_ui/all_screen/grocery.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
@@ -113,12 +112,12 @@ class _OfferPageState extends State<OfferPage> with SingleTickerProviderStateMix
                 Expanded(
                   child: TabBarView(
                     controller: controller,
-                    children: [
-                      Grocery(),
-                      Grocery(),
-                      Grocery(),
-                      Grocery(),
-                      Grocery(),
+                    children: const [
+                      //Grocery(),
+                      //Grocery(),
+                      //Grocery(),
+                      //Grocery(),
+                      //Grocery(),
                     ],
                   ),
                 ),

@@ -1,7 +1,8 @@
-/// home screen
+/// new home screen
 /*
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:customer_ui/all_screen/all_offerpage.dart';
 import 'package:customer_ui/all_screen/cart_detailspage.dart';
@@ -14,17 +15,18 @@ import 'package:customer_ui/dataModel/category_data_model.dart';
 import 'package:customer_ui/dataModel/one_ninetynine_data_model.dart';
 import 'package:customer_ui/dataModel/search_data_model.dart';
 import 'package:customer_ui/dataModel/slider_model.dart';
+import 'package:customer_ui/preferences/user_preferance.dart';
 import 'package:customer_ui/ruf/search.dart';
 import 'package:customer_ui/welcomeScreen/sigininform.dart';
 import 'package:customer_ui/widgets/category_container.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+
 import '../dataModel/breat_biscuit.dart';
 import '../dataModel/city_model.dart';
 import '../dataModel/seller_response.dart';
@@ -45,6 +47,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   bool isLocationChanged = false;
   bool isCategoryLoaded = false;
   String newArea = "";
+  //final keyIsFirstLoaded = 'is_first_loaded';
 
   Future<dynamic> buildShowDialog(BuildContext context, List<String> areaName, List<String> cityName) {
     Widget okButton = FlatButton(
@@ -90,7 +93,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             child: Align(
                               alignment: Alignment.centerRight,
                               child: DropDown(
+                                ///items: [cityName[0]],
                                 items: [cityName[0]],
+
                                 hint: Text(
                                   "",
                                 ),
@@ -135,7 +140,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: DropDown(
-                              items: areaName,
+                              //
+                              items: areaName..removeAt(0),
+
+                              //: areaName..removeAt(0)..add("Sylhet"); means:
+                              //areaName =  areaName.removeAt(0);
+                              //areaName = areaName.add("Sylhet");
                               hint: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
@@ -160,7 +170,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -182,6 +192,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                             log("Area name is $selectAreaName");
                           });
                           Navigator.of(context).pop();
+                          if (!UserPreference.containsKey(UserPreference.showAreaDialogue)) {
+                            UserPreference.setBool(UserPreference.showAreaDialogue, true);
+                            UserPreference.setString(UserPreference.selectedArea, selectAreaName);
+                          } else {
+                            UserPreference.setString(UserPreference.selectedArea, selectAreaName);
+                          }
                           fetchShop(selectAreaName).then((value) {
                             getCategory();
                           });
@@ -206,30 +222,36 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
         });
   }
 
-  CategoryContainer userService = CategoryContainer(
-    categoryName: '',
-    large_Banner: '',
-    add_banner: '',
-    nameNo: '',
-  );
-
   @override
   void initState() {
     // TODO: implement initState
     log("------USER TOKEN IS------ :${box.read(userToken)}");
-    Clipboard.setData(ClipboardData(text: box.read(userToken)));
+    //Clipboard.setData(ClipboardData(text: box.read(userToken)));
     controller.getCartName();
-    getCityName();
+
+    UserPreference.setPreference().then((value) {
+      if (!UserPreference.containsKey(UserPreference.showAreaDialogue)) {
+        getCityName(true);
+      } else {
+        getCityName(false).then((value) {
+          setState(() {
+            selectAreaName = UserPreference.getString(UserPreference.selectedArea) ?? "";
+          });
+        });
+      }
+    });
+
     getCategory();
     getSliderSearch();
     getOneTo99Data();
-
-    //fetchProducts(areaName);
-    // getLogoutResponse();
   }
 
-  var sliderData = [];
+  //
 
+  //
+
+  /// slider
+  var sliderData = [];
   Future<void> getSliderSearch() async {
     String sliderURl = "https://test.protidin.com.bd/api/v2/sliders";
 
@@ -249,6 +271,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     // log("after decode $dataMap");
   }
 
+  /// add to cart
   Future<void> addToCart(
     id,
     userId,
@@ -288,8 +311,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
     log("update cart ${res.body}");
 
-    ///log("add user address response ${res.body}");
-
     if (res.statusCode == 200 || res.statusCode == 201) {
       var dataMap = jsonDecode(res.body);
     } else {
@@ -298,7 +319,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     setState(() {});
   }
 
-  ///
+  /// logout
   Future<void> getLogoutResponse() async {
     log("Log out response calling");
     final response = await http.get(
@@ -308,6 +329,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
     //
     if (response.statusCode == 200 || response.statusCode == 201) {
+      UserPreference.clearPreference();
       Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
 
       ///print(box.read('userName'));
@@ -322,10 +344,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     ///return logoutResponseFromJson(response.body);
   }
 
-  ///
-
   var productData = [];
 
+  /// search product
   Future<void> getProductBySearch({required String name}) async {
     String searchProductURl = "https://test.protidin.com.bd/api/v2/products/search";
 
@@ -345,8 +366,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     // log("after decode $dataMap");
   }
 
-  ///
-
   var demo = [];
   var controller = Get.put(CartItemsController());
 
@@ -363,7 +382,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   int shopId = 0;
   var shopName = "";
 
-  Future<void> getCityName() async {
+  Future<void> getCityName(bool isShowDialog) async {
     areaName.clear();
     cityName.clear();
 
@@ -381,7 +400,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       areaName.add(element.area);
     }
     // city name comment out
-    buildShowDialog(context, areaName, cityName);
+
+    if (isShowDialog) buildShowDialog(context, areaName, cityName);
+
     setState(() {});
     //log("area2 name $areaName");
     //log("city2 name $cityName");
@@ -692,7 +713,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
               height: 10,
             ),
 
-            //_buildList(),
+            /// search bar
             Center(
               child: Container(
                 width: MediaQuery.of(context).size.width / 1.1,
@@ -764,7 +785,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 alignment: Alignment.centerLeft,
                 child: GestureDetector(
                   onTap: () {
-                    getCityName();
+                    getCityName(true);
                   },
                   child: SizedBox(
                     height: 40,
@@ -789,7 +810,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            getCityName();
+                            getCityName(true);
                           },
                           child: Container(
                               height: 8,
@@ -1758,10 +1779,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   width: 30,
                 )),
 
+                /*
+                RefreshIndicator(
+                onRefresh: () {},
+                child: Container()
+                )
+                */
                 Obx(() => Text(
                       controller.cartLength.value.toString(),
-                )
-                ),
+                    )),
               ],
             ),
             backgroundColor: kPrimaryColor,
@@ -1773,9 +1799,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   }
 }
 
-*/
+ */
 
-/// cart details page
+/// new cart details page
 /*
 import 'dart:convert';
 import 'dart:developer';
@@ -2968,7 +2994,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
 */
 
-/// category container
+/// new category container
 /*
 import 'dart:convert';
 import 'dart:developer';
@@ -3487,7 +3513,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
 
 */
 
-/// payment method & address
+/// new payment method & address
 /*
 import 'dart:convert';
 import 'dart:developer';
@@ -3640,6 +3666,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
   ///
   ///var paymentModel = [];
   var paymentData = [];
+  bool isLoading = false;
 
   Future<void> getPaymentTypes() async {
     var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/payment-types"), headers: <String, String>{
@@ -4482,9 +4509,24 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
             ),
 
             GestureDetector(
-              onTap: () {
-                orderCreate("${box.read(userID)}", widget.ownerId, paymentType, selectedAddress, widget.grandTotal);
-              },
+              onTap: isLoading
+                  ? () {}
+                  : () {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      orderCreate(
+                        "${box.read(userID)}",
+                        widget.ownerId,
+                        paymentType,
+                        selectedAddress,
+                        widget.grandTotal,
+                      ).then((value) {
+                        setState(() {
+                          isLoading = false;
+                        });
+                      });
+                    },
               child: Container(
                 width: MediaQuery.of(context).size.width / 1,
                 height: 56,
@@ -4505,18 +4547,20 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
                   ],
                 ),
                 child: Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        widget.grandTotal,
-                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
-                      ),
-                      Text(
-                        "place order",
-                        style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
-                      ),
-                    ],
-                  ),
+                  child: isLoading
+                      ? CircularProgressIndicator(color: Colors.white,)
+                      : Column(
+                          children: [
+                            Text(
+                              widget.grandTotal,
+                              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+                            ),
+                            Text(
+                              "Place Order",
+                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+                            ),
+                          ],
+                        ),
                 ),
               ),
             ),
@@ -4711,6 +4755,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> {
     );
   }
 }
+
 */
 
 /// my account
@@ -5036,7 +5081,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
 
 */
 
-/// cart item controller
+/// new cart item controller
 /*
 import 'dart:convert';
 import 'dart:developer';
@@ -5053,6 +5098,7 @@ class CartItemsController extends GetxController {
 
   Future<void> getCartName() async {
     cartItemsList.clear();
+    box.write(cartList, cartItemsList);
     log("cart length ${cartLength.value}");
     log("-----get cart items---with user ID ${box.read(userID)}--");
 
@@ -5095,17 +5141,18 @@ class CartItemsController extends GetxController {
   }
 }
 
- */
+*/
 
-/// payment screen
+/// new payment screen
 /*
-import 'dart:async';
 import 'dart:developer';
 
-import 'package:customer_ui/all_screen/home_screen.dart';
 import 'package:customer_ui/components/styles.dart';
+import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import 'home_screen.dart';
 import 'ongoing_orders.dart';
 
 //import 'Language.dart';
@@ -5133,10 +5180,25 @@ class Payment_Screen extends StatefulWidget {
 }
 
 class _Payment_ScreenState extends State<Payment_Screen> {
+  var controller = Get.put(CartItemsController());
+
   @override
+  /*
+  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              CurrentBookingDetails(request: booking)),
+                    ).then((value) => setState(() {}));
+                    print("refresh done ");
+                  });
+   */
+
   void initState() {
-    Timer(Duration(seconds: 5), () {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
+    Future.delayed(Duration(seconds: 3), () {
+      controller.getCartName().then((value) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
+      });
     });
     super.initState();
     // TODO: implement initState
@@ -5551,6 +5613,799 @@ class _Payment_ScreenState extends State<Payment_Screen> {
           ),
         ),
       ),
+    );
+  }
+}
+*/
+
+/// user shared preference
+/*
+import 'package:shared_preferences/shared_preferences.dart';
+
+class UserPreference {
+  static SharedPreferences? instance;
+  static const String showAreaDialogue = 'areaDialog';
+  static const String selectedArea = 'selectedArea';
+  static Future<void> setPreference() async {
+    instance = await SharedPreferences.getInstance();
+  }
+
+  static Future<bool> clearPreference() {
+    return instance!.clear();
+  }
+
+  static bool containsKey(String key) {
+    return instance!.containsKey(key);
+  }
+
+  static dynamic get(String key) {
+    return instance!.get(key);
+  }
+
+  static bool? getBool(String key) {
+    return instance!.getBool(key);
+  }
+
+  static Future<bool> setBool(String key, bool value) {
+    return instance!.setBool(key, value);
+  }
+
+  static String? getString(String key) {
+    return instance!.getString(key);
+  }
+
+  static Future<bool> setString(String key, String value) {
+    return instance!.setString(key, value);
+  }
+}
+
+*/
+
+/// offer page/ category wise
+/*
+import 'package:customer_ui/all_screen/category_wise_separate.dart';
+import 'package:customer_ui/all_screen/offer_page.dart';
+import 'package:customer_ui/components/size_config.dart';
+import 'package:customer_ui/components/styles.dart';
+import 'package:flutter/material.dart';
+
+
+
+class AllOfferPage extends StatefulWidget {
+  @override
+  _AllOfferPageState createState() => _AllOfferPageState();
+}
+
+class _AllOfferPageState extends State<AllOfferPage> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: kWhiteColor,
+        centerTitle: true,
+        title: Text(
+          "All Offers",
+          style: TextStyle(color: kBlackColor, fontSize: 14),
+        ),
+        iconTheme: IconThemeData(color: kBlackColor),
+        actions: const [
+          Center(
+            child: Icon(
+              Icons.menu,
+              color: kBlackColor,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          )
+        ],
+      ),
+
+      backgroundColor: Colors.white,
+      //backgroundColor: Colors.indigo[50],
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+
+              SizedBox(height: 10,),
+
+
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryOfferPage()));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey
+                            .withOpacity(0.15),
+                        spreadRadius: 5, //spread radius
+                        blurRadius: 5, // blur radius
+                        offset: Offset(
+                            0, 3),
+                      ),
+                    ],
+                  ),
+                  height: 200,
+                  width: MediaQuery.of(context).size.width/1.1,
+                  child: Image.asset("assets/img_78.png",fit: BoxFit.cover,),
+                ),
+              ),
+
+
+              SizedBox(height: 10,),
+
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) =>OfferPage()));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+
+                    image: DecorationImage(
+                        image: AssetImage("assets/img_79.png"),
+                        fit: BoxFit.cover
+                    ),
+
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey
+                            .withOpacity(0.15),
+                        spreadRadius: 5, //spread radius
+                        blurRadius: 5, // blur radius
+                        offset: Offset(
+                            0, 3),
+                      ),
+                    ],
+                  ),
+                  height: 200,
+                  width: MediaQuery.of(context).size.width/1.1,
+                  child: Image.asset("assets/img_80.png",),
+                ),
+              ),
+
+              const SizedBox(height: 10,),
+
+              InkWell(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryOfferPage()));
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage("assets/img_81.png"),
+                        fit: BoxFit.cover
+                    ),
+
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+
+                      BoxShadow(
+                        color: Colors.grey
+                            .withOpacity(0.15),
+                        spreadRadius: 5, //spread radius
+                        blurRadius: 5, // blur radius
+                        offset: Offset(
+                            0, 3),
+                      ),
+
+                    ],
+                  ),
+                  height: 350,
+                  width: MediaQuery.of(context).size.width/1.1,
+                  child: Image.asset("assets/img_175.png",),
+                ),
+              ),
+
+              const SizedBox(height: 10,),
+
+              Container(
+                decoration: BoxDecoration(
+
+                  image: DecorationImage(
+                      image: AssetImage("assets/img_82.png"),
+                      fit: BoxFit.cover
+                  ),
+
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+
+                    BoxShadow(
+                      color: Colors.grey
+                          .withOpacity(0.15),
+                      spreadRadius: 5, //spread radius
+                      blurRadius: 5, // blur radius
+                      offset: Offset(
+                          0, 3),
+                    ),
+
+                  ],
+                ),
+                height: 200,
+                width: MediaQuery.of(context).size.width/1.1,
+                //child: Image.asset("assets/img_86.png",),
+              ),
+
+
+              const SizedBox(height: 10,),
+
+              Container(
+                decoration: BoxDecoration(
+
+                  image: DecorationImage(
+                      image: AssetImage("assets/img_176.png"),
+                      fit: BoxFit.cover
+                  ),
+
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+
+                    BoxShadow(
+                      color: Colors.grey
+                          .withOpacity(0.15),
+                      spreadRadius: 5, //spread radius
+                      blurRadius: 5, // blur radius
+                      offset: Offset(
+                          0, 3),
+                    ),
+
+                  ],
+                ),
+                height: 200,
+                width: MediaQuery.of(context).size.width/1.1,
+                //child: Image.asset("assets/img_78.png",),
+              ),
+
+              const SizedBox(height: 10,),
+
+              Container(
+                decoration: BoxDecoration(
+
+                  image: DecorationImage(
+                      image: AssetImage("assets/img_178.png"),
+                      fit: BoxFit.cover
+                  ),
+
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+
+                    BoxShadow(
+                      color: Colors.grey
+                          .withOpacity(0.15),
+                      spreadRadius: 5, //spread radius
+                      blurRadius: 5, // blur radius
+                      offset: Offset(
+                          0, 3),
+                    ),
+
+                  ],
+                ),
+                height: 200,
+                width: MediaQuery.of(context).size.width/1.1,
+                child: Image.asset("assets/img_177.png",),
+              ),
+
+
+              const SizedBox(height: 10,),
+
+              Container(
+                decoration: BoxDecoration(
+
+                  image: DecorationImage(
+                      image: AssetImage("assets/img_180.png"),
+                      fit: BoxFit.cover
+                  ),
+
+                  borderRadius: BorderRadius.circular(5),
+                  boxShadow: [
+
+                    BoxShadow(
+                      color: Colors.grey
+                          .withOpacity(0.15),
+                      spreadRadius: 5, //spread radius
+                      blurRadius: 5, // blur radius
+                      offset: Offset(
+                          0, 3),
+                    ),
+
+                  ],
+                ),
+                height: 200,
+                width: MediaQuery.of(context).size.width/1.1,
+                child: Image.asset("assets/img_179.png",),
+              ),
+
+              SizedBox(height: 80,),
+
+            ],
+          ),
+        ),
+      ),
+
+    );
+  }
+
+}
+*/
+
+/// all grocery
+/*
+
+import 'dart:developer';
+
+import 'package:customer_ui/components/size_config.dart';
+import 'package:customer_ui/components/styles.dart';
+import 'package:customer_ui/components/utils.dart';
+import 'package:customer_ui/dataModel/product_response.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+
+import 'grocery.dart';
+
+class AllGrocery extends StatefulWidget {
+  const AllGrocery({Key? key, required this.link}) : super(key: key);
+
+  final String link;
+
+  @override
+  _AllGroceryState createState() => _AllGroceryState();
+}
+
+class _AllGroceryState extends State<AllGrocery> {
+  List<Product> listOfProducts = [];
+  Future fetchProducts(link2) async {
+    listOfProducts.clear();
+    log("tap link $link2");
+    log("user id ${box.read(user_Id)}");
+    log("web store id ${box.read(webStoreId)}");
+
+    var response = await get(Uri.parse(link2));
+    var productResponse = productMiniResponseFromJson(response.body);
+
+    for (var ele in productResponse.products!) {
+      if (ele.user_id == box.read(user_Id) || ele.user_id == box.read(webStoreId)) {
+        log(" name  ${ele.name}");
+        listOfProducts.add(Product(
+            name: ele.name,
+            thumbnail_image: ele.thumbnail_image,
+            base_discounted_price: ele.base_discounted_price,
+            shop_name: ele.shop_name,
+            base_price: ele.base_price,
+            unit: ele.unit,
+            id: ele.id,
+            links: ele.links!,
+            discount: ele.discount!,
+            has_discount: ele.has_discount,
+            user_id: ele.user_id));
+        log("product length ${listOfProducts.length}");
+        setState(() {});
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    fetchProducts(widget.link);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var width = SizeConfig.screenWidth;
+    var height = SizeConfig.screenHeight;
+    var block = SizeConfig.block;
+    return Scaffold(
+      body: SizedBox(
+        height: height,
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("1454 offer found"),
+                  Row(
+                    children: const [
+                      Icon(Icons.filter_list_outlined),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text("Top Deal"),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Icon(Icons.keyboard_arrow_down)
+                    ],
+                  ),
+                  Icon(Icons.category_outlined)
+                ],
+              ),
+              sized20,
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    return TabProductItemWidget(
+                      width: width,
+                      block: block,
+                      height: height,
+                      image: '',
+                      productName: listOfProducts[index].name.toString(),
+                      actualPrice: "BDT 130",
+                      discountPrice: "BDT 110",
+                    );
+                  },
+                  itemCount: listOfProducts.length,
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+*/
+
+/// category wise separate
+/*
+import 'package:customer_ui/all_screen/cart_detailspage.dart';
+import 'package:customer_ui/components/size_config.dart';
+import 'package:customer_ui/components/styles.dart';
+import 'package:customer_ui/components/utils.dart';
+import 'package:flutter/material.dart';
+
+import 'all_gorcery.dart';
+
+class GroceryOfferPage extends StatefulWidget {
+  var categoryLink = "";
+  var receiveCategoryName = "";
+  var receiveLargeBanner = "";
+  var categoryData = [];
+
+  ///Details({Key? key, required this.link}) : super(key: key);
+
+  GroceryOfferPage(
+      {Key? key,
+      required this.categoryLink,
+      required this.receiveCategoryName,
+      required this.receiveLargeBanner,
+      required this.categoryData})
+      : super(key: key);
+
+  @override
+  _GroceryOfferPageState createState() => _GroceryOfferPageState();
+}
+
+class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerProviderStateMixin {
+  late TabController controller;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    controller = TabController(length: widget.categoryData.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var width = SizeConfig.screenWidth;
+    var height = SizeConfig.screenHeight;
+    var block = SizeConfig.block;
+
+    return Scaffold(
+      backgroundColor: kWhiteColor,
+      appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: kWhiteColor,
+        centerTitle: true,
+        title: Text(
+          widget.receiveCategoryName,
+          style: TextStyle(color: kBlackColor, fontSize: block * 4),
+        ),
+        iconTheme: IconThemeData(color: kBlackColor),
+        actions: const [
+          Center(
+            child: Icon(
+              Icons.menu,
+              color: kBlackColor,
+            ),
+          ),
+          SizedBox(
+            width: 10,
+          )
+        ],
+      ),
+      body: SizedBox(
+        height: height,
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ///Image.asset("assets/groceryposter.png"),
+              Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  child: Image.network(
+                    imagePath + widget.receiveLargeBanner,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+
+              ///
+              SizedBox(
+                height: 50,
+                child: TabBar(
+                  isScrollable: true,
+                  indicatorColor: kPrimaryColor,
+                  controller: controller,
+                  tabs: widget.categoryData.map((string) => tabBarItems(block, string.name, '1')).toList(),
+                ),
+              ),
+              Expanded(
+                child: TabBarView(
+                  controller: controller,
+                  children: widget.categoryData
+                      .map((string) => AllGrocery(
+                            link: string.links.products,
+                          ))
+                      .toList(),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+                  },
+                  child: Container(
+                    height: 60,
+                    width: MediaQuery.of(context).size.width / 4.5,
+                    child: Image.asset("assets/img_160.png"),
+                  ),
+                ),
+              ),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Row tabBarItems(double block, String title, String amount) {
+    return Row(
+      children: [
+        Text(
+          title,
+          style: TextStyle(color: kBlackColor),
+        ),
+      ],
+    );
+  }
+}
+*/
+
+/// grocery
+/*
+import 'package:customer_ui/components/size_config.dart';
+import 'package:customer_ui/components/styles.dart';
+import 'package:flutter/material.dart';
+
+class Grocery extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    var width = SizeConfig.screenWidth;
+    var height = SizeConfig.screenHeight;
+    var block = SizeConfig.block;
+    return Scaffold(
+      body: SizedBox(
+        height: height,
+        width: width,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("454 offer found"),
+                  Row(
+                    children: [Icon(Icons.filter_list_outlined), Text("Discount")],
+                  ),
+                  Icon(Icons.category_outlined)
+                ],
+              ),
+              sized20,
+              Expanded(
+                //flex: 3,
+                child: ListView(
+                  children: [
+                    TabProductItemWidget(
+                      width: width,
+                      block: block,
+                      height: height,
+                      image: "assets/lays.png",
+                      productName: "Lays Premium Chips Orange Flavor- 65g",
+                      actualPrice: "BDT 130",
+                      discountPrice: "BDT 110",
+                    ),
+                    TabProductItemWidget(
+                      width: width,
+                      block: block,
+                      height: height,
+                      image: "assets/dove.png",
+                      productName: "Dove Alovera Moyesture Lotions - 500g",
+                      actualPrice: "BDT 550",
+                      discountPrice: "BDT 410",
+                    ),
+                    TabProductItemWidget(
+                      width: width,
+                      block: block,
+                      height: height,
+                      image: "assets/oil.png",
+                      productName: "Aci Pure 100% Healthy Soyabin Oil - 5 litre",
+                      actualPrice: "BDT 650",
+                      discountPrice: "BDT 590",
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TabProductItemWidget extends StatelessWidget {
+  const TabProductItemWidget({
+    Key? key,
+    required this.width,
+    required this.block,
+    required this.height,
+    this.image,
+    this.productName,
+    this.off,
+    this.actualPrice,
+    this.discountPrice,
+  }) : super(key: key);
+
+  final double width;
+  final double block;
+  final double height;
+  final String? image;
+  final String? productName;
+  final String? off;
+  final String? actualPrice;
+  final String? discountPrice;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          //height: height * 0.15,
+          width: width,
+          padding: EdgeInsets.symmetric(horizontal: 10.0),
+          child: Row(
+            children: [
+              InkWell(
+                  onTap: () {
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
+                  },
+                  child: Image.asset(image!)),
+              SizedBox(
+                width: 10,
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      productName!,
+                      style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w500),
+                      maxLines: 2,
+                    ),
+                    sized5,
+                    Container(
+                      height: height * 0.03,
+                      margin: EdgeInsets.only(top: 10),
+                      width: width * 0.15,
+                      decoration: BoxDecoration(color: Colors.green),
+                      child: Center(
+                        child: Text(
+                          "15% Off",
+                          style: TextStyle(color: Colors.white, fontSize: block * 3, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    sized5,
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              actualPrice!,
+                              style: TextStyle(
+                                color: kBlackColor,
+                                fontSize: block * 4.5,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Padding(padding: const EdgeInsets.only(left: 5)),
+                            Text(discountPrice!,
+                                style: TextStyle(
+                                    color: kBlackColor,
+                                    fontSize: block * 4,
+                                    fontWeight: FontWeight.w300,
+                                    decoration: TextDecoration.lineThrough)),
+                            SizedBox(
+                              width: 10,
+                            ),
+                          ],
+                        ),
+                        Expanded(child: Container()),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
+                          decoration: BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
+                          child: Row(
+                            children: [
+                              Text("Add", style: TextStyle(color: kWhiteColor, fontSize: block * 4, fontWeight: FontWeight.bold)),
+                              Icon(
+                                Icons.add,
+                                color: kWhiteColor,
+                              )
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Divider(
+          color: kBlackColor,
+          thickness: 0.3,
+        )
+      ],
     );
   }
 }

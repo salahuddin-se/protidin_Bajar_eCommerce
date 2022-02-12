@@ -14,19 +14,19 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
-class GroceryDetails extends StatefulWidget {
+class ProductDetails extends StatefulWidget {
   var detailsLink = "";
   var relatedProductLink = "";
-  GroceryDetails({
+  ProductDetails({
     required this.detailsLink,
     required this.relatedProductLink,
   });
 
   @override
-  _GroceryDetailsState createState() => _GroceryDetailsState();
+  _ProductDetailsState createState() => _ProductDetailsState();
 }
 
-class _GroceryDetailsState extends State<GroceryDetails> {
+class _ProductDetailsState extends State<ProductDetails> {
   var productsData = [];
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var controller = Get.put(CartItemsController());
@@ -37,7 +37,7 @@ class _GroceryDetailsState extends State<GroceryDetails> {
     quantity,
   ) async {
     log("user id $userId");
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/add"),
+    var res = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/add"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{
           "id": id.toString(),
@@ -51,6 +51,8 @@ class _GroceryDetailsState extends State<GroceryDetails> {
 
       ///await updateAddressInCart(userId);
       await controller.getCartName();
+
+      //box.write(key, controller);
 
       //await getCartSummary();
     } else {
@@ -198,29 +200,44 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                           style: TextStyle(color: kBlackColor, fontSize: block * 5, fontWeight: FontWeight.w500),
                         ),
                         sized15,
-                        Text(
-                          "${productsData[index].description ?? "No"} description Found",
-                          style: TextStyle(color: kBlackColor.withOpacity(0.5), fontSize: block * 3.5, fontWeight: FontWeight.w300),
-                        ),
+                        productsData[index].description == null
+                            ? Text("")
+                            : Text(
+                                productsData[index].description,
+                                style: TextStyle(color: kBlackColor.withOpacity(0.5), fontSize: block * 3.5, fontWeight: FontWeight.w300),
+                              ),
                         sized15,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
-                                Text(productsData[index].baseDiscountedPrice,
-                                    style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.bold)),
+                                Container(
+                                  child: Image.asset(
+                                    "assets/p.png",
+                                    height: 24,
+                                  ),
+                                  height: 29,
+                                  width: 22,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 4.0),
+                                  child: Text(productsData[index].baseDiscountedPrice,
+                                      style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.bold)),
+                                ),
                                 SizedBox(
                                   width: 15,
                                 ),
-                                Text(
-                                  productsData[index].basePrice,
-                                  style: TextStyle(
-                                      color: kBlackColor,
-                                      fontSize: block * 4,
-                                      fontWeight: FontWeight.w300,
-                                      decoration: TextDecoration.lineThrough),
-                                ),
+                                productsData[index].basePrice == productsData[index].baseDiscountedPrice
+                                    ? Text("")
+                                    : Text(
+                                        productsData[index].basePrice,
+                                        style: TextStyle(
+                                            color: kBlackColor,
+                                            fontSize: block * 4,
+                                            fontWeight: FontWeight.w300,
+                                            decoration: TextDecoration.lineThrough),
+                                      ),
                                 SizedBox(
                                   width: 15,
                                 ),
@@ -231,7 +248,8 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                         decoration: BoxDecoration(color: Colors.green),
                                         child: Center(
                                           child: Text(
-                                            "15% OFF",
+                                            "15% off",
+                                            //"-৳ ${listOfProducts[index].discount.toString()}",
                                             style: TextStyle(color: Colors.white, fontSize: block * 3, fontWeight: FontWeight.bold),
                                           ),
                                         ),
@@ -241,15 +259,18 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                             ),
                             Row(
                               children: [
-                                Icon(
-                                  Icons.wallet_travel_rounded,
-                                  color: Colors.green,
+                                Container(
+                                  child: Image.asset(
+                                    "assets/img_172.png",
+                                    height: 24,
+                                  ),
+                                  height: 29,
+                                  width: 22,
                                 ),
                                 SizedBox(
                                   width: 10,
                                 ),
-                                Text("BDT ${productsData[index].calculablePrice}",
-                                    style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w400)),
+                                Text("৳0", style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w400)),
                               ],
                             )
                           ],
@@ -259,17 +280,17 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                           height: height * 0.05,
                           width: width,
                           padding: EdgeInsets.symmetric(horizontal: 5.0),
-                          decoration: BoxDecoration(color: Colors.red[50], borderRadius: BorderRadius.circular(5.0)),
+                          decoration: BoxDecoration(color: Color(0xFFF4EFF5), borderRadius: BorderRadius.circular(5.0)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Image.asset("assets/emo.png"),
                               Text(
-                                "Member Price: BDT 690",
+                                "Member Price: ৳680",
                                 style: TextStyle(color: kBlackColor, fontSize: block * 3.5, fontWeight: FontWeight.w400),
                               ),
                               Text(
-                                "Save BDT 20",
+                                "Save ৳20",
                                 style: TextStyle(color: Colors.green, fontSize: block * 3.5, fontWeight: FontWeight.w400),
                               ),
                               Icon(
@@ -327,15 +348,6 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                         SingleChildScrollView(
                           child: Column(
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text("Related Product",
-                                      style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.w700)),
-                                  Text("Show more",
-                                      style: TextStyle(color: kBlackColor, fontSize: block * 3.5, fontWeight: FontWeight.w500)),
-                                ],
-                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -343,157 +355,170 @@ class _GroceryDetailsState extends State<GroceryDetails> {
                                 height: height,
                                 width: width,
                                 padding: EdgeInsets.all(10.0),
-                                decoration: BoxDecoration(color: Colors.red[50], borderRadius: BorderRadius.circular(10.0)),
-                                child: ListView.builder(
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: relatedData.length,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemBuilder: (_, index) {
-                                      return FittedBox(
-                                        child: Column(
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: const [
-                                                //Text("Related", style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.bold)),
-                                                //Text("Show more", style: TextStyle(color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w300)),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                Container(
-                                                  //height: height * 0.15,
-                                                  width: width,
-
-                                                  padding: EdgeInsets.symmetric(horizontal: 10.0),
-                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: kWhiteColor),
-                                                  child: Row(
-                                                    children: [
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width / 2.7,
-                                                        child: InkWell(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) => GroceryDetails(
-                                                                          detailsLink: relatedData[index].links!.details!,
-                                                                          relatedProductLink: "",
-                                                                        )));
-                                                          },
-                                                          child: Image.network(
-                                                            imagePath + relatedData[index].thumbnailImage,
-                                                            fit: BoxFit.cover,
-                                                            height: height * 0.2,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(context).size.width * 3 / 5.5,
-                                                        child: Column(
-                                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                                          mainAxisAlignment: MainAxisAlignment.center,
-                                                          children: [
-                                                            sized10,
-                                                            Text(
-                                                              relatedData[index].name,
-                                                              style: TextStyle(
-                                                                  color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w500),
-                                                              maxLines: 2,
-                                                            ),
-                                                            sized5,
-                                                            Container(
-                                                              ///height: height * 0.02,
-                                                              height: height * 0.028,
-                                                              margin: EdgeInsets.only(top: 10),
-
-                                                              ///width: width * 0.15,
-                                                              width: width * 0.2,
-                                                              decoration: BoxDecoration(color: Colors.green),
-                                                              child: Center(
-                                                                child: Text(
-                                                                  "null",
-                                                                  style: TextStyle(
-                                                                      color: Colors.white,
-                                                                      fontSize: block * 3,
-                                                                      fontWeight: FontWeight.bold),
-                                                                ),
+                                decoration: BoxDecoration(color: Color(0xFFF4EFF5), borderRadius: BorderRadius.circular(10.0)),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Text("Related Product",
+                                            style: TextStyle(color: kBlackColor, fontSize: block * 4.5, fontWeight: FontWeight.w700)),
+                                        Text("Show more",
+                                            style: TextStyle(color: kBlackColor, fontSize: block * 3.5, fontWeight: FontWeight.w500)),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Flexible(
+                                      child: ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.vertical,
+                                          itemCount: relatedData.length,
+                                          physics: NeverScrollableScrollPhysics(),
+                                          itemBuilder: (_, index) {
+                                            return FittedBox(
+                                              child: Column(
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                                                    child: Container(
+                                                      //height: height * 0.15,
+                                                      width: width,
+                                                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                                                      decoration:
+                                                          BoxDecoration(borderRadius: BorderRadius.circular(10.0), color: kWhiteColor),
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            width: MediaQuery.of(context).size.width / 2.7,
+                                                            child: InkWell(
+                                                              onTap: () {
+                                                                Navigator.push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) => ProductDetails(
+                                                                              detailsLink: relatedData[index].links!.details!,
+                                                                              relatedProductLink: "",
+                                                                            )));
+                                                              },
+                                                              child: Image.network(
+                                                                imagePath + relatedData[index].thumbnailImage,
+                                                                fit: BoxFit.cover,
+                                                                height: height * 0.2,
                                                               ),
                                                             ),
-                                                            sized5,
-                                                            Row(
+                                                          ),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Container(
+                                                            width: MediaQuery.of(context).size.width * 3 / 5.5,
+                                                            child: Column(
+                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                              mainAxisAlignment: MainAxisAlignment.center,
                                                               children: [
+                                                                sized10,
+                                                                Text(
+                                                                  relatedData[index].name,
+                                                                  style: TextStyle(
+                                                                      color: kBlackColor, fontSize: block * 4, fontWeight: FontWeight.w500),
+                                                                  maxLines: 2,
+                                                                ),
+                                                                sized5,
+                                                                relatedData[index].basePrice == relatedData[index].baseDiscountedPrice
+                                                                    ? Text("")
+                                                                    : Container(
+                                                                        ///height: height * 0.02,
+                                                                        height: height * 0.028,
+                                                                        margin: EdgeInsets.only(top: 10),
+
+                                                                        ///width: width * 0.15,
+                                                                        width: width * 0.2,
+                                                                        decoration: BoxDecoration(color: Colors.green),
+                                                                        child: Center(
+                                                                          child: Text(
+                                                                            //"null",
+                                                                            "${relatedData[index].discount.toString()}TK OFF",
+                                                                            style: TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontSize: block * 4,
+                                                                                fontWeight: FontWeight.bold),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                sized5,
                                                                 Row(
                                                                   children: [
-                                                                    Text(relatedData[index].baseDiscountedPrice,
-                                                                        style: TextStyle(
-                                                                            color: kBlackColor,
-                                                                            fontSize: block * 4.5,
-                                                                            fontWeight: FontWeight.bold)),
-                                                                    SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Text(
-                                                                      relatedData[index].basePrice,
-                                                                      style: TextStyle(
-                                                                          color: kBlackColor,
-                                                                          fontSize: block * 4,
-                                                                          fontWeight: FontWeight.w300,
-                                                                          decoration: TextDecoration.lineThrough),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                                Expanded(child: Container()),
-                                                                InkWell(
-                                                                  onTap: () {
-                                                                    addToCart(relatedData[index].id, box.read(userID), 1);
-                                                                  },
-                                                                  child: Container(
-                                                                    padding: EdgeInsets.symmetric(horizontal: 7.0, vertical: 3.0),
-                                                                    decoration: BoxDecoration(
-                                                                      color: kPrimaryColor,
-                                                                      borderRadius: BorderRadius.circular(20.0),
-                                                                    ),
-                                                                    child: Row(
+                                                                    Row(
                                                                       children: [
-                                                                        Text("Add",
+                                                                        Text(relatedData[index].baseDiscountedPrice,
                                                                             style: TextStyle(
-                                                                                color: kWhiteColor,
-                                                                                fontSize: block * 4,
+                                                                                color: kBlackColor,
+                                                                                fontSize: block * 4.5,
                                                                                 fontWeight: FontWeight.bold)),
-                                                                        Icon(
-                                                                          Icons.add,
-                                                                          color: kWhiteColor,
-                                                                        )
+                                                                        SizedBox(
+                                                                          width: 10,
+                                                                        ),
+                                                                        relatedData[index].basePrice ==
+                                                                                relatedData[index].baseDiscountedPrice
+                                                                            ? Text("")
+                                                                            : Text(
+                                                                                relatedData[index].basePrice,
+                                                                                style: TextStyle(
+                                                                                    color: kBlackColor,
+                                                                                    fontSize: block * 4,
+                                                                                    fontWeight: FontWeight.w300,
+                                                                                    decoration: TextDecoration.lineThrough),
+                                                                              )
                                                                       ],
                                                                     ),
-                                                                  ),
+                                                                    Expanded(child: Container()),
+                                                                    InkWell(
+                                                                      onTap: () {
+                                                                        addToCart(relatedData[index].id, box.read(userID), 1);
+                                                                      },
+                                                                      child: Container(
+                                                                        padding: EdgeInsets.symmetric(horizontal: 7.0, vertical: 3.0),
+                                                                        decoration: BoxDecoration(
+                                                                          color: kPrimaryColor,
+                                                                          borderRadius: BorderRadius.circular(20.0),
+                                                                        ),
+                                                                        child: Row(
+                                                                          children: [
+                                                                            Text("Add",
+                                                                                style: TextStyle(
+                                                                                    color: kWhiteColor,
+                                                                                    fontSize: block * 4,
+                                                                                    fontWeight: FontWeight.bold)),
+                                                                            Icon(
+                                                                              Icons.add,
+                                                                              color: kWhiteColor,
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    SizedBox(
+                                                                      width: 20,
+                                                                    ),
+                                                                  ],
                                                                 ),
-                                                                SizedBox(
-                                                                  width: 20,
-                                                                ),
+                                                                sized10,
                                                               ],
                                                             ),
-                                                            sized10,
-                                                          ],
-                                                        ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
+                                                    ),
                                                   ),
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    }),
+                                                ],
+                                              ),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -510,29 +535,45 @@ class _GroceryDetailsState extends State<GroceryDetails> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-          elevation: 0.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              //Icon(Icons.add_shopping_cart),
+      floatingActionButton: Container(
+        // height: 85,
+        // width: 85,
+        height: 70,
+        width: 70,
+        child: FloatingActionButton(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                //Icon(Icons.add_shopping_cart),
 
-              Center(
+                Center(
+                    child: Padding(
+                  //padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                   child: Image.asset(
-                "assets/pi.png",
-                height: 45,
-                width: 30,
-              )),
+                    "assets/cat.png",
+                    height: 29,
+                  ),
+                )),
 
-              Obx(() => Text(
-                    controller.cartLength.value.toString(),
-                  )),
-            ],
-          ),
-          backgroundColor: kPrimaryColor,
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
-          }),
+                Obx(() => Align(
+                      alignment: Alignment.topRight,
+                      child: CircleAvatar(
+                        radius: 10.5,
+                        backgroundColor: Colors.green[500],
+                        child: Text(
+                          controller.cartLength.value.toString(),
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+            backgroundColor: Color(0xFF9900FF),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+            }),
+      ),
     );
   }
 
