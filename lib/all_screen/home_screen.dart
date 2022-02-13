@@ -42,9 +42,11 @@ class CategoryHomeScreen extends StatefulWidget {
 class _MyHomePageState extends State<CategoryHomeScreen> {
   var value;
   var Cart;
-  bool isLocationChanged = false;
+  bool isLocationChanged = true;
   bool isCategoryLoaded = false;
   String newArea = "";
+  int? currentUser;
+  int? currentWebStore;
   //final keyIsFirstLoaded = 'is_first_loaded';
 
   Future<dynamic> buildShowDialog(BuildContext context, List<String> areaName, List<String> cityName) {
@@ -71,14 +73,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   Row(
                     children: [
                       Container(
-                          width: MediaQuery.of(context).size.width / 6,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: Text(
-                              "City",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Color(0xFF515151)),
-                            ),
-                          )),
+                        width: MediaQuery.of(context).size.width / 6,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            "City",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Color(0xFF515151)),
+                          ),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.center,
                         child: Container(
@@ -409,8 +412,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     if (isShowDialog) buildShowDialog(context, areaName, cityName);
 
     setState(() {});
-    //log("area2 name $areaName");
-    //log("city2 name $cityName");
   }
 
   Future fetchShop(String areaName) async {
@@ -441,13 +442,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             log("webstore ID $_webStoreId");
             log("user ID $_userId");
 
-            box.write(webStoreId, _webStoreId);
-            box.write(user_Id, _userId);
+            await box.write(webStoreId, _webStoreId);
+            await box.write(user_Id, _userId);
 
             //await getCategoryData(name: widget.na)
 
             setState(() {
               isLocationChanged = false;
+              currentUser = _userId;
+              currentWebStore = _webStoreId;
             });
           }
         }
@@ -470,6 +473,17 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   var householdLargeBanner = "";
   var toysGiftLargeBanner = "";
   var stationaryLargeBanner = "";
+
+  var groceryMobileBanner = "";
+  var chocolateMobileBanner = "";
+  var breadMobileBanner = "";
+  var dairyBeverageMobileBanner = "";
+  var motherBabyMobileBanner = "";
+  var fruitsVegMobileBanner = "";
+  var personalCareMobileBanner = "";
+  var householdMobileBanner = "";
+  var toysGiftMobileBanner = "";
+  var stationaryMobileBanner = "";
 
   ///
   var groceryAddBanner = "";
@@ -500,25 +514,35 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       for (var ele in categoryDataModel.data) {
         if (ele.name == "Grocery") {
           groceryLargeBanner = ele.largeBanner;
+          groceryMobileBanner = ele.mobileBanner;
           //log("Banner Image $groceryLargeBanner");
         } else if (ele.name == "Chocolate & Sweets") {
           chocolateLargeBanner = ele.largeBanner;
+          chocolateMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Bread Biscuit & Snacks") {
           breadLargeBanner = ele.largeBanner;
+          breadMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Dairy & Beverages") {
           dairyBeverageLargeBanner = ele.largeBanner;
+          dairyBeverageMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Mother & Baby") {
           motherBabyLargeBanner = ele.largeBanner;
+          motherBabyMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Fruits & Vegetables") {
           fruitsVegLargeBanner = ele.largeBanner;
+          fruitsVegMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Personal Care") {
           personalCareLargeBanner = ele.largeBanner;
+          personalCareMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Household") {
           householdLargeBanner = ele.largeBanner;
+          householdMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Toys & Gift") {
           toysGiftLargeBanner = ele.largeBanner;
+          toysGiftMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Stationery") {
           stationaryLargeBanner = ele.largeBanner;
+          stationaryMobileBanner = ele.mobileBanner;
         }
 
         ///
@@ -781,6 +805,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
             sized10,
 
+            /// alert dialogue
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: Align(
@@ -842,7 +867,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 itemCount: sliderData.length,
                 itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) => Container(
                       ///height: 250,
-                      child: Image.network(imagePath + sliderData[itemIndex].photo),
+                      child: sliderData.isNotEmpty ? Image.network(imagePath + sliderData[itemIndex].photo!) : Center(),
                     ),
                 options: CarouselOptions(
                   height: 120,
@@ -1066,8 +1091,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               : Image.network(imagePath + categoryData[index].mobileBanner)),
 
                                       ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
-
                                       sized10,
+
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                           2,
@@ -1134,7 +1159,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               fontWeight: FontWeight.w700,
                                               fontSize: 16,
                                               fontStyle: FontStyle.normal,
-                                              fontFamily: "CeraProBold"),
+                                              fontFamily: "CeraProMedium"),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -1233,12 +1258,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           InkWell(
                                             onTap: () {
                                               Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => ProductDetails(
-                                                            detailsLink: categoryProducts[index].links.details,
-                                                            relatedProductLink: relatedProductsLink,
-                                                          )));
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => ProductDetails(
+                                                    detailsLink: categoryProducts[index].links.details,
+                                                    relatedProductLink: relatedProductsLink,
+                                                  ),
+                                                ),
+                                              );
                                             },
                                             child: FittedBox(
                                               child: Container(
@@ -1270,7 +1297,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               height: MediaQuery.of(context).size.height / 40,
                                               child: Text(
                                                 categoryProducts[index].unit,
-                                                style: TextStyle(color: Colors.grey.withOpacity(0.9), fontSize: 15),
+                                                style: TextStyle(
+                                                  color: Colors.grey.withOpacity(0.9),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'CeraProMedium',
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -1298,7 +1330,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                           color: Color(0xFF515151),
                                                           fontSize: 19,
                                                           fontFamily: 'CeraProMedium',
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight: FontWeight.w700,
                                                         )),
                                                     categoryProducts[index].baseDiscountedPrice == categoryProducts[index].basePrice
                                                         ? Text("")
@@ -1306,7 +1338,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                             style: TextStyle(
                                                                 color: Color(0xFFA299A8),
                                                                 fontSize: 13,
-                                                                fontWeight: FontWeight.w500,
+                                                                fontWeight: FontWeight.w400,
+                                                                fontFamily: 'CeraProMedium',
                                                                 decoration: TextDecoration.lineThrough)),
                                                     Padding(
                                                       padding: const EdgeInsets.only(left: 10),
@@ -1358,7 +1391,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                     padding: const EdgeInsets.fromLTRB(4, 3, 0, 0),
                                                     child: Text(
                                                       "Earning  +৳18",
-                                                      style: TextStyle(fontSize: 13, color: Colors.green, fontWeight: FontWeight.w600),
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors.green,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: 'CeraProMedium',
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -1524,9 +1562,11 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               oneTwoNinentyNineData[index].name.toString(),
                                               style: TextStyle(
                                                 color: Color(0xFF515151),
-                                                fontSize: 12.5,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: "CeraProBold",
+                                                fontSize: 15.3111,
+                                                //fontWeight: FontWeight.w300,
+                                                fontFamily: "CeraProMedium",
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: FontStyle.normal,
                                               ),
                                               maxLines: 2,
                                               textAlign: TextAlign.center,
@@ -1539,7 +1579,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           height: MediaQuery.of(context).size.height / 38,
                                           child: Text(
                                             oneTwoNinentyNineData[index].unit.toString(),
-                                            style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                            style: TextStyle(
+                                              color: Colors.grey.withOpacity(0.9),
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'CeraProMedium',
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -1558,14 +1603,20 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                   width: 22,
                                                 ),
                                                 Text(oneTwoNinentyNineData[index].disCountPrice.toString(),
-                                                    style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
+                                                    style: TextStyle(
+                                                      color: Color(0xFF515151),
+                                                      fontSize: 19,
+                                                      fontFamily: 'CeraProMedium',
+                                                      fontWeight: FontWeight.w700,
+                                                    )),
                                                 oneTwoNinentyNineData[index].basePrice == oneTwoNinentyNineData[index].disCountPrice
                                                     ? Text("")
                                                     : Text(oneTwoNinentyNineData[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
-                                                            fontSize: 12,
+                                                            fontSize: 13,
                                                             fontWeight: FontWeight.w400,
+                                                            fontFamily: 'CeraProMedium',
                                                             decoration: TextDecoration.lineThrough)),
                                                 Padding(
                                                   padding: const EdgeInsets.only(left: 10),
@@ -1622,7 +1673,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 padding: const EdgeInsets.fromLTRB(4, 3, 0, 0),
                                                 child: Text(
                                                   "  Earning  +৳18",
-                                                  style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'CeraProMedium',
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -1655,6 +1711,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                     nameNo: 4,
                     large_Banner: groceryLargeBanner,
                     add_banner: groceryAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: groceryMobileBanner,
                   ),
 
             SizedBox(
@@ -1666,7 +1725,11 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                     categoryName: "Dairy & Beverage",
                     nameNo: 7,
                     large_Banner: dairyBeverageLargeBanner,
-                    add_banner: dairyBeverageAddBanner),
+                    add_banner: dairyBeverageAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: dairyBeverageMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1674,7 +1737,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Mother & Baby", nameNo: 8, large_Banner: motherBabyLargeBanner, add_banner: motherBabyAddBanner),
+                    categoryName: "Mother & Baby",
+                    nameNo: 8,
+                    large_Banner: motherBabyLargeBanner,
+                    add_banner: motherBabyAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: motherBabyMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1682,7 +1752,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Fruits & Vegetables", nameNo: 9, large_Banner: fruitsVegLargeBanner, add_banner: fruitsVegAddBanner),
+                    categoryName: "Fruits & Vegetables",
+                    nameNo: 9,
+                    large_Banner: fruitsVegLargeBanner,
+                    add_banner: fruitsVegAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: fruitsVegMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1690,7 +1767,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Personal Care", nameNo: 10, large_Banner: personalCareLargeBanner, add_banner: personalCareAddBanner),
+                    categoryName: "Personal Care",
+                    nameNo: 0,
+                    large_Banner: personalCareLargeBanner,
+                    add_banner: personalCareAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: personalCareMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1698,7 +1782,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Bread Biscuit & Snacks", nameNo: 11, large_Banner: breadLargeBanner, add_banner: breadAddBanner),
+                    categoryName: "Bread Biscuit & Snacks",
+                    nameNo: 11,
+                    large_Banner: breadLargeBanner,
+                    add_banner: breadAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: breadMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1706,7 +1797,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Household", nameNo: 13, large_Banner: householdLargeBanner, add_banner: householdAddBanner),
+                    categoryName: "Household",
+                    nameNo: 13,
+                    large_Banner: householdLargeBanner,
+                    add_banner: householdAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: householdMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1714,7 +1812,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Chocolate & Sweets", nameNo: 46, large_Banner: chocolateLargeBanner, add_banner: chocolateAddBanner),
+                    categoryName: "Chocolate & Sweets",
+                    nameNo: 46,
+                    large_Banner: chocolateLargeBanner,
+                    add_banner: chocolateAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: chocolateMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1722,7 +1827,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Toys & Gift", nameNo: 14, large_Banner: toysGiftLargeBanner, add_banner: toysGiftAddBanner),
+                    categoryName: "Toys & Gift",
+                    nameNo: 14,
+                    large_Banner: toysGiftLargeBanner,
+                    add_banner: toysGiftAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: toysGiftMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1730,7 +1842,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Stationery", nameNo: 199, large_Banner: stationaryLargeBanner, add_banner: stationaryAddBanner),
+                    categoryName: "Stationery",
+                    nameNo: 199,
+                    large_Banner: stationaryLargeBanner,
+                    add_banner: stationaryAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: stationaryMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,

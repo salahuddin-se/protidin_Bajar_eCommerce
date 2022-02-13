@@ -18,13 +18,23 @@ import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class CategoryContainer extends StatefulWidget {
-  const CategoryContainer(
-      {Key? key, required this.categoryName, required this.nameNo, required this.large_Banner, required this.add_banner})
-      : super(key: key);
+  const CategoryContainer({
+    Key? key,
+    required this.categoryName,
+    required this.nameNo,
+    required this.large_Banner,
+    required this.add_banner,
+    required this.currentUserId,
+    required this.currentEbStoreId,
+    required this.catImage,
+  }) : super(key: key);
   final String categoryName;
   final int nameNo;
+  final String catImage;
   final String large_Banner;
   final String add_banner;
+  final int currentUserId;
+  final int currentEbStoreId;
 
   @override
   _CategoryContainerState createState() => _CategoryContainerState();
@@ -33,12 +43,13 @@ class CategoryContainer extends StatefulWidget {
 class _CategoryContainerState extends State<CategoryContainer> {
   var categoryData = [];
 
-  var valueOne;
-  var categoryItemData = " ";
+  var valueOne = "all";
+  var categoryItemData = "All";
   var relatedProductsLink = " ";
+  int lastPage = 1;
   var adt;
   List<Product> listOfProducts = [];
-  List<Product> catetgoryProducts = [];
+  List<Product> categoryProducts = [];
   final PagingController<int, Product> _controller = PagingController(firstPageKey: 1);
 
   bool initPage = true;
@@ -57,16 +68,13 @@ class _CategoryContainerState extends State<CategoryContainer> {
     if (groceryDataMap["success"] == true) {
       var categoryDataModel = CategoryDataModel.fromJson(groceryDataMap);
 
-      ///
       categoryData = categoryDataModel.data;
-      categoryItemData = categoryDataModel.data[0].name;
-      relatedProductsLink = categoryData[0].links.products;
+      // categoryItemData = categoryDataModel.data[0].name;
+      // relatedProductsLink = categoryData[0].links.products;
 
       box.write(related_product_link, relatedProductsLink);
-
-      await fetchProducts(categoryDataModel.data[0].links.products);
-
       setState(() {});
+      // await fetchProducts(categoryDataModel.data[0].links.products);
     } else {}
   }
 
@@ -77,26 +85,70 @@ class _CategoryContainerState extends State<CategoryContainer> {
     log("new web store id ${box.read(webStoreId)}");
 
     var response = await get(Uri.parse(link2));
-    var productResponse = productMiniResponseFromJson(response.body);
+    var productResponse = productMiniResponseFromJson(response.body.toString());
 
-    for (var ele in productResponse.products!) {
-      if (ele.user_id == box.read(user_Id) || ele.user_id == box.read(webStoreId)) {
-        log(" name  ${ele.name}");
-        listOfProducts.add(Product(
-            name: ele.name,
-            thumbnail_image: ele.thumbnail_image,
-            base_discounted_price: ele.base_discounted_price,
-            shop_name: ele.shop_name,
-            base_price: ele.base_price,
-            unit: ele.unit,
-            id: ele.id,
-            links: ele.links!,
-            discount: ele.discount!,
-            has_discount: ele.has_discount,
-            user_id: ele.user_id));
-        log("product length ${listOfProducts.length}");
-        setState(() {});
+    setState(() {
+      listOfProducts = productResponse.products!
+          .where(
+            (ele) => ele.user_id == widget.currentEbStoreId || ele.user_id == widget.currentEbStoreId,
+          )
+          .toList();
+    });
+
+    print("LIST_PRODUCT: ${listOfProducts.length}");
+  }
+
+  Future<List<Product>> _getProductsByCategory({required int cateId, int page = 1}) async {
+    final response12 = await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/products/category/$cateId?page=$page"),
+        headers: {"Accept": "application/json"});
+    var searchDataMap = jsonDecode(response12.body);
+    if (searchDataMap["success"] == true) {
+      var fetchedProducts = productMiniResponseFromJson(response12.body);
+
+      setState(() {
+        lastPage = fetchedProducts.meta!.lastPage!;
+        for (var ele in fetchedProducts.products!) {
+          print("BOX_VENDOR: ${widget.currentEbStoreId}");
+          print("USER_ID: ${ele.user_id}");
+          print("BOX_USER_ID: ${widget.currentUserId}");
+          if (ele.user_id == widget.currentUserId || ele.user_id == widget.currentEbStoreId) {
+            log(" name  ${ele.name}");
+            categoryProducts.add(Product(
+                name: ele.name,
+                thumbnail_image: ele.thumbnail_image,
+                base_discounted_price: ele.base_discounted_price,
+                shop_name: ele.shop_name,
+                base_price: ele.base_price,
+                unit: ele.unit,
+                id: ele.id,
+                links: ele.links!,
+                discount: ele.discount!,
+                has_discount: ele.has_discount,
+                user_id: ele.user_id));
+
+            setState(() {});
+          }
+        }
+      });
+    }
+
+    categoryProducts.sort((first, next) => next.discount!.compareTo(first.discount!));
+
+    return categoryProducts;
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final newItems = await _getProductsByCategory(page: pageKey, cateId: widget.nameNo);
+      final isLastPage = pageKey == lastPage;
+      if (isLastPage) {
+        _controller.appendLastPage(newItems);
+      } else {
+        final nextPageKey = pageKey + newItems.length;
+        _controller.appendPage(newItems, nextPageKey);
       }
+    } catch (error) {
+      _controller.error = error;
     }
   }
 
@@ -121,40 +173,8 @@ class _CategoryContainerState extends State<CategoryContainer> {
       ///await updateAddressInCart(userId);
       await controller.getCartName();
     } else {
+      print(res.body);
       showToast("Something went wrong", context: context);
-    }
-  }
-
-  Future<List<Product>> _getProductsByCategory({required int cateId, int page = 1}) async {
-    final response12 = await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/products/category/$cateId?page=$page"),
-        headers: {"Accept": "application/json"});
-
-    List<Product> tempList = [];
-
-    var searchDataMap = jsonDecode(response12.body);
-    if (searchDataMap["success"] == true) {
-      setState(() {
-        var searchProduct = productMiniResponseFromJson(response12.body);
-        // names = tempList;
-        for (int i = 0; i < searchProduct.products!.length; i++) {
-          tempList.add(searchProduct.products![i]);
-        }
-        catetgoryProducts = tempList;
-        //_filter.clear();
-      });
-    }
-
-    return tempList;
-  }
-
-  Future<void> _fetchPage(int pageKey) async {
-    try {
-      final newItems = await _getProductsByCategory(page: pageKey, cateId: widget.nameNo);
-
-      final nextPageKey = pageKey + newItems.length;
-      _controller.appendPage(newItems, nextPageKey);
-    } catch (error) {
-      _controller.error = error;
     }
   }
 
@@ -177,7 +197,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
     var width = SizeConfig.screenWidth;
     var height = SizeConfig.screenHeight;
     var block = SizeConfig.block;
-    if (initPage) valueOne = 'all';
     return Column(
       children: [
         Container(
@@ -256,14 +275,13 @@ class _CategoryContainerState extends State<CategoryContainer> {
                     return GestureDetector(
                         onTap: () {
                           setState(() {
-                            initPage = false;
-                            valueOne = index == 0 ? 'all' : (index - 1).toString();
                             categoryItemData = index == 0 ? 'All' : categoryData[index - 1].name;
+                            initPage = index == 0;
                             if (index != 0) relatedProductsLink = categoryData[index - 1].links.products;
+                            valueOne = index == 0 ? 'all' : (index - 1).toString();
                             log("related link $relatedProductsLink");
-                            if (index != 0) fetchProducts(categoryData[index - 1].links.products);
-                            setState(() {});
                           });
+                          if (index != 0) fetchProducts(categoryData[index - 1].links.products);
                         },
                         child: Container(
                           height: height * 0.2,
@@ -288,7 +306,9 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(0),
                                     child: index == 0
-                                        ? Image.asset("assets/app_logo.png")
+                                        ? Image.network(
+                                            imagePath + widget.catImage,
+                                          )
                                         : categoryData[index - 1].mobileBanner.isEmpty
                                             ? Image.asset("assets/app_logo.png")
                                             : Image.network(
@@ -370,7 +390,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                 child: Container(
                   height: height * 0.32,
                   width: width,
-                  child: valueOne.toString() == 'all' || initPage
+                  child: initPage
                       ? PagedListView<int, Product>(
                           pagingController: _controller,
                           scrollDirection: Axis.horizontal,
@@ -470,9 +490,11 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                                 item.name.toString(),
                                                 style: TextStyle(
                                                   color: Color(0xFF515151),
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: "CeraProBold",
+                                                  fontSize: 15.3111,
+                                                  //fontWeight: FontWeight.w300,
+                                                  fontFamily: "CeraProMedium",
+                                                  fontWeight: FontWeight.w500,
+                                                  fontStyle: FontStyle.normal,
                                                 ),
                                                 maxLines: 2,
                                                 textAlign: TextAlign.center,
@@ -490,7 +512,12 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                           child: Center(
                                             child: Text(
                                               item.unit.toString(),
-                                              style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              style: TextStyle(
+                                                color: Colors.grey.withOpacity(0.9),
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'CeraProMedium',
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -520,9 +547,9 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                                             fontSize: 12,
                                                             fontWeight: FontWeight.w400,
                                                             decoration: TextDecoration.lineThrough)),
-                                                Padding(
-                                                  padding: const EdgeInsets.only(left: 10),
-                                                ),
+                                                // Padding(
+                                                //   padding: const EdgeInsets.only(left: 10),
+                                                // ),
                                                 InkWell(
                                                   onTap: () {
                                                     addToCart(item.id, box.read(userID), 1);
@@ -533,15 +560,18 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                                     ///
                                                     //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
                                                   },
-                                                  child: Container(
-                                                    height: 40,
-                                                    width: 40,
-                                                    decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
-                                                    child: Center(
-                                                      child: Image.asset(
-                                                        "assets/pi.png",
-                                                        height: 40,
-                                                        width: 40,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 2.84),
+                                                    child: Container(
+                                                      height: 40,
+                                                      width: 40,
+                                                      decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
+                                                      child: Center(
+                                                        child: Image.asset(
+                                                          "assets/pi.png",
+                                                          height: 40,
+                                                          width: 40,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -575,7 +605,12 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                                 padding: const EdgeInsets.fromLTRB(5, 3, 0, 0),
                                                 child: Text(
                                                   "  Earning  +৳18",
-                                                  style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'CeraProMedium',
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -682,9 +717,11 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                               listOfProducts[index].name.toString(),
                                               style: TextStyle(
                                                 color: Color(0xFF515151),
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: "CeraProBold",
+                                                fontSize: 15.3111,
+                                                //fontWeight: FontWeight.w300,
+                                                fontFamily: "CeraProMedium",
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: FontStyle.normal,
                                               ),
                                               maxLines: 2,
                                               textAlign: TextAlign.center,
@@ -702,7 +739,12 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                         child: Center(
                                           child: Text(
                                             listOfProducts[index].unit.toString(),
-                                            style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                            style: TextStyle(
+                                              color: Colors.grey.withOpacity(0.9),
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'CeraProMedium',
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -787,7 +829,12 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                               padding: const EdgeInsets.fromLTRB(5, 3, 0, 0),
                                               child: Text(
                                                 "  Earning  +৳18",
-                                                style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                                style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'CeraProMedium',
+                                                ),
                                               ),
                                             ),
                                           ],

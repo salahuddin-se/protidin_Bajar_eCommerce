@@ -208,20 +208,23 @@ class _SearchScreenState extends State<SearchScreen> {
                 SizedBox(
                   height: 20.0,
                 ),
-                // Text(
-                //   "Categories",
-                //   style: TextStyle(fontSize: 18.0, color: kBlackColor, fontWeight: FontWeight.w500),
-                // )
-                Container(height: filteredCategories.length >= 5 ? 400 : 100, child: getCatList()),
+                Text(
+                  "Categories",
+                  style: TextStyle(fontSize: 18.0, color: kBlackColor, fontWeight: FontWeight.w500),
+                ),
+                Container(height: filteredCategories.length >= 5 ? 300 : 300, child: getCatList()),
                 SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "Products for you",
-                  style: TextStyle(fontSize: 18.0, color: kBlackColor, fontWeight: FontWeight.w500),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 15.0),
+                  child: Text(
+                    "Products for you",
+                    style: TextStyle(fontSize: 18.0, color: kBlackColor, fontWeight: FontWeight.w500),
+                  ),
                 ),
                 Container(
-                  height: filteredNames.length >= 5 ? 400 : 100,
+                  height: filteredNames.length >= 5 ? 400 : 400,
                   //height: filteredNames.length >= 5 ? 400 : 300,
                   child: _buildList(),
                 )

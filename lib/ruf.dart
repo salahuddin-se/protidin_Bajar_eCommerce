@@ -1,4 +1,4 @@
-/// new home screen
+/// new home screen 13/02
 /*
 import 'dart:convert';
 import 'dart:developer';
@@ -144,8 +144,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                               items: areaName..removeAt(0),
 
                               //: areaName..removeAt(0)..add("Sylhet"); means:
-                              //areaName =  areaName.removeAt(0);
-                              //areaName = areaName.add("Sylhet");
+                              //areaName =  areaName..removeAt(0);
+                              //areaName = areaName..add("Sylhet");
                               hint: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
@@ -233,17 +233,19 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       if (!UserPreference.containsKey(UserPreference.showAreaDialogue)) {
         getCityName(true);
       } else {
-        getCityName(false).then((value) {
-          setState(() {
-            selectAreaName = UserPreference.getString(UserPreference.selectedArea) ?? "";
-          });
+        setState(() {
+          selectAreaName = UserPreference.getString(UserPreference.selectedArea) ?? "";
         });
+        getCityName(false);
       }
     });
 
-    getCategory();
     getSliderSearch();
     getOneTo99Data();
+    fetchShop(selectAreaName).then((value) {
+      getCategory();
+      fetchSellers(selectAreaName);
+    });
   }
 
   //
@@ -253,7 +255,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   /// slider
   var sliderData = [];
   Future<void> getSliderSearch() async {
-    String sliderURl = "https://test.protidin.com.bd/api/v2/sliders";
+    String sliderURl = "http://test.protidin.com.bd:88/api/v2/sliders";
 
     final res3 = await get(Uri.parse(sliderURl), headers: {"Accept": "application/json"});
 
@@ -278,7 +280,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     quantity,
   ) async {
     log("user id $userId");
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/add"),
+    var res = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/add"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{
           "id": id.toString(),
@@ -306,7 +308,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   Future<void> updateAddressInCart(userId) async {
     var jsonBody = (<String, dynamic>{"user_id": userId.toString(), "address_id": userId.toString()});
 
-    var res = await post(Uri.parse("https://test.protidin.com.bd/api/v2/update-address-in-cart"),
+    var res = await post(Uri.parse("http://test.protidin.com.bd:88/api/v2/update-address-in-cart"),
         headers: <String, String>{'Accept': 'application/json', 'Authorization': 'Bearer ${box.read(userToken)}'}, body: jsonBody);
 
     log("update cart ${res.body}");
@@ -323,7 +325,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   Future<void> getLogoutResponse() async {
     log("Log out response calling");
     final response = await http.get(
-      Uri.parse("https://test.protidin.com.bd/api/v2/auth/logout"),
+      Uri.parse("http://test.protidin.com.bd:88/api/v2/auth/logout"),
       headers: {"Authorization": "Bearer ${box.read(userToken)}"},
     );
 
@@ -348,7 +350,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   /// search product
   Future<void> getProductBySearch({required String name}) async {
-    String searchProductURl = "https://test.protidin.com.bd/api/v2/products/search";
+    String searchProductURl = "http://test.protidin.com.bd:88/api/v2/products/search";
 
     final response3 = await get(Uri.parse(searchProductURl), headers: {"Accept": "application/json"});
 
@@ -367,8 +369,13 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   }
 
   var demo = [];
+
+  ///
+  ///
   var controller = Get.put(CartItemsController());
 
+  ///
+  ///
   List<String> cityData = [];
   var selectDhaka = " ";
 
@@ -386,7 +393,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     areaName.clear();
     cityName.clear();
 
-    var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/cities"), headers: <String, String>{
+    var response = await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/cities"), headers: <String, String>{
       'Accept': 'application/json',
     });
 
@@ -410,7 +417,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   Future fetchShop(String areaName) async {
     _shops.clear();
-    var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/shops?page=1"));
+    var response = await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/shops?page=1"));
     log("shops res: " + response.body);
     var shopResponse = shopResponseFromJson(response.body);
     _shops.addAll(shopResponse.shops!);
@@ -420,24 +427,24 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   Future fetchSellers(String areaName) async {
     _sellers.clear();
-    var response = await get(Uri.parse("https://test.protidin.com.bd/api/v2/sellers?page=1&name=''"));
+    var response = await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/sellers?page=1&name=''"));
     log("sellers res: " + response.body);
     var sellerResponse = sellerResponseFromJson(response.body);
     _sellers.addAll(sellerResponse.sellers!);
     for (Seller seller in _sellers) {
       if (seller.area != '') {
         var areaJson = jsonDecode(seller.area!);
-        List<String>? areaList = areaJson != null ? List.from(areaJson) : null;
-        for (String area in areaList!) {
+        List<String> areaList = areaJson != null ? List.from(areaJson) : [];
+        for (String area in areaList) {
           if (areaName == area) {
             _webStoreId = seller.webStoreId!;
             _userId = seller.userId!;
 
-            box.write(webStoreId, _webStoreId);
-            box.write(user_Id, _userId);
-
             log("webstore ID $_webStoreId");
             log("user ID $_userId");
+
+            box.write(webStoreId, _webStoreId);
+            box.write(user_Id, _userId);
 
             //await getCategoryData(name: widget.na)
 
@@ -449,10 +456,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       }
     }
   }
-
-  ///
-
-  ///
 
   var relatedProductsLink = " ";
 
@@ -486,7 +489,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   Future<void> getCategory() async {
     log("comes");
-    String productURl = "https://test.protidin.com.bd/api/v2/categories/home";
+    String productURl = "http://test.protidin.com.bd:88/api/v2/categories/home";
 
     final response = await get(Uri.parse(productURl), headers: {"Accept": "application/json"});
 
@@ -630,7 +633,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   Future<void> getOneTo99Data() async {
     final response12 =
-        await get(Uri.parse("https://test.protidin.com.bd/api/v2/products/category/4"), headers: {"Accept": "application/json"});
+        await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/products/category/4"), headers: {"Accept": "application/json"});
 
     var oneTwoNinentyNineItemDataMap = jsonDecode(response12.body);
 
@@ -668,7 +671,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
   Future<void> getCategoryData({required String name}) async {
     //log("grocery data calling");
-    String groceryURl = "https://test.protidin.com.bd/api/v2/sub-categories/$name";
+    String groceryURl = "http://test.protidin.com.bd:88/api/v2/sub-categories/$name";
 
     final response3 = await get(Uri.parse(groceryURl), headers: {"Accept": "application/json"});
 
@@ -702,7 +705,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
-        backgroundColor: Color(0xFFE5E5E5),
+        backgroundColor: Color(0xFFF4EFF5),
         endDrawer: buildDrawerClass(context, block, callback: getLogoutResponse),
         body: SingleChildScrollView(
             child: Padding(
@@ -779,6 +782,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             ),
 
             sized10,
+
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: Align(
@@ -906,12 +910,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                           Navigator.push(context, MaterialPageRoute(builder: (context) => OfferPage()));
                         },
                         child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.fitWidth,
-                              image: AssetImage("assets/p1.png"),
-                            ),
-                          ),
+                          //decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                          child: Image.asset("assets/p1.png"),
                         ),
                       ),
                       Padding(
@@ -1082,7 +1082,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           height: MediaQuery.of(context).size.height / 14,
                                           child: Text(
                                             categoryData[index].name,
-                                            style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize: 16),
+                                            style: TextStyle(
+                                                color: Color(0xFF515151),
+                                                fontWeight: FontWeight.w700,
+                                                fontSize: 16,
+                                                fontStyle: FontStyle.normal,
+                                                fontFamily: "CeraProBold"),
                                             textAlign: TextAlign.center,
                                           ),
                                         ),
@@ -1126,7 +1131,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                         height: MediaQuery.of(context).size.height / 14,
                                         child: Text(
                                           categoryData[index].name,
-                                          style: TextStyle(color: Color(0xFF515151), fontWeight: FontWeight.w700, fontSize: 16),
+                                          style: TextStyle(
+                                              color: Color(0xFF515151),
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 16,
+                                              fontStyle: FontStyle.normal,
+                                              fontFamily: "CeraProBold"),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -1170,7 +1180,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                   return Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Container(
-                                      decoration: BoxDecoration(color: Color(0xFFF1EDF2), borderRadius: BorderRadius.circular(15.0)),
+                                      decoration: BoxDecoration(color: Color(0xFFF4F1F5), borderRadius: BorderRadius.circular(15.0)),
                                       width: MediaQuery.of(context).size.width / 2.34,
                                       child: Column(
                                         children: [
@@ -1186,11 +1196,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                     BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
                                               ),
                                               //
-                                              child: Center(
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
                                                 child: categoryProducts[index].hasDiscount == true
-                                                    ? Text(
-                                                        "-৳ ${categoryProducts[index].discount.toString()}",
-                                                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                                                    ? Padding(
+                                                        padding: const EdgeInsets.only(left: 3.0),
+                                                        child: Text(
+                                                          "${categoryProducts[index].discount.toString()}TK OFF",
+                                                          style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                                                        ),
                                                       )
                                                     : Text(
                                                         //"15% OFF",
@@ -1203,12 +1217,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           InkWell(
                                             onTap: () {
                                               Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => GroceryDetails(
-                                                            detailsLink: categoryProducts[index].links.details,
-                                                            relatedProductLink: relatedProductsLink,
-                                                          )));
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => ProductDetails(
+                                                    detailsLink: categoryProducts[index].links.details,
+                                                    relatedProductLink: relatedProductsLink,
+                                                  ),
+                                                ),
+                                              );
                                             },
                                             child: Container(
                                               child: Image.network(imagePath + categoryProducts[index].thumbnailImage),
@@ -1216,41 +1232,47 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               width: MediaQuery.of(context).size.width / 2.34,
                                             ),
                                           ),
-                                          FittedBox(
-                                            child: Container(
-                                              ///height: height! * 0.08,
-                                              width: MediaQuery.of(context).size.width / 2.36,
-                                              height: MediaQuery.of(context).size.height / 16,
-                                              child: Padding(
-                                                padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-                                                child: Text(
-                                                  categoryProducts[index].name,
-                                                  style: TextStyle(
-                                                    color: Color(0xFF515151),
-                                                    fontSize: 12.5,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily: "CeraProBold",
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => ProductDetails(
+                                                            detailsLink: categoryProducts[index].links.details,
+                                                            relatedProductLink: relatedProductsLink,
+                                                          )));
+                                            },
+                                            child: FittedBox(
+                                              child: Container(
+                                                ///height: height! * 0.08,
+                                                width: MediaQuery.of(context).size.width / 2.36,
+                                                height: MediaQuery.of(context).size.height / 16.5,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+                                                  child: Text(
+                                                    categoryProducts[index].name,
+                                                    //'ACI Healthy 100% pure Soybean Oil',
+                                                    style: TextStyle(
+                                                      color: Color(0xFF515151),
+                                                      fontSize: 15.3111,
+                                                      //fontWeight: FontWeight.w300,
+                                                      fontFamily: "CeraProMedium",
+                                                      fontWeight: FontWeight.w500,
+                                                      fontStyle: FontStyle.normal,
+                                                    ),
+                                                    maxLines: 2,
+                                                    textAlign: TextAlign.center,
                                                   ),
-                                                  maxLines: 2,
-                                                  textAlign: TextAlign.center,
                                                 ),
                                               ),
                                             ),
                                           ),
                                           Center(
                                             child: Container(
-                                              height: MediaQuery.of(context).size.height / 38,
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    categoryProducts[index].unit,
-                                                    style: TextStyle(color: Colors.grey.withOpacity(0.9)),
-                                                  ),
-                                                  Text(
-                                                    categoryProducts[index].userId.toString(),
-                                                    style: TextStyle(color: Colors.grey.withOpacity(0.9)),
-                                                  ),
-                                                ],
+                                              height: MediaQuery.of(context).size.height / 40,
+                                              child: Text(
+                                                categoryProducts[index].unit,
+                                                style: TextStyle(color: Colors.grey.withOpacity(0.9), fontSize: 15),
                                               ),
                                             ),
                                           ),
@@ -1259,25 +1281,35 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                             child: Center(
                                               child: Container(
                                                 //height: MediaQuery.of(context).size.height/32,
-                                                height: MediaQuery.of(context).size.height / 31.5,
+                                                height: MediaQuery.of(context).size.height / 22,
                                                 width: MediaQuery.of(context).size.width / 2.34,
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                   children: [
                                                     Container(
-                                                      child: Image.asset("assets/p.png"),
-                                                      height: 20,
-                                                      width: 22,
+                                                      child: Image.asset(
+                                                        "assets/p.png",
+                                                        height: 24,
+                                                        width: 24,
+                                                      ),
+                                                      height: 24,
+                                                      width: 24,
                                                     ),
                                                     Text(categoryProducts[index].baseDiscountedPrice.toString(),
-                                                        style:
-                                                            TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
-                                                    Text(categoryProducts[index].basePrice.toString(),
                                                         style: TextStyle(
-                                                            color: Color(0xFFA299A8),
-                                                            fontSize: 12,
-                                                            fontWeight: FontWeight.w400,
-                                                            decoration: TextDecoration.lineThrough)),
+                                                          color: Color(0xFF515151),
+                                                          fontSize: 19,
+                                                          fontFamily: 'CeraProMedium',
+                                                          fontWeight: FontWeight.bold,
+                                                        )),
+                                                    categoryProducts[index].baseDiscountedPrice == categoryProducts[index].basePrice
+                                                        ? Text("")
+                                                        : Text(categoryProducts[index].basePrice.toString(),
+                                                            style: TextStyle(
+                                                                color: Color(0xFFA299A8),
+                                                                fontSize: 13,
+                                                                fontWeight: FontWeight.w500,
+                                                                decoration: TextDecoration.lineThrough)),
                                                     Padding(
                                                       padding: const EdgeInsets.only(left: 10),
                                                     ),
@@ -1287,11 +1319,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                         //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
                                                       },
                                                       child: Container(
-                                                        height: 25,
-                                                        width: 25,
+                                                        height: 40,
+                                                        width: 40,
                                                         decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
                                                         child: Center(
-                                                          child: Image.asset("assets/pi.png"),
+                                                          child: Image.asset(
+                                                            "assets/pi.png",
+                                                            height: 40,
+                                                            width: 40,
+                                                          ),
                                                         ),
                                                       ),
                                                     )
@@ -1303,10 +1339,10 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           Container(
                                             //height: height! * 0.03,
                                             //height: MediaQuery.of(context).size.height/26,
-                                            height: MediaQuery.of(context).size.height / 21,
+                                            height: MediaQuery.of(context).size.height / 26,
                                             width: MediaQuery.of(context).size.width / 2.34,
                                             decoration: BoxDecoration(
-                                                color: Colors.lightGreen[100],
+                                                color: Color(0xFFDDEAE1),
                                                 borderRadius: BorderRadius.only(
                                                     bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
                                             child: Padding(
@@ -1317,14 +1353,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 children: [
                                                   Container(
                                                     child: Image.asset("assets/img_42.png"),
-                                                    height: 17,
-                                                    width: 15,
+                                                    height: 12,
+                                                    width: 10,
                                                   ),
                                                   Padding(
-                                                    padding: const EdgeInsets.only(top: 2),
+                                                    padding: const EdgeInsets.fromLTRB(4, 3, 0, 0),
                                                     child: Text(
-                                                      "  Earning +৳18",
-                                                      style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                                      "Earning  +৳18",
+                                                      style: TextStyle(fontSize: 13, color: Colors.green, fontWeight: FontWeight.w600),
                                                     ),
                                                   ),
                                                 ],
@@ -1433,35 +1469,49 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                         alignment: Alignment.centerLeft,
                                         child: Container(
                                           width: MediaQuery.of(context).size.width / 5,
+
                                           height: MediaQuery.of(context).size.height / 41,
                                           margin: EdgeInsets.only(top: 10),
                                           decoration: BoxDecoration(
-                                            color: Colors.green,
+                                            color: oneTwoNinentyNineData[index].discount == 0 ? Color(0xFFF4F1F5) : Color(0xFF10AA2A),
                                             borderRadius:
                                                 BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
                                           ),
                                           //
 
-                                          child: Center(
-                                            child: Text(
-                                              "-৳ ${oneTwoNinentyNineData[index].discount.toString()}",
-                                              style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
-                                            ),
-                                          ),
+                                          child: Align(
+                                              alignment: Alignment.centerLeft,
+                                              child: oneTwoNinentyNineData[index].discount == 0
+                                                  ? Text(
+                                                      //"15% OFF",
+                                                      "",
+                                                      style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                                    )
+                                                  : Padding(
+                                                      padding: const EdgeInsets.only(left: 3.0),
+                                                      child: Text(
+                                                        //"15% OFF",
+                                                        "${oneTwoNinentyNineData[index].discount.toString()}TK OFF",
+                                                        style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                                                      ),
+                                                    )),
                                         ),
                                       ),
-                                      InkWell(
-                                        onTap: () {},
+                                      Container(
+                                        height: MediaQuery.of(context).size.height / 8,
                                         child: InkWell(
-                                          /*onTap: (){
-                                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroceryDetails(
-                                                detailsLink:  oneTwoNinentyNineData[index].links.details ,
-                                              )));
-                                            },*/
-                                          child: Container(
-                                            child: Image.network(imagePath + oneTwoNinentyNineData[index].image.toString()),
-                                            height: MediaQuery.of(context).size.height / 8,
-                                            width: MediaQuery.of(context).size.width / 2.34,
+                                          onTap: () {},
+                                          child: InkWell(
+                                            /*onTap: (){
+                                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GroceryDetails(
+                                                  detailsLink:  oneTwoNinentyNineData[index].links.details ,
+                                                )));
+                                              },*/
+                                            child: Container(
+                                              child: Image.network(imagePath + oneTwoNinentyNineData[index].image.toString()),
+                                              height: MediaQuery.of(context).size.height / 8,
+                                              width: MediaQuery.of(context).size.width / 2.34,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -1499,7 +1549,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         child: Center(
                                           child: Container(
-                                            height: MediaQuery.of(context).size.height / 32,
+                                            height: MediaQuery.of(context).size.height / 22.8,
                                             width: MediaQuery.of(context).size.width / 2.34,
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1511,12 +1561,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 ),
                                                 Text(oneTwoNinentyNineData[index].disCountPrice.toString(),
                                                     style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
-                                                Text(oneTwoNinentyNineData[index].basePrice.toString(),
-                                                    style: TextStyle(
-                                                        color: Color(0xFFA299A8),
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w400,
-                                                        decoration: TextDecoration.lineThrough)),
+                                                oneTwoNinentyNineData[index].basePrice == oneTwoNinentyNineData[index].disCountPrice
+                                                    ? Text("")
+                                                    : Text(oneTwoNinentyNineData[index].basePrice.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)),
                                                 Padding(
                                                   padding: const EdgeInsets.only(left: 10),
                                                 ),
@@ -1533,11 +1585,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                     Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
                                                   },*/
                                                   child: Container(
-                                                    height: 25,
-                                                    width: 25,
+                                                    height: 40,
+                                                    width: 40,
                                                     decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
                                                     child: Center(
-                                                      child: Image.asset("assets/pi.png"),
+                                                      child: Image.asset(
+                                                        "assets/pi.png",
+                                                        height: 40,
+                                                        width: 40,
+                                                      ),
                                                     ),
                                                   ),
                                                 )
@@ -1547,10 +1603,10 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                         ),
                                       ),
                                       Container(
-                                        height: MediaQuery.of(context).size.height / 21,
+                                        height: MediaQuery.of(context).size.height / 28,
                                         width: MediaQuery.of(context).size.width / 2.34,
                                         decoration: BoxDecoration(
-                                            color: Colors.lightGreen[100],
+                                            color: Color(0xFFDDEAE1),
                                             borderRadius:
                                                 BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
                                         child: Padding(
@@ -1565,9 +1621,9 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 width: 15,
                                               ),
                                               Padding(
-                                                padding: const EdgeInsets.only(top: 2),
+                                                padding: const EdgeInsets.fromLTRB(4, 3, 0, 0),
                                                 child: Text(
-                                                  "  Earning +৳18",
+                                                  "  Earning  +৳18",
                                                   style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
                                                 ),
                                               ),
@@ -1598,7 +1654,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 ? Container()
                 : CategoryContainer(
                     categoryName: "Grocery",
-                    nameNo: '4',
+                    nameNo: "4",
                     large_Banner: groceryLargeBanner,
                     add_banner: groceryAddBanner,
                   ),
@@ -1610,7 +1666,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 ? Container()
                 : CategoryContainer(
                     categoryName: "Dairy & Beverage",
-                    nameNo: '7',
+                    nameNo: "7",
                     large_Banner: dairyBeverageLargeBanner,
                     add_banner: dairyBeverageAddBanner),
 
@@ -1620,7 +1676,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Mother & Baby", nameNo: '8', large_Banner: motherBabyLargeBanner, add_banner: motherBabyAddBanner),
+                    categoryName: "Mother & Baby", nameNo: "8", large_Banner: motherBabyLargeBanner, add_banner: motherBabyAddBanner),
 
             SizedBox(
               height: 30,
@@ -1628,7 +1684,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Fruits & Vegetables", nameNo: '9', large_Banner: fruitsVegLargeBanner, add_banner: fruitsVegAddBanner),
+                    categoryName: "Fruits & Vegetables", nameNo: "9", large_Banner: fruitsVegLargeBanner, add_banner: fruitsVegAddBanner),
 
             SizedBox(
               height: 30,
@@ -1636,7 +1692,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Personal Care", nameNo: '10', large_Banner: personalCareLargeBanner, add_banner: personalCareAddBanner),
+                    categoryName: "Personal Care", nameNo: "10", large_Banner: personalCareLargeBanner, add_banner: personalCareAddBanner),
 
             SizedBox(
               height: 30,
@@ -1644,7 +1700,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Bread Biscuit & Snacks", nameNo: '11', large_Banner: breadLargeBanner, add_banner: breadAddBanner),
+                    categoryName: "Bread Biscuit & Snacks", nameNo: "11", large_Banner: breadLargeBanner, add_banner: breadAddBanner),
 
             SizedBox(
               height: 30,
@@ -1652,7 +1708,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Household", nameNo: '13', large_Banner: householdLargeBanner, add_banner: householdAddBanner),
+                    categoryName: "Household", nameNo: "13", large_Banner: householdLargeBanner, add_banner: householdAddBanner),
 
             SizedBox(
               height: 30,
@@ -1660,7 +1716,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Chocolate & Sweets", nameNo: '46', large_Banner: chocolateLargeBanner, add_banner: chocolateAddBanner),
+                    categoryName: "Chocolate & Sweets", nameNo: "46", large_Banner: chocolateLargeBanner, add_banner: chocolateAddBanner),
 
             SizedBox(
               height: 30,
@@ -1668,7 +1724,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Toys & Gift", nameNo: '14', large_Banner: toysGiftLargeBanner, add_banner: toysGiftAddBanner),
+                    categoryName: "Toys & Gift", nameNo: "14", large_Banner: toysGiftLargeBanner, add_banner: toysGiftAddBanner),
 
             SizedBox(
               height: 30,
@@ -1676,7 +1732,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Stationery", nameNo: '199', large_Banner: stationaryLargeBanner, add_banner: stationaryAddBanner),
+                    categoryName: "Stationery", nameNo: "199", large_Banner: stationaryLargeBanner, add_banner: stationaryAddBanner),
 
             SizedBox(
               height: 30,
@@ -1713,20 +1769,54 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
               height: 20,
             ),
 
-            TextFormField(
-              textAlign: TextAlign.center,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: InputBorder.none,
-                  contentPadding: EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
-                  hintText: 'Search Here',
-                  prefixIcon: Icon(Icons.search)),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+              child: Container(
+                color: Colors.white,
+                child: TextFormField(
+                  textAlign: TextAlign.center,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                      hintText: 'Search Here',
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.only(left: 30),
+                        child: Icon(Icons.search),
+                      )),
+                ),
+              ),
             ),
 
             SizedBox(
               height: 20,
             ),
 
+            Padding(
+              padding: const EdgeInsets.only(left: 17.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("or",
+                        style: TextStyle(color: Color(0xFF515151), fontSize: 12.5, fontWeight: FontWeight.w100, fontFamily: "CeraProBold")),
+                    Text("Request the item.",
+                        style: TextStyle(color: Color(0xFFB99DCB), fontSize: 14.4, fontWeight: FontWeight.w100, fontFamily: "CeraProBold")),
+                    Text(
+                      "We will get it as soon as possible and\n notify you",
+                      style: TextStyle(color: Color(0xFF515151), fontSize: 14.4, fontFamily: "CeraProBold"),
+                    )
+                  ],
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 30,
+            ),
+
+            /// call
             Container(
               height: height * 0.14,
               //width: width,
@@ -1738,7 +1828,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   Icon(
                     Icons.call,
                     color: kBlackColor,
-                    size: block * 10,
+                    size: block * 8,
                   ),
                   SizedBox(
                     width: 10,
@@ -1748,11 +1838,11 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                     children: [
                       Text(
                         "Call for query:",
-                        style: TextStyle(color: kBlackColor, fontSize: block * 7),
+                        style: TextStyle(color: Colors.grey, fontSize: block * 5, fontFamily: "CeraProBold", fontWeight: FontWeight.normal),
                       ),
                       Text(
                         "01812-3456789",
-                        style: TextStyle(color: kBlackColor, fontSize: block * 7, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: kBlackColor, fontSize: block * 6, fontWeight: FontWeight.bold, fontFamily: "CeraProBold"),
                       )
                     ],
                   )
@@ -1765,41 +1855,52 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             ),
           ]),
         )),
-        floatingActionButton: FloatingActionButton(
-            elevation: 0.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                //Icon(Icons.add_shopping_cart),
+        floatingActionButton: Container(
+          // height: 75,
+          // width: 75,
+          height: 70,
+          width: 70,
 
-                Center(
+          child: FloatingActionButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  //Icon(Icons.add_shopping_cart),
+
+                  Center(
+                      child: Padding(
+                    //padding: const EdgeInsets.fromLTRB(25, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                     child: Image.asset(
-                  "assets/pi.png",
-                  height: 45,
-                  width: 30,
-                )),
+                      "assets/cat.png",
+                      height: 29,
+                    ),
+                  )),
 
-                /*
-                RefreshIndicator(
-                onRefresh: () {},
-                child: Container()
-                )
-                */
-                Obx(() => Text(
-                      controller.cartLength.value.toString(),
-                    )),
-              ],
-            ),
-            backgroundColor: kPrimaryColor,
-            onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
-            }),
+                  Obx(() => Align(
+                        alignment: Alignment.topRight,
+                        child: CircleAvatar(
+                          radius: 10.5,
+                          backgroundColor: Colors.green[500],
+                          child: Text(
+                            controller.cartLength.value.toString(),
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+                          ),
+                        ),
+                      )),
+                ],
+              ),
+              backgroundColor: Color(0xFF9900FF),
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+              }),
+        ),
       ),
     );
   }
 }
 
- */
+*/
 
 /// new cart details page
 /*
@@ -2994,11 +3095,12 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
 */
 
-/// new category container
+/// new category container 12/02/
 /*
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:customer_ui/all_screen/category_wise_separate.dart';
 import 'package:customer_ui/all_screen/product_details.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
@@ -3011,13 +3113,14 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class CategoryContainer extends StatefulWidget {
   const CategoryContainer(
       {Key? key, required this.categoryName, required this.nameNo, required this.large_Banner, required this.add_banner})
       : super(key: key);
   final String categoryName;
-  final String nameNo;
+  final int nameNo;
   final String large_Banner;
   final String add_banner;
 
@@ -3032,13 +3135,44 @@ class _CategoryContainerState extends State<CategoryContainer> {
   var categoryItemData = " ";
   var relatedProductsLink = " ";
   var adt;
-
   List<Product> listOfProducts = [];
+  List<Product> catetgoryProducts = [];
+  final PagingController<int, Product> _controller = PagingController(firstPageKey: 1);
+
+  bool initPage = true;
+
+  var controller = Get.put(CartItemsController());
+
+  Future<void> getCategoryData({required String name}) async {
+    log("widget name $name");
+
+    String groceryURl = "http://test.protidin.com.bd:88/api/v2/sub-categories/$name";
+
+    final response3 = await get(Uri.parse(groceryURl), headers: {"Accept": "application/json"});
+
+    var groceryDataMap = jsonDecode(response3.body);
+
+    if (groceryDataMap["success"] == true) {
+      var categoryDataModel = CategoryDataModel.fromJson(groceryDataMap);
+
+      ///
+      categoryData = categoryDataModel.data;
+      categoryItemData = categoryDataModel.data[0].name;
+      relatedProductsLink = categoryData[0].links.products;
+
+      box.write(related_product_link, relatedProductsLink);
+
+      await fetchProducts(categoryDataModel.data[0].links.products);
+
+      setState(() {});
+    } else {}
+  }
+
   Future fetchProducts(link2) async {
     listOfProducts.clear();
     log("tap link $link2");
-    log("user id ${box.read(user_Id)}");
-    log("web store id ${box.read(webStoreId)}");
+    log("new user id ${box.read(user_Id)}");
+    log("new web store id ${box.read(webStoreId)}");
 
     var response = await get(Uri.parse(link2));
     var productResponse = productMiniResponseFromJson(response.body);
@@ -3064,37 +3198,13 @@ class _CategoryContainerState extends State<CategoryContainer> {
     }
   }
 
-  Future<void> getCategoryData({required String name}) async {
-    log("widget name $name");
-
-    String groceryURl = "https://test.protidin.com.bd/api/v2/sub-categories/$name";
-
-    final response3 = await get(Uri.parse(groceryURl), headers: {"Accept": "application/json"});
-
-    var groceryDataMap = jsonDecode(response3.body);
-
-    if (groceryDataMap["success"] == true) {
-      var categoryDataModel = CategoryDataModel.fromJson(groceryDataMap);
-      categoryData = categoryDataModel.data;
-      categoryItemData = categoryDataModel.data[0].name;
-      relatedProductsLink = categoryData[0].links.products;
-
-      box.write(related_product_link, relatedProductsLink);
-
-      await fetchProducts(categoryDataModel.data[0].links.products);
-      setState(() {});
-    } else {}
-  }
-
-  var controller = Get.put(CartItemsController());
-
   Future<void> addToCart(
     id,
     userId,
     quantity,
   ) async {
     log("user id $userId");
-    var res = await http.post(Uri.parse("https://test.protidin.com.bd/api/v2/carts/add"),
+    var res = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/add"),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
         body: jsonEncode(<String, dynamic>{
           "id": id.toString(),
@@ -3113,12 +3223,50 @@ class _CategoryContainerState extends State<CategoryContainer> {
     }
   }
 
+  Future<List<Product>> _getProductsByCategory({required int cateId, int page = 1}) async {
+    final response12 = await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/products/category/$cateId?page=$page"),
+        headers: {"Accept": "application/json"});
+
+    List<Product> tempList = [];
+
+    var searchDataMap = jsonDecode(response12.body);
+    if (searchDataMap["success"] == true) {
+      setState(() {
+        var searchProduct = productMiniResponseFromJson(response12.body);
+        // names = tempList;
+        for (int i = 0; i < searchProduct.products!.length; i++) {
+          tempList.add(searchProduct.products![i]);
+        }
+        catetgoryProducts = tempList;
+        //_filter.clear();
+      });
+    }
+
+    tempList.sort((first, next) => next.discount!.compareTo(first.discount!));
+
+    return tempList;
+  }
+
+  Future<void> _fetchPage(int pageKey) async {
+    try {
+      final newItems = await _getProductsByCategory(page: pageKey, cateId: widget.nameNo);
+
+      final nextPageKey = pageKey + newItems.length;
+      _controller.appendPage(newItems, nextPageKey);
+    } catch (error) {
+      _controller.error = error;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     log("name no ${widget.nameNo}");
-    getCategoryData(name: widget.nameNo);
+    getCategoryData(name: widget.nameNo.toString());
+    _controller.addPageRequestListener((pageKey) {
+      _fetchPage(pageKey);
+    });
 
     ///fetchProducts("link2");
   }
@@ -3129,6 +3277,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
     var width = SizeConfig.screenWidth;
     var height = SizeConfig.screenHeight;
     var block = SizeConfig.block;
+    if (initPage) valueOne = 'all';
     return Column(
       children: [
         Container(
@@ -3152,9 +3301,24 @@ class _CategoryContainerState extends State<CategoryContainer> {
                       widget.categoryName,
                       style: TextStyle(color: Color(0xFF515151), fontSize: 22, fontWeight: FontWeight.w700, fontFamily: "CeraProBold"),
                     ),
-                    Text(
-                      "VIEW ALL",
-                      style: TextStyle(color: Color(0xFF515151), fontSize: 12, fontWeight: FontWeight.w400),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GroceryOfferPage(
+                                      ///categoryLink: categoryItemData,
+                                      receiveCategoryName: widget.categoryName,
+                                      receiveLargeBanner: widget.large_Banner,
+                                      categoryData: categoryData,
+                                    )));
+                      },
+                      child: Container(
+                        child: Text(
+                          "VIEW ALL",
+                          style: TextStyle(color: Color(0xFF515151), fontSize: 12, fontWeight: FontWeight.w400),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -3187,97 +3351,101 @@ class _CategoryContainerState extends State<CategoryContainer> {
                 child: ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: categoryData.length,
+                  itemCount: categoryData.length + 1,
                   itemBuilder: (_, index) {
                     return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          valueOne = index.toString();
-                          categoryItemData = categoryData[index].name;
-                          relatedProductsLink = categoryData[index].links.products;
-                          log("related link $relatedProductsLink");
-                          fetchProducts(categoryData[index].links.products);
-                          setState(() {});
-                        });
-                      },
-                      child: valueOne.toString() != index.toString()
-                          ? Container(
-                              child: Container(
-                                height: height * 0.2,
-                                width: width * 0.35,
-                                margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5),
+                        onTap: () {
+                          setState(() {
+                            initPage = false;
+                            valueOne = index == 0 ? 'all' : (index - 1).toString();
+                            categoryItemData = index == 0 ? 'All' : categoryData[index - 1].name;
+                            if (index != 0) relatedProductsLink = categoryData[index - 1].links.products;
+                            log("related link $relatedProductsLink");
+                            if (index != 0) fetchProducts(categoryData[index - 1].links.products);
+                            setState(() {});
+                          });
+                        },
+                        child: Container(
+                          height: height * 0.2,
+                          width: width * 0.35,
+                          margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
+                          decoration: BoxDecoration(
+                            //color: Colors.grey.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Column(
+                            children: [
+                              Container(
+                                height: height * 0.15,
+                                //width: width*0.30,
+                                width: width * 0.30,
                                 decoration: BoxDecoration(
-                                  //color: Colors.grey.withOpacity(0.2),
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      height: height * 0.15,
-                                      //width: width*0.30,
-                                      width: width * 0.30,
-                                      decoration: BoxDecoration(color: Color(0xFFF0E6F2), borderRadius: BorderRadius.circular(15.0)),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(0),
-                                          child: categoryData[index].mobileBanner.isEmpty
-                                              ? Image.asset("assets/app_logo.png")
-                                              : Image.network(
-                                                  imagePath + categoryData[index].mobileBanner,
-                                                ),
-                                        ),
-                                      ),
-                                    ),
-                                    sized5,
-                                    Text(
-                                      categoryData[index].name,
-                                      style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
+                                    color: valueOne.toString() == (index - 1).toString() || (valueOne.toString() == 'all' && index == 0)
+                                        ? Colors.white
+                                        : Color(0xFFF0E6F2),
+                                    borderRadius: BorderRadius.circular(15.0)),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(0),
+                                    child: index == 0
+                                        ? Image.asset("assets/app_logo.png")
+                                        : categoryData[index - 1].mobileBanner.isEmpty
+                                            ? Image.asset("assets/app_logo.png")
+                                            : Image.network(
+                                                imagePath + categoryData[index - 1].mobileBanner,
+                                              ),
+                                  ),
                                 ),
                               ),
-                            )
-                          : Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: Container(
-                                  //height: height * 0.2,
-                                  height: height * 0.2,
-                                  width: width * 0.35,
-                                  margin: EdgeInsets.symmetric(vertical: 5.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        height: height * 0.15,
-                                        width: width * 0.30,
-                                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(0),
-                                          child: Center(
-                                            child: categoryData[index].mobileBanner.isEmpty
-                                                ?
-                                                //Text("OK"):
-                                                Image.asset("assets/app_logo.png")
-                                                : Image.network(
-                                                    imagePath + categoryData[index].mobileBanner,
-                                                  ),
-                                          ),
-                                        ),
-                                      ),
-                                      sized5,
-                                      Text(
-                                        categoryData[index].name,
-                                        style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                    );
+                              sized5,
+                              Text(
+                                index == 0 ? 'All' : categoryData[index - 1].name,
+                                style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        )
+                        // : Padding(
+                        //     padding: const EdgeInsets.only(left: 5.0),
+                        //     child: Container(
+                        //         //height: height * 0.2,
+                        //         height: height * 0.2,
+                        //         width: width * 0.35,
+                        //         margin: EdgeInsets.symmetric(vertical: 5.0),
+                        //         decoration: BoxDecoration(
+                        //           color: Colors.blueGrey,
+                        //           borderRadius: BorderRadius.circular(10.0),
+                        //         ),
+                        //         child: Column(
+                        //           children: [
+                        //             Container(
+                        //               height: height * 0.15,
+                        //               width: width * 0.30,
+                        //               decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
+                        //               child: Padding(
+                        //                 padding: const EdgeInsets.all(0),
+                        //                 child: Center(
+                        //                   child: categoryData[index].mobileBanner.isEmpty
+                        //                       ?
+                        //                       //Text("OK"):
+                        //                       Image.asset("assets/app_logo.png")
+                        //                       : Image.network(
+                        //                           imagePath + categoryData[index].mobileBanner,
+                        //                         ),
+                        //                 ),
+                        //               ),
+                        //             ),
+                        //             sized5,
+                        //             Text(
+                        //               categoryData[index].name,
+                        //               style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
+                        //               textAlign: TextAlign.center,
+                        //             ),
+                        //           ],
+                        //         )),
+                        //   ),
+                        );
                   },
                 ),
               ),
@@ -3302,185 +3470,435 @@ class _CategoryContainerState extends State<CategoryContainer> {
                 child: Container(
                   height: height * 0.32,
                   width: width,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: listOfProducts.length,
-                      itemBuilder: (_, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            decoration: BoxDecoration(color: Color(0xFFF1EDF2), borderRadius: BorderRadius.circular(15.0)),
-                            //height: MediaQuery.of(context).size.height/3.2,width: MediaQuery.of(context).size.width / 2.34,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width / 5,
+                  child: valueOne.toString() == 'all' || initPage
+                      ? PagedListView<int, Product>(
+                          pagingController: _controller,
+                          scrollDirection: Axis.horizontal,
+                          builderDelegate: PagedChildBuilderDelegate<Product>(
+                            firstPageErrorIndicatorBuilder: (ctx) => Container(),
+                            newPageErrorIndicatorBuilder: (ctx) => Container(),
+                            noItemsFoundIndicatorBuilder: (ctx) => Center(
+                              child: Text('No item'),
+                            ),
+                            noMoreItemsIndicatorBuilder: (ctx) => Center(
+                              child: Text('No more item'),
+                            ),
+                            itemBuilder: (context, item, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Container(
+                                  decoration: BoxDecoration(color: Color(0xFFF4F1F5), borderRadius: BorderRadius.circular(15.0)),
+                                  //height: MediaQuery.of(context).size.height/3.2,width: MediaQuery.of(context).size.width / 2.34,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Container(
+                                          width: MediaQuery.of(context).size.width / 5,
 
-                                    height: MediaQuery.of(context).size.height / 41,
-                                    margin: EdgeInsets.only(top: 10),
-                                    decoration: BoxDecoration(
-                                      color: listOfProducts[index].has_discount == true ? Colors.green : Color(0xFFF1EDF2),
-                                      borderRadius: BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
-                                    ),
-                                    //
+                                          height: MediaQuery.of(context).size.height / 41,
+                                          margin: EdgeInsets.only(top: 10),
+                                          decoration: BoxDecoration(
+                                            color: item.has_discount == true ? Color(0xFF10AA2A) : Color(0xFFF4F1F5),
+                                            borderRadius:
+                                                BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
+                                          ),
+                                          //
 
-                                    child: Center(
-                                      child: listOfProducts[index].has_discount == true
-                                          ? Text(
-                                              //"15% OFF",
-                                              "-৳ ${listOfProducts[index].discount.toString()}",
-                                              style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
-                                            )
-                                          : Text(
-                                              //"15% OFF",
-                                              "",
-                                              style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
-                                            ),
-                                    ),
-                                  ),
-                                ),
-
-                                ///
-                                GestureDetector(
-                                  onTap: () {
-                                    log("details ${listOfProducts[index].links!.details}");
-
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => GroceryDetails(
-                                                  detailsLink: listOfProducts[index].links!.details!,
-                                                  relatedProductLink: relatedProductsLink,
-                                                )));
-                                  },
-                                  child: Container(
-                                    child: Image.network(imagePath + listOfProducts[index].thumbnail_image.toString()),
-                                    height: MediaQuery.of(context).size.height / 8,
-                                    width: MediaQuery.of(context).size.width / 2.34,
-                                  ),
-                                ),
-
-                                ///
-
-                                FittedBox(
-                                  child: Container(
-                                    ///height: height! * 0.08,
-                                    width: MediaQuery.of(context).size.width / 2.36,
-                                    height: MediaQuery.of(context).size.height / 17,
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-                                      child: Text(
-                                        listOfProducts[index].name.toString(),
-                                        style: TextStyle(
-                                          color: Color(0xFF515151),
-                                          fontSize: 12.5,
-                                          fontWeight: FontWeight.w600,
-                                          fontFamily: "CeraProBold",
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: item.has_discount == true
+                                                ? Padding(
+                                                    padding: const EdgeInsets.only(left: 3.0),
+                                                    child: Text(
+                                                      //"15% OFF",
+                                                      "${item.discount.toString()}TK OFF",
+                                                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    //"15% OFF",
+                                                    "",
+                                                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                                  ),
+                                          ),
                                         ),
-                                        maxLines: 2,
-                                        textAlign: TextAlign.center,
                                       ),
-                                    ),
-                                  ),
-                                ),
 
-                                Align(
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height / 38,
-                                    width: MediaQuery.of(context).size.width / 2.5,
-                                    child: Center(
-                                      child: Text(
-                                        listOfProducts[index].unit.toString(),
-                                        style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                      ///
+                                      GestureDetector(
+                                        onTap: () {
+                                          log("details ${item.links!.details}");
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ProductDetails(
+                                                  detailsLink: item.links!.details!, relatedProductLink: relatedProductsLink),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          child: Image.network(imagePath + item.thumbnail_image.toString()),
+                                          height: MediaQuery.of(context).size.height / 8,
+                                          width: MediaQuery.of(context).size.width / 2.34,
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                  child: Center(
-                                    child: Container(
-                                      height: MediaQuery.of(context).size.height / 32,
-                                      width: MediaQuery.of(context).size.width / 2.34,
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Container(
-                                            child: Image.asset("assets/p.png"),
-                                            height: 20,
-                                            width: 22,
-                                          ),
-                                          Text(listOfProducts[index].base_discounted_price.toString(),
-                                              style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
-                                          Text(listOfProducts[index].base_price.toString(),
-                                              style: TextStyle(
-                                                  color: Color(0xFFA299A8),
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400,
-                                                  decoration: TextDecoration.lineThrough)),
-                                          Padding(
-                                            padding: const EdgeInsets.only(left: 10),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              addToCart(listOfProducts[index].id, box.read(userID), 1);
-                                              //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
-                                            },
-                                            child: Container(
-                                              height: 25,
-                                              width: 25,
-                                              decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
-                                              child: Center(
-                                                child: Image.asset("assets/pi.png"),
+
+                                      ///
+
+                                      InkWell(
+                                        onTap: () {
+                                          log("details ${item.links!.details}");
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ProductDetails(
+                                                  detailsLink: item.links!.details!, relatedProductLink: relatedProductsLink),
+                                            ),
+                                          );
+                                        },
+                                        child: FittedBox(
+                                          child: Container(
+                                            ///height: height! * 0.08,
+                                            width: MediaQuery.of(context).size.width / 2.36,
+                                            height: MediaQuery.of(context).size.height / 18,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+                                              child: Text(
+                                                item.name.toString(),
+                                                style: TextStyle(
+                                                  color: Color(0xFF515151),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontFamily: "CeraProBold",
+                                                ),
+                                                maxLines: 2,
+                                                textAlign: TextAlign.center,
                                               ),
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  //height: height! * 0.03,
-                                  height: MediaQuery.of(context).size.height / 26,
-                                  width: MediaQuery.of(context).size.width / 2.34,
-                                  decoration: BoxDecoration(
-                                      color: Colors.lightGreen[100],
-                                      borderRadius:
-                                          BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          child: Image.asset("assets/img_42.png"),
-                                          height: 17,
-                                          width: 15,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(top: 2),
-                                          child: Text(
-                                            "  Earning +৳18",
-                                            style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                      ),
+
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          height: MediaQuery.of(context).size.height / 38,
+                                          width: MediaQuery.of(context).size.width / 2.5,
+                                          child: Center(
+                                            child: Text(
+                                              item.unit.toString(),
+                                              style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                            ),
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ),
+
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        child: Center(
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height / 24,
+                                            width: MediaQuery.of(context).size.width / 2.34,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Container(
+                                                  child: Image.asset("assets/p.png"),
+                                                  height: 20,
+                                                  width: 22,
+                                                ),
+                                                Text(item.base_discounted_price.toString(),
+                                                    style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
+                                                item.base_discounted_price == item.base_price
+                                                    ? Text("")
+                                                    : Text(item.base_price.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 12,
+                                                            fontWeight: FontWeight.w400,
+                                                            decoration: TextDecoration.lineThrough)),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 10),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    addToCart(item.id, box.read(userID), 1);
+
+                                                    ///
+                                                    //box.write(list_of_products, listOfProducts[index].id);
+
+                                                    ///
+                                                    //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+                                                  },
+                                                  child: Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
+                                                    child: Center(
+                                                      child: Image.asset(
+                                                        "assets/pi.png",
+                                                        height: 40,
+                                                        width: 40,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      Container(
+                                        //height: height! * 0.03,
+                                        height: MediaQuery.of(context).size.height / 30,
+                                        width: MediaQuery.of(context).size.width / 2.34,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFFDDEAE1),
+                                            borderRadius:
+                                                BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                child: Image.asset("assets/img_42.png"),
+                                                height: 17,
+                                                width: 15,
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.fromLTRB(5, 3, 0, 0),
+                                                child: Text(
+                                                  "  Earning  +৳18",
+                                                  style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                )
-                              ],
-                            ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      }),
+                        )
+                      : ListView.builder(
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: listOfProducts.length,
+                          itemBuilder: (_, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Container(
+                                decoration: BoxDecoration(color: Color(0xFFF4F1F5), borderRadius: BorderRadius.circular(15.0)),
+                                //height: MediaQuery.of(context).size.height/3.2,width: MediaQuery.of(context).size.width / 2.34,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Container(
+                                        width: MediaQuery.of(context).size.width / 5,
+
+                                        height: MediaQuery.of(context).size.height / 41,
+                                        margin: EdgeInsets.only(top: 10),
+                                        decoration: BoxDecoration(
+                                          color: listOfProducts[index].has_discount == true ? Color(0xFF10AA2A) : Color(0xFFF4F1F5),
+                                          borderRadius:
+                                              BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
+                                        ),
+                                        //
+
+                                        child: Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: listOfProducts[index].has_discount == true
+                                              ? Padding(
+                                                  padding: const EdgeInsets.only(left: 3.0),
+                                                  child: Text(
+                                                    //"15% OFF",
+                                                    "${listOfProducts[index].discount.toString()}TK OFF",
+                                                    style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                                                  ),
+                                                )
+                                              : Text(
+                                                  //"15% OFF",
+                                                  "",
+                                                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    ///
+                                    GestureDetector(
+                                      onTap: () {
+                                        log("details ${listOfProducts[index].links!.details}");
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ProductDetails(
+                                                detailsLink: listOfProducts[index].links!.details!,
+                                                relatedProductLink: relatedProductsLink),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        child: Image.network(imagePath + listOfProducts[index].thumbnail_image.toString()),
+                                        height: MediaQuery.of(context).size.height / 8,
+                                        width: MediaQuery.of(context).size.width / 2.34,
+                                      ),
+                                    ),
+
+                                    ///
+
+                                    InkWell(
+                                      onTap: () {
+                                        log("details ${listOfProducts[index].links!.details}");
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ProductDetails(
+                                                detailsLink: listOfProducts[index].links!.details!,
+                                                relatedProductLink: relatedProductsLink),
+                                          ),
+                                        );
+                                      },
+                                      child: FittedBox(
+                                        child: Container(
+                                          ///height: height! * 0.08,
+                                          width: MediaQuery.of(context).size.width / 2.36,
+                                          height: MediaQuery.of(context).size.height / 18,
+                                          child: Padding(
+                                            padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+                                            child: Text(
+                                              listOfProducts[index].name.toString(),
+                                              style: TextStyle(
+                                                color: Color(0xFF515151),
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
+                                                fontFamily: "CeraProBold",
+                                              ),
+                                              maxLines: 2,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        height: MediaQuery.of(context).size.height / 38,
+                                        width: MediaQuery.of(context).size.width / 2.5,
+                                        child: Center(
+                                          child: Text(
+                                            listOfProducts[index].unit.toString(),
+                                            style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                      child: Center(
+                                        child: Container(
+                                          height: MediaQuery.of(context).size.height / 24,
+                                          width: MediaQuery.of(context).size.width / 2.34,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                child: Image.asset("assets/p.png"),
+                                                height: 20,
+                                                width: 22,
+                                              ),
+                                              Text(listOfProducts[index].base_discounted_price.toString(),
+                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
+                                              listOfProducts[index].base_discounted_price == listOfProducts[index].base_price
+                                                  ? Text("")
+                                                  : Text(listOfProducts[index].base_price.toString(),
+                                                      style: TextStyle(
+                                                          color: Color(0xFFA299A8),
+                                                          fontSize: 12,
+                                                          fontWeight: FontWeight.w400,
+                                                          decoration: TextDecoration.lineThrough)),
+                                              Padding(
+                                                padding: const EdgeInsets.only(left: 10),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  addToCart(listOfProducts[index].id, box.read(userID), 1);
+
+                                                  ///
+                                                  //box.write(list_of_products, listOfProducts[index].id);
+
+                                                  ///
+                                                  //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+                                                },
+                                                child: Container(
+                                                  height: 40,
+                                                  width: 40,
+                                                  decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      "assets/pi.png",
+                                                      height: 40,
+                                                      width: 40,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+
+                                    Container(
+                                      //height: height! * 0.03,
+                                      height: MediaQuery.of(context).size.height / 30,
+                                      width: MediaQuery.of(context).size.width / 2.34,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFFDDEAE1),
+                                          borderRadius:
+                                              BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              child: Image.asset("assets/img_42.png"),
+                                              height: 17,
+                                              width: 15,
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.fromLTRB(5, 3, 0, 0),
+                                              child: Text(
+                                                "  Earning  +৳18",
+                                                style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
                 ),
               ),
 
