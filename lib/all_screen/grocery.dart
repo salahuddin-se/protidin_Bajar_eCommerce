@@ -1,15 +1,13 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/controller/cartItemsController.dart';
+import 'package:customer_ui/dataModel/order_product_model.dart';
 import 'package:customer_ui/dataModel/product_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class TabProductItemWidget extends StatefulWidget {
@@ -51,31 +49,6 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
     ///fetchProducts("link2");
   }
 
-  Future<void> addToCart(
-    id,
-    userId,
-    quantity,
-  ) async {
-    log("user id $userId");
-    var res = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/add"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
-        body: jsonEncode(<String, dynamic>{
-          "id": id.toString(),
-          "variant": "",
-          "user_id": userId,
-          "quantity": quantity,
-        }));
-
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      showToast("Cart Added Successfully", context: context);
-
-      ///await updateAddressInCart(userId);
-      await controller2.getCartName();
-    } else {
-      showToast("Something went wrong", context: context);
-    }
-  }
-
   List<Product> listOfProducts = [];
   Future fetchProducts(link2) async {
     listOfProducts.clear();
@@ -111,6 +84,8 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
   Widget build(BuildContext context) {
     return Column(
       children: [
+        //Text("HI"),
+
         Container(
           //height: height * 0.15,
           width: widget.width,
@@ -132,8 +107,16 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
                   children: [
                     Text(
                       widget.productName!,
-                      style: TextStyle(color: kBlackColor, fontSize: widget.block * 4, fontWeight: FontWeight.w500),
+                      style: TextStyle(
+                        color: Color(0xFF515151),
+                        fontSize: 16,
+                        fontFamily: 'CeraProMedium',
+                        fontWeight: FontWeight.w500,
+                      ),
                       maxLines: 2,
+                    ),
+                    SizedBox(
+                      height: 3,
                     ),
                     sized5,
                     widget.discountPrice == widget.actualPrice
@@ -141,8 +124,11 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
                         : Container(
                             height: widget.height * 0.03,
                             margin: EdgeInsets.only(top: 10),
-                            width: widget.width * 0.15,
-                            decoration: BoxDecoration(color: Colors.green),
+                            width: widget.width * 0.16,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              borderRadius: BorderRadius.circular(3),
+                            ),
                             child: Center(
                               child: Text(
                                 "${widget.off.toString()}TK OFF",
@@ -160,28 +146,35 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
                             children: [
                               Container(
                                 width: MediaQuery.of(context).size.width / 7,
-                                child: Text(
-                                  widget.actualPrice!,
-                                  style: TextStyle(
-                                    color: kBlackColor,
-                                    fontSize: widget.block * 4.5,
-                                    fontWeight: FontWeight.w600,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 16.0),
+                                  child: Text(
+                                    widget.actualPrice!,
+                                    style: TextStyle(
+                                      color: Color(0xFF515151),
+                                      fontSize: 19,
+                                      fontFamily: 'CeraProMedium',
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                               ),
                               //Padding(padding: const EdgeInsets.only(left: 5)),
                               widget.discountPrice == widget.actualPrice
-                                  ? Container(width: MediaQuery.of(context).size.width / 6, child: Text(""))
+                                  ? Container(width: MediaQuery.of(context).size.width / 7, child: Text(""))
                                   : Container(
                                       width: MediaQuery.of(context).size.width / 7,
                                       child: Padding(
-                                        padding: const EdgeInsets.only(right: 15.0),
-                                        child: Text(widget.discountPrice!,
-                                            style: TextStyle(
-                                                color: kBlackColor,
-                                                fontSize: widget.block * 4,
-                                                fontWeight: FontWeight.w300,
-                                                decoration: TextDecoration.lineThrough)),
+                                        padding: const EdgeInsets.fromLTRB(0, 16, 15, 0),
+                                        child: Text(
+                                          widget.discountPrice!,
+                                          style: TextStyle(
+                                              color: kBlackColor,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'CeraProMedium',
+                                              decoration: TextDecoration.lineThrough),
+                                        ),
                                       ),
                                     ),
                             ],
@@ -191,35 +184,38 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
                         InkWell(
                           onTap: () {
                             ///
-                            addToCart(widget.id, box.read(userID), 1);
+                            controller2.addToCart(
+                                OrderItemModel(
+                                    productId: widget.id,
+                                    price: int.tryParse(widget.discountPrice!.toString().replaceAll('৳', '')),
+                                    productThumbnailImage: widget.image,
+                                    productName: widget.productName,
+                                    quantity: 1,
+                                    userId: box.read(userID),
+                                    variant: '',
+                                    discount: int.tryParse(widget.off!.replaceAll('TK OFF', '')),
+                                    discountType: ''),
+                                context);
 
                             ///
                             //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
                           },
                           child: Container(
-                            width: MediaQuery.of(context).size.width / 5.5,
-                            height: 28,
+                            width: MediaQuery.of(context).size.width / 5.4,
+                            height: 40,
                             //padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 3.0),
                             decoration: BoxDecoration(
-                              color: kPrimaryColor,
+                              //color: kPrimaryColor,
                               borderRadius: BorderRadius.circular(15.0),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Container(
-                                    width: 30,
-                                    height: 15,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 2.0),
-                                      child: Text("Add",
-                                          style: TextStyle(color: kWhiteColor, fontSize: widget.block * 3.5, fontWeight: FontWeight.bold)),
-                                    )),
-                                Icon(
-                                  Icons.add,
-                                  color: kWhiteColor,
-                                  size: 20,
-                                )
+                                Image.asset(
+                                  "assets/img_193.png",
+                                  height: 40,
+                                  width: 40,
+                                ),
                               ],
                             ),
                           ),
@@ -239,7 +235,7 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
         ),
         Divider(
           color: kBlackColor,
-          thickness: 0.3,
+          thickness: 0.2,
         ),
       ],
     );

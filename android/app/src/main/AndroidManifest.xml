@@ -2,7 +2,7 @@
     package="com.example.customer_ui">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="customer_ui"
+        android:label="Protidin"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

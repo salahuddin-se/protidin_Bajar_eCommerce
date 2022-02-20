@@ -65,10 +65,13 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
         elevation: 0.0,
         backgroundColor: kWhiteColor,
         centerTitle: true,
-        title: Text(
-          widget.receiveCategoryName,
-          style: TextStyle(color: kBlackColor, fontSize: block * 4),
-        ),
+        title: Text(widget.receiveCategoryName,
+            style: TextStyle(
+              color: Color(0xFF515151),
+              fontSize: 13,
+              fontFamily: 'CeraProMedium',
+              fontWeight: FontWeight.w500,
+            )),
         iconTheme: IconThemeData(color: kBlackColor),
         actions: const [
           Center(
@@ -87,7 +90,7 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
           height: height,
           width: width,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -101,17 +104,108 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
                   ),
                 ),
 
-                ///
                 SizedBox(
-                  height: 50,
-                  child: TabBar(
-                    isScrollable: true,
-                    indicatorColor: kPrimaryColor,
-                    controller: controller,
-                    tabs: widget.categoryData.map((string) => tabBarItems(block, string.name, '1')).toList(),
+                  height: 10,
+                ),
+
+                ///
+                Container(
+                  decoration: BoxDecoration(
+                    // borderRadius: BorderRadius.circular(5.0),
+                    //color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white,
+                        offset: Offset(
+                          0.0,
+                          01.0,
+                        ), //(x,y)
+                        blurRadius: 6.0,
+                      ),
+                    ],
+                  ),
+                  child: SizedBox(
+                    height: 50,
+                    child: TabBar(
+                      isScrollable: true,
+                      indicatorColor: Colors.green,
+                      controller: controller,
+                      tabs: widget.categoryData
+                          .map(
+                            (string) => tabBarItems(
+                              block,
+                              string.name,
+                              '1',
+                            ),
+                          )
+                          .toList(),
+                    ),
                   ),
                 ),
 
+                Divider(
+                  color: kBlackColor,
+                  thickness: 0.5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 0, 7, 0),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width / 1,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "1454 item found",
+                          style: TextStyle(
+                            color: kBlackColor,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'CeraProMedium',
+                          ),
+                        ),
+                        Container(
+                          child: Image.asset(
+                            "assets/img_187.png",
+                            height: 22,
+                            width: 22,
+                          ),
+                          height: 22,
+                          width: 22,
+                        ),
+                        Text(
+                          "Top Deal",
+                          style: TextStyle(
+                            color: kBlackColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            fontFamily: 'CeraProMedium',
+                          ),
+                        ),
+                        Container(
+                          child: Image.asset(
+                            "assets/img_188.png",
+                            height: 15,
+                            width: 15,
+                          ),
+                          height: 15,
+                          width: 15,
+                        ),
+                        Container(
+                          child: Image.asset(
+                            "assets/img_189.png",
+                            height: 22,
+                            width: 22,
+                          ),
+                          height: 22,
+                          width: 22,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Expanded(
                   child: TabBarView(
                     controller: controller,
@@ -122,27 +216,11 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
                         .toList(),
                   ),
                 ),
-                // SizedBox(
-                //   height: 100,
-                // ),
               ],
             ),
           ),
         ),
       ),
-      /*
-      Obx(() => Align(
-                        alignment: Alignment.topRight,
-                        child: CircleAvatar(
-                          radius: 11.5,
-                          backgroundColor: Colors.green[500],
-                          child: Text(
-                            controller.cartLength.value.toString(),
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
-                          ),
-                        ),
-                      )),
-       */
       floatingActionButton: Container(
         // height: 85,
         // width: 85,
@@ -190,7 +268,11 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
       children: [
         Text(
           title,
-          style: TextStyle(color: kBlackColor),
+          style: TextStyle(
+            color: kBlackColor,
+            fontSize: 16,
+            fontFamily: 'CeraProMedium',
+          ),
         ),
       ],
     );

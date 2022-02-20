@@ -13,7 +13,8 @@ import '../my_theme.dart';
 import 'sigininform.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key? key}) : super(key: key);
+  const SignUpPage({Key? key, this.isFromCart = false}) : super(key: key);
+  final bool isFromCart;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -63,7 +64,14 @@ class _MyHomePageState extends State<SignUpPage> {
     if (response.statusCode == 200 || response.statusCode == 201) {
       var dataMap = jsonDecode(response.body);
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SignInPage(
+            isFromCart: widget.isFromCart,
+          ),
+        ),
+      );
 
       showToast(dataMap["message"], context: context);
       //Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
@@ -224,7 +232,8 @@ class _MyHomePageState extends State<SignUpPage> {
                             ),
                           ),
                         ),
-                      )),
+                      ),
+                    ),
               SizedBox(
                 height: 0,
               ),

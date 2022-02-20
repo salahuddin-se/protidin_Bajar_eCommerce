@@ -44,6 +44,7 @@ class CartItems {
     this.quantity,
     this.lowerLimit,
     this.upperLimit,
+    this.discount,
   });
   late final int? id;
   late final int? ownerId;
@@ -59,6 +60,7 @@ class CartItems {
   late int? quantity;
   late final int? lowerLimit;
   late final int? upperLimit;
+  int? discount;
 
   CartItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];

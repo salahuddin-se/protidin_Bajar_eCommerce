@@ -24,5 +24,7 @@ const add_carts = "ADD_CARTS";
 const userAvatar = "USER_AVATAR";
 const userID = "USER_ID";
 const cartList = "CART_LIST";
+const category_name = "CART_LIST";
+const cart_item = "CART_ITEM";
 
 const bool checkPayments = false;

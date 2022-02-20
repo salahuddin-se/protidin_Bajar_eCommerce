@@ -1,4 +1,3 @@
-import 'package:customer_ui/all_screen/offer_page.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -62,21 +61,21 @@ class _AllOfferPageState extends State<AllOfferPage> {
                   height: 200,
                   width: MediaQuery.of(context).size.width / 1.1,
                   child: Image.asset(
-                    "assets/img_78.png",
+                    "assets/p1.png",
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               SizedBox(
-                height: 10,
+                height: 15,
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => OfferPage()));
+                  //Navigator.push(context, MaterialPageRoute(builder: (context) => OfferPage()));
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage("assets/img_79.png"), fit: BoxFit.cover),
+                    image: DecorationImage(image: AssetImage("assets/p2.png"), fit: BoxFit.cover),
                     borderRadius: BorderRadius.circular(5),
                     boxShadow: [
                       BoxShadow(
@@ -89,13 +88,13 @@ class _AllOfferPageState extends State<AllOfferPage> {
                   ),
                   height: 200,
                   width: MediaQuery.of(context).size.width / 1.1,
-                  child: Image.asset(
-                    "assets/img_80.png",
-                  ),
+                  // child: Image.asset(
+                  //   "assets/img_80.png",
+                  // ),
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               InkWell(
                 onTap: () {
@@ -103,7 +102,7 @@ class _AllOfferPageState extends State<AllOfferPage> {
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage("assets/img_81.png"), fit: BoxFit.cover),
+                    image: DecorationImage(image: AssetImage("assets/p3.png"), fit: BoxFit.cover),
                     borderRadius: BorderRadius.circular(5),
                     boxShadow: [
                       BoxShadow(
@@ -114,19 +113,19 @@ class _AllOfferPageState extends State<AllOfferPage> {
                       ),
                     ],
                   ),
-                  height: 350,
+                  height: 200,
                   width: MediaQuery.of(context).size.width / 1.1,
-                  child: Image.asset(
-                    "assets/img_175.png",
-                  ),
+                  // child: Image.asset(
+                  //   "assets/img_175.png",
+                  // ),
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               Container(
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage("assets/img_82.png"), fit: BoxFit.cover),
+                  image: DecorationImage(image: AssetImage("assets/p4.png"), fit: BoxFit.cover),
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
@@ -142,11 +141,11 @@ class _AllOfferPageState extends State<AllOfferPage> {
                 //child: Image.asset("assets/img_86.png",),
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               Container(
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage("assets/img_176.png"), fit: BoxFit.cover),
+                  image: DecorationImage(image: AssetImage("assets/p5.png"), fit: BoxFit.cover),
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
@@ -162,11 +161,11 @@ class _AllOfferPageState extends State<AllOfferPage> {
                 //child: Image.asset("assets/img_78.png",),
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               Container(
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage("assets/img_178.png"), fit: BoxFit.cover),
+                  image: DecorationImage(image: AssetImage("assets/p6.png"), fit: BoxFit.cover),
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
@@ -179,16 +178,16 @@ class _AllOfferPageState extends State<AllOfferPage> {
                 ),
                 height: 200,
                 width: MediaQuery.of(context).size.width / 1.1,
-                child: Image.asset(
-                  "assets/img_177.png",
-                ),
+                // child: Image.asset(
+                //   "assets/img_177.png",
+                // ),
               ),
               const SizedBox(
-                height: 10,
+                height: 15,
               ),
               Container(
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage("assets/img_180.png"), fit: BoxFit.cover),
+                  image: DecorationImage(image: AssetImage("assets/p7.png"), fit: BoxFit.cover),
                   borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
@@ -201,9 +200,9 @@ class _AllOfferPageState extends State<AllOfferPage> {
                 ),
                 height: 200,
                 width: MediaQuery.of(context).size.width / 1.1,
-                child: Image.asset(
-                  "assets/img_179.png",
-                ),
+                // child: Image.asset(
+                //   "assets/img_179.png",
+                // ),
               ),
               SizedBox(
                 height: 80,

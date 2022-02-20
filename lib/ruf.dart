@@ -1,4 +1,4 @@
-/// new home screen 13/02
+/// new home screen 14/02
 /*
 import 'dart:convert';
 import 'dart:developer';
@@ -44,9 +44,11 @@ class CategoryHomeScreen extends StatefulWidget {
 class _MyHomePageState extends State<CategoryHomeScreen> {
   var value;
   var Cart;
-  bool isLocationChanged = false;
+  bool isLocationChanged = true;
   bool isCategoryLoaded = false;
   String newArea = "";
+  int? currentUser;
+  int? currentWebStore;
   //final keyIsFirstLoaded = 'is_first_loaded';
 
   Future<dynamic> buildShowDialog(BuildContext context, List<String> areaName, List<String> cityName) {
@@ -73,14 +75,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                   Row(
                     children: [
                       Container(
-                          width: MediaQuery.of(context).size.width / 6,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: Text(
-                              "City",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Color(0xFF515151)),
-                            ),
-                          )),
+                        width: MediaQuery.of(context).size.width / 6,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            "City",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Color(0xFF515151)),
+                          ),
+                        ),
+                      ),
                       Align(
                         alignment: Alignment.center,
                         child: Container(
@@ -248,10 +251,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     });
   }
 
-  //
-
-  //
-
   /// slider
   var sliderData = [];
   Future<void> getSliderSearch() async {
@@ -411,8 +410,6 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
     if (isShowDialog) buildShowDialog(context, areaName, cityName);
 
     setState(() {});
-    //log("area2 name $areaName");
-    //log("city2 name $cityName");
   }
 
   Future fetchShop(String areaName) async {
@@ -443,13 +440,15 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             log("webstore ID $_webStoreId");
             log("user ID $_userId");
 
-            box.write(webStoreId, _webStoreId);
-            box.write(user_Id, _userId);
+            await box.write(webStoreId, _webStoreId);
+            await box.write(user_Id, _userId);
 
             //await getCategoryData(name: widget.na)
 
             setState(() {
               isLocationChanged = false;
+              currentUser = _userId;
+              currentWebStore = _webStoreId;
             });
           }
         }
@@ -472,6 +471,17 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
   var householdLargeBanner = "";
   var toysGiftLargeBanner = "";
   var stationaryLargeBanner = "";
+
+  var groceryMobileBanner = "";
+  var chocolateMobileBanner = "";
+  var breadMobileBanner = "";
+  var dairyBeverageMobileBanner = "";
+  var motherBabyMobileBanner = "";
+  var fruitsVegMobileBanner = "";
+  var personalCareMobileBanner = "";
+  var householdMobileBanner = "";
+  var toysGiftMobileBanner = "";
+  var stationaryMobileBanner = "";
 
   ///
   var groceryAddBanner = "";
@@ -502,25 +512,35 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
       for (var ele in categoryDataModel.data) {
         if (ele.name == "Grocery") {
           groceryLargeBanner = ele.largeBanner;
+          groceryMobileBanner = ele.mobileBanner;
           //log("Banner Image $groceryLargeBanner");
         } else if (ele.name == "Chocolate & Sweets") {
           chocolateLargeBanner = ele.largeBanner;
+          chocolateMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Bread Biscuit & Snacks") {
           breadLargeBanner = ele.largeBanner;
+          breadMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Dairy & Beverages") {
           dairyBeverageLargeBanner = ele.largeBanner;
+          dairyBeverageMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Mother & Baby") {
           motherBabyLargeBanner = ele.largeBanner;
+          motherBabyMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Fruits & Vegetables") {
           fruitsVegLargeBanner = ele.largeBanner;
+          fruitsVegMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Personal Care") {
           personalCareLargeBanner = ele.largeBanner;
+          personalCareMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Household") {
           householdLargeBanner = ele.largeBanner;
+          householdMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Toys & Gift") {
           toysGiftLargeBanner = ele.largeBanner;
+          toysGiftMobileBanner = ele.mobileBanner;
         } else if (ele.name == "Stationery") {
           stationaryLargeBanner = ele.largeBanner;
+          stationaryMobileBanner = ele.mobileBanner;
         }
 
         ///
@@ -783,6 +803,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
 
             sized10,
 
+            /// alert dialogue
             Padding(
               padding: const EdgeInsets.only(left: 15.0),
               child: Align(
@@ -839,12 +860,11 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             ),
 
             /// top banner
-
             CarouselSlider.builder(
                 itemCount: sliderData.length,
                 itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) => Container(
                       ///height: 250,
-                      child: Image.network(imagePath + sliderData[itemIndex].photo),
+                      child: sliderData.isNotEmpty ? Image.network(imagePath + sliderData[itemIndex].photo!) : Center(),
                     ),
                 options: CarouselOptions(
                   height: 120,
@@ -1068,8 +1088,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               : Image.network(imagePath + categoryData[index].mobileBanner)),
 
                                       ///Expanded(child: Image.network(imagePath+categoryData[index].largeBanner)),
-
                                       sized10,
+
                                       Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                           2,
@@ -1136,7 +1156,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               fontWeight: FontWeight.w700,
                                               fontSize: 16,
                                               fontStyle: FontStyle.normal,
-                                              fontFamily: "CeraProBold"),
+                                              fontFamily: "CeraProMedium"),
                                           textAlign: TextAlign.center,
                                         ),
                                       ),
@@ -1235,12 +1255,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           InkWell(
                                             onTap: () {
                                               Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) => ProductDetails(
-                                                            detailsLink: categoryProducts[index].links.details,
-                                                            relatedProductLink: relatedProductsLink,
-                                                          )));
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) => ProductDetails(
+                                                    detailsLink: categoryProducts[index].links.details,
+                                                    relatedProductLink: relatedProductsLink,
+                                                  ),
+                                                ),
+                                              );
                                             },
                                             child: FittedBox(
                                               child: Container(
@@ -1272,7 +1294,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               height: MediaQuery.of(context).size.height / 40,
                                               child: Text(
                                                 categoryProducts[index].unit,
-                                                style: TextStyle(color: Colors.grey.withOpacity(0.9), fontSize: 15),
+                                                style: TextStyle(
+                                                  color: Colors.grey.withOpacity(0.9),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                  fontFamily: 'CeraProMedium',
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -1300,7 +1327,7 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                           color: Color(0xFF515151),
                                                           fontSize: 19,
                                                           fontFamily: 'CeraProMedium',
-                                                          fontWeight: FontWeight.bold,
+                                                          fontWeight: FontWeight.w700,
                                                         )),
                                                     categoryProducts[index].baseDiscountedPrice == categoryProducts[index].basePrice
                                                         ? Text("")
@@ -1308,7 +1335,8 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                             style: TextStyle(
                                                                 color: Color(0xFFA299A8),
                                                                 fontSize: 13,
-                                                                fontWeight: FontWeight.w500,
+                                                                fontWeight: FontWeight.w400,
+                                                                fontFamily: 'CeraProMedium',
                                                                 decoration: TextDecoration.lineThrough)),
                                                     Padding(
                                                       padding: const EdgeInsets.only(left: 10),
@@ -1360,7 +1388,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                     padding: const EdgeInsets.fromLTRB(4, 3, 0, 0),
                                                     child: Text(
                                                       "Earning  +৳18",
-                                                      style: TextStyle(fontSize: 13, color: Colors.green, fontWeight: FontWeight.w600),
+                                                      style: TextStyle(
+                                                        fontSize: 13,
+                                                        color: Colors.green,
+                                                        fontWeight: FontWeight.w400,
+                                                        fontFamily: 'CeraProMedium',
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -1526,9 +1559,11 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                               oneTwoNinentyNineData[index].name.toString(),
                                               style: TextStyle(
                                                 color: Color(0xFF515151),
-                                                fontSize: 12.5,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: "CeraProBold",
+                                                fontSize: 15.3111,
+                                                //fontWeight: FontWeight.w300,
+                                                fontFamily: "CeraProMedium",
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle: FontStyle.normal,
                                               ),
                                               maxLines: 2,
                                               textAlign: TextAlign.center,
@@ -1541,7 +1576,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                           height: MediaQuery.of(context).size.height / 38,
                                           child: Text(
                                             oneTwoNinentyNineData[index].unit.toString(),
-                                            style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                            style: TextStyle(
+                                              color: Colors.grey.withOpacity(0.9),
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w400,
+                                              fontFamily: 'CeraProMedium',
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -1560,14 +1600,20 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                   width: 22,
                                                 ),
                                                 Text(oneTwoNinentyNineData[index].disCountPrice.toString(),
-                                                    style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
+                                                    style: TextStyle(
+                                                      color: Color(0xFF515151),
+                                                      fontSize: 19,
+                                                      fontFamily: 'CeraProMedium',
+                                                      fontWeight: FontWeight.w700,
+                                                    )),
                                                 oneTwoNinentyNineData[index].basePrice == oneTwoNinentyNineData[index].disCountPrice
                                                     ? Text("")
                                                     : Text(oneTwoNinentyNineData[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
-                                                            fontSize: 12,
+                                                            fontSize: 13,
                                                             fontWeight: FontWeight.w400,
+                                                            fontFamily: 'CeraProMedium',
                                                             decoration: TextDecoration.lineThrough)),
                                                 Padding(
                                                   padding: const EdgeInsets.only(left: 10),
@@ -1624,7 +1670,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                                                 padding: const EdgeInsets.fromLTRB(4, 3, 0, 0),
                                                 child: Text(
                                                   "  Earning  +৳18",
-                                                  style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'CeraProMedium',
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -1654,9 +1705,12 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 ? Container()
                 : CategoryContainer(
                     categoryName: "Grocery",
-                    nameNo: "4",
+                    nameNo: 4,
                     large_Banner: groceryLargeBanner,
                     add_banner: groceryAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: groceryMobileBanner,
                   ),
 
             SizedBox(
@@ -1666,9 +1720,13 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
                 ? Container()
                 : CategoryContainer(
                     categoryName: "Dairy & Beverage",
-                    nameNo: "7",
+                    nameNo: 7,
                     large_Banner: dairyBeverageLargeBanner,
-                    add_banner: dairyBeverageAddBanner),
+                    add_banner: dairyBeverageAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: dairyBeverageMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1676,7 +1734,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Mother & Baby", nameNo: "8", large_Banner: motherBabyLargeBanner, add_banner: motherBabyAddBanner),
+                    categoryName: "Mother & Baby",
+                    nameNo: 8,
+                    large_Banner: motherBabyLargeBanner,
+                    add_banner: motherBabyAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: motherBabyMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1684,7 +1749,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Fruits & Vegetables", nameNo: "9", large_Banner: fruitsVegLargeBanner, add_banner: fruitsVegAddBanner),
+                    categoryName: "Fruits & Vegetables",
+                    nameNo: 9,
+                    large_Banner: fruitsVegLargeBanner,
+                    add_banner: fruitsVegAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: fruitsVegMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1692,7 +1764,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Personal Care", nameNo: "10", large_Banner: personalCareLargeBanner, add_banner: personalCareAddBanner),
+                    categoryName: "Personal Care",
+                    nameNo: 10,
+                    large_Banner: personalCareLargeBanner,
+                    add_banner: personalCareAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: personalCareMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1700,7 +1779,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Bread Biscuit & Snacks", nameNo: "11", large_Banner: breadLargeBanner, add_banner: breadAddBanner),
+                    categoryName: "Bread Biscuit & Snacks",
+                    nameNo: 11,
+                    large_Banner: breadLargeBanner,
+                    add_banner: breadAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: breadMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1708,7 +1794,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Household", nameNo: "13", large_Banner: householdLargeBanner, add_banner: householdAddBanner),
+                    categoryName: "Household",
+                    nameNo: 13,
+                    large_Banner: householdLargeBanner,
+                    add_banner: householdAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: householdMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1716,7 +1809,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Chocolate & Sweets", nameNo: "46", large_Banner: chocolateLargeBanner, add_banner: chocolateAddBanner),
+                    categoryName: "Chocolate & Sweets",
+                    nameNo: 46,
+                    large_Banner: chocolateLargeBanner,
+                    add_banner: chocolateAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: chocolateMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1724,7 +1824,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Toys & Gift", nameNo: "14", large_Banner: toysGiftLargeBanner, add_banner: toysGiftAddBanner),
+                    categoryName: "Toys & Gift",
+                    nameNo: 14,
+                    large_Banner: toysGiftLargeBanner,
+                    add_banner: toysGiftAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: toysGiftMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -1732,7 +1839,14 @@ class _MyHomePageState extends State<CategoryHomeScreen> {
             isLocationChanged
                 ? Container()
                 : CategoryContainer(
-                    categoryName: "Stationery", nameNo: "199", large_Banner: stationaryLargeBanner, add_banner: stationaryAddBanner),
+                    categoryName: "Stationery",
+                    nameNo: 199,
+                    large_Banner: stationaryLargeBanner,
+                    add_banner: stationaryAddBanner,
+                    currentEbStoreId: currentWebStore!,
+                    currentUserId: currentUser!,
+                    catImage: stationaryMobileBanner,
+                  ),
 
             SizedBox(
               height: 30,
@@ -3095,7 +3209,7 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
 
 */
 
-/// new category container 12/02/
+/// new category container 15/02/
 /*
 import 'dart:convert';
 import 'dart:developer';
@@ -3106,6 +3220,7 @@ import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/controller/cartItemsController.dart';
+import 'package:customer_ui/dataModel/breat_biscuit.dart';
 import 'package:customer_ui/dataModel/category_data_model.dart';
 import 'package:customer_ui/dataModel/product_response.dart';
 import 'package:flutter/material.dart';
@@ -3113,16 +3228,25 @@ import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class CategoryContainer extends StatefulWidget {
-  const CategoryContainer(
-      {Key? key, required this.categoryName, required this.nameNo, required this.large_Banner, required this.add_banner})
-      : super(key: key);
+  const CategoryContainer({
+    Key? key,
+    required this.categoryName,
+    required this.nameNo,
+    required this.large_Banner,
+    required this.add_banner,
+    required this.currentUserId,
+    required this.currentEbStoreId,
+    required this.catImage,
+  }) : super(key: key);
   final String categoryName;
   final int nameNo;
+  final String catImage;
   final String large_Banner;
   final String add_banner;
+  final int currentUserId;
+  final int currentEbStoreId;
 
   @override
   _CategoryContainerState createState() => _CategoryContainerState();
@@ -3131,13 +3255,15 @@ class CategoryContainer extends StatefulWidget {
 class _CategoryContainerState extends State<CategoryContainer> {
   var categoryData = [];
 
-  var valueOne;
-  var categoryItemData = " ";
+  var valueOne = "all";
+  var categoryItemData = "Top Deals";
   var relatedProductsLink = " ";
+  //int lastPage = 1;
+  late final int cat_id;
   var adt;
   List<Product> listOfProducts = [];
-  List<Product> catetgoryProducts = [];
-  final PagingController<int, Product> _controller = PagingController(firstPageKey: 1);
+
+  //final PagingController<int, Product> _controller = PagingController(firstPageKey: 1);
 
   bool initPage = true;
 
@@ -3155,18 +3281,37 @@ class _CategoryContainerState extends State<CategoryContainer> {
     if (groceryDataMap["success"] == true) {
       var categoryDataModel = CategoryDataModel.fromJson(groceryDataMap);
 
-      ///
       categoryData = categoryDataModel.data;
-      categoryItemData = categoryDataModel.data[0].name;
-      relatedProductsLink = categoryData[0].links.products;
+      // categoryItemData = categoryDataModel.data[0].name;
+      // relatedProductsLink = categoryData[0].links.products;
 
       box.write(related_product_link, relatedProductsLink);
-
-      await fetchProducts(categoryDataModel.data[0].links.products);
-
       setState(() {});
+      // await fetchProducts(categoryDataModel.data[0].links.products);
     } else {}
   }
+
+  // Future fetchProducts(link2) async {
+  //   listOfProducts.clear();
+  //   log("tap link $link2");
+  //   log("new user id ${box.read(user_Id)}");
+  //   log("new web store id ${box.read(webStoreId)}");
+  //
+  //   var response = await get(Uri.parse(link2));
+  //   var productResponse = productMiniResponseFromJson(response.body.toString());
+  //
+  //   setState(() {
+  //     listOfProducts = productResponse.products!
+  //         .where(
+  //           //(ele) => ele.user_id == widget.currentEbStoreId || ele.user_id == widget.currentEbStoreId,
+  //           //(ele) => ele.user_id == box.read(userID) || ele.user_id == box.read(webStoreId),
+  //           (ele) => ele.user_id == widget.currentEbStoreId || ele.user_id == widget.currentEbStoreId,
+  //         )
+  //         .toList();
+  //   });
+  //
+  //   print("LIST_PRODUCT: ${listOfProducts.length}");
+  // }
 
   Future fetchProducts(link2) async {
     listOfProducts.clear();
@@ -3175,8 +3320,96 @@ class _CategoryContainerState extends State<CategoryContainer> {
     log("new web store id ${box.read(webStoreId)}");
 
     var response = await get(Uri.parse(link2));
-    var productResponse = productMiniResponseFromJson(response.body);
+    var productResponse = productMiniResponseFromJson(response.body.toString());
 
+    for (var ele in productResponse.products!) {
+      if (ele.user_id == box.read(user_Id) || ele.user_id == box.read(webStoreId)) {
+        log(" name  ${ele.name}");
+        listOfProducts.add(Product(
+            name: ele.name,
+            thumbnail_image: ele.thumbnail_image,
+            base_discounted_price: ele.base_discounted_price,
+            shop_name: ele.shop_name,
+            base_price: ele.base_price,
+            unit: ele.unit,
+            id: ele.id,
+            links: ele.links!,
+            discount: ele.discount!,
+            has_discount: ele.has_discount,
+            user_id: ele.user_id));
+        //log("product length ${listOfProducts.length}");
+        setState(() {});
+      }
+    }
+
+    print("LIST_PRODUCT: ${listOfProducts.length}");
+    listOfProducts.sort((first, next) => next.discount!.compareTo(first.discount!));
+
+    return listOfProducts;
+  }
+
+  /*
+  List allCategoryProducts = [];
+  Future _getProductsByCategory({required String cateId}) async {
+    final response12 =
+        await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/products/category/$cateId"), headers: {"Accept": "application/json"});
+    var searchDataMap = jsonDecode(response12.body);
+    if (searchDataMap["success"] == true) {
+      var fetchedProducts = BreadBiscuit.(response12.body);
+      allCategoryProducts = fetchedProducts.data;
+      for (var ele in fetchedProducts.products!) {
+        if (ele.user_id == widget.currentEbStoreId || ele.user_id == widget.currentEbStoreId) {
+          log(" name  ${ele.name}");
+          allCategoryProducts.add(Product(
+              name: ele.name,
+              thumbnail_image: ele.thumbnail_image,
+              base_discounted_price: ele.base_discounted_price,
+              shop_name: ele.shop_name,
+              base_price: ele.base_price,
+              unit: ele.unit,
+              id: ele.id,
+              links: ele.links!,
+              discount: ele.discount!,
+              has_discount: ele.has_discount,
+              user_id: ele.user_id));
+          //log("product length ${listOfProducts.length}");
+
+          setState(() {});
+        }
+        print("LIST_PRODUCT Of Category Product: ${allCategoryProducts.length}");
+      }
+      /*setState(() {
+        lastPage = fetchedProducts.meta!.lastPage!;
+        for (var ele in fetchedProducts.products!) {
+          print("BOX_VENDOR: ${widget.currentEbStoreId}");
+          print("USER_ID: ${ele.user_id}");
+          print("BOX_USER_ID: ${widget.currentUserId}");
+
+          /// temporary
+          /// if (ele.user_id == widget.currentUserId || ele.user_id == widget.currentEbStoreId) {
+          if (ele.user_id == widget.currentUserId || ele.user_id == widget.currentEbStoreId) {
+            ///
+            log(" name  ${ele.name}");
+            categoryProducts.add(Product(
+                name: ele.name,
+                thumbnail_image: ele.thumbnail_image,
+                base_discounted_price: ele.base_discounted_price,
+                shop_name: ele.shop_name,
+                base_price: ele.base_price,
+                unit: ele.unit,
+                id: ele.id,
+                links: ele.links!,
+                discount: ele.discount!,
+                has_discount: ele.has_discount,
+                user_id: ele.user_id));
+
+            setState(() {});
+          }
+        }
+      });*/
+    }
+
+    /*
     for (var ele in productResponse.products!) {
       if (ele.user_id == box.read(user_Id) || ele.user_id == box.read(webStoreId)) {
         log(" name  ${ele.name}");
@@ -3196,6 +3429,64 @@ class _CategoryContainerState extends State<CategoryContainer> {
         setState(() {});
       }
     }
+     */
+    allCategoryProducts.sort((first, next) => next.discount!.compareTo(first.discount!));
+
+    return allCategoryProducts;
+  }
+*/
+
+  var categoryProducts = [];
+  List allCategoryProducts = [];
+
+  Future _getProductsByCategory({required String cateId}) async {
+    //categoryProducts.clear();
+
+    final response12 =
+        await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/products/category/$cateId"), headers: {"Accept": "application/json"});
+
+    var biscuitSweetsDataMap = jsonDecode(response12.body);
+
+    if (biscuitSweetsDataMap["success"] == true) {
+      //log("category data after tap $biscuitSweetsDataMap");
+
+      var biscuitSweetsDataModel = BreadBiscuit.fromJson(biscuitSweetsDataMap);
+      List<ProductsData> prodData = biscuitSweetsDataModel.data;
+
+      allCategoryProducts =
+          prodData.where((element) => element.userId == box.read(user_Id) || element.userId == box.read(webStoreId)).toList();
+      // for (var ele in biscuitSweetsDataModel.data) {
+      //   productsData.clear();
+      //
+      //   log("element user_id: ${ele.userId == box.read(user_Id) || ele.userId == box.read(webStoreId)}");
+      //   // log("seller user_id: ${ele.userId == box.read(webStoreId)}");
+      //   if (ele.userId == box.read(user_Id) || ele.userId == box.read(webStoreId)) {
+      //     productsData.add(ProductsData(
+      //
+      //         ///name: ele.name,
+      //         name: ele.name,
+      //         thumbnailImage: ele.thumbnailImage,
+      //         baseDiscountedPrice: ele.baseDiscountedPrice,
+      //         shopName: ele.shopName,
+      //         basePrice: ele.basePrice,
+      //         unit: ele.unit,
+      //         id: ele.id,
+      //         links: ele.links!,
+      //         discount: ele.discount!,
+      //         hasDiscount: ele.hasDiscount,
+      //         userId: ele.userId));
+      //   }
+      // }
+      // Future.delayed(Duration(seconds: 3), () {
+      setState(() {});
+      // });
+
+      //relatedProductsLink=ca
+      //log("categoryProducts data length ${categoryProducts.length}");
+    } else {
+      //log("data invalid");
+    }
+    // log("after decode $dataMap");
   }
 
   Future<void> addToCart(
@@ -3219,42 +3510,8 @@ class _CategoryContainerState extends State<CategoryContainer> {
       ///await updateAddressInCart(userId);
       await controller.getCartName();
     } else {
+      print(res.body);
       showToast("Something went wrong", context: context);
-    }
-  }
-
-  Future<List<Product>> _getProductsByCategory({required int cateId, int page = 1}) async {
-    final response12 = await get(Uri.parse("http://test.protidin.com.bd:88/api/v2/products/category/$cateId?page=$page"),
-        headers: {"Accept": "application/json"});
-
-    List<Product> tempList = [];
-
-    var searchDataMap = jsonDecode(response12.body);
-    if (searchDataMap["success"] == true) {
-      setState(() {
-        var searchProduct = productMiniResponseFromJson(response12.body);
-        // names = tempList;
-        for (int i = 0; i < searchProduct.products!.length; i++) {
-          tempList.add(searchProduct.products![i]);
-        }
-        catetgoryProducts = tempList;
-        //_filter.clear();
-      });
-    }
-
-    tempList.sort((first, next) => next.discount!.compareTo(first.discount!));
-
-    return tempList;
-  }
-
-  Future<void> _fetchPage(int pageKey) async {
-    try {
-      final newItems = await _getProductsByCategory(page: pageKey, cateId: widget.nameNo);
-
-      final nextPageKey = pageKey + newItems.length;
-      _controller.appendPage(newItems, nextPageKey);
-    } catch (error) {
-      _controller.error = error;
     }
   }
 
@@ -3264,9 +3521,8 @@ class _CategoryContainerState extends State<CategoryContainer> {
     super.initState();
     log("name no ${widget.nameNo}");
     getCategoryData(name: widget.nameNo.toString());
-    _controller.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
-    });
+    //_controller.addPageRequestListener((pageKey) {_fetchPage(pageKey);});
+    _getProductsByCategory(cateId: widget.nameNo.toString());
 
     ///fetchProducts("link2");
   }
@@ -3277,7 +3533,6 @@ class _CategoryContainerState extends State<CategoryContainer> {
     var width = SizeConfig.screenWidth;
     var height = SizeConfig.screenHeight;
     var block = SizeConfig.block;
-    if (initPage) valueOne = 'all';
     return Column(
       children: [
         Container(
@@ -3356,14 +3611,13 @@ class _CategoryContainerState extends State<CategoryContainer> {
                     return GestureDetector(
                         onTap: () {
                           setState(() {
-                            initPage = false;
-                            valueOne = index == 0 ? 'all' : (index - 1).toString();
-                            categoryItemData = index == 0 ? 'All' : categoryData[index - 1].name;
+                            categoryItemData = index == 0 ? 'Top Deals' : categoryData[index - 1].name;
+                            initPage = index == 0;
                             if (index != 0) relatedProductsLink = categoryData[index - 1].links.products;
+                            valueOne = index == 0 ? 'all' : (index - 1).toString();
                             log("related link $relatedProductsLink");
-                            if (index != 0) fetchProducts(categoryData[index - 1].links.products);
-                            setState(() {});
                           });
+                          if (index != 0) fetchProducts(categoryData[index - 1].links.products);
                         },
                         child: Container(
                           height: height * 0.2,
@@ -3388,7 +3642,9 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(0),
                                     child: index == 0
-                                        ? Image.asset("assets/app_logo.png")
+                                        ? Image.network(
+                                            imagePath + widget.catImage,
+                                          )
                                         : categoryData[index - 1].mobileBanner.isEmpty
                                             ? Image.asset("assets/app_logo.png")
                                             : Image.network(
@@ -3399,53 +3655,13 @@ class _CategoryContainerState extends State<CategoryContainer> {
                               ),
                               sized5,
                               Text(
-                                index == 0 ? 'All' : categoryData[index - 1].name,
+                                index == 0 ? 'Top Deals' : categoryData[index - 1].name,
                                 style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
                                 textAlign: TextAlign.center,
                               ),
                             ],
                           ),
-                        )
-                        // : Padding(
-                        //     padding: const EdgeInsets.only(left: 5.0),
-                        //     child: Container(
-                        //         //height: height * 0.2,
-                        //         height: height * 0.2,
-                        //         width: width * 0.35,
-                        //         margin: EdgeInsets.symmetric(vertical: 5.0),
-                        //         decoration: BoxDecoration(
-                        //           color: Colors.blueGrey,
-                        //           borderRadius: BorderRadius.circular(10.0),
-                        //         ),
-                        //         child: Column(
-                        //           children: [
-                        //             Container(
-                        //               height: height * 0.15,
-                        //               width: width * 0.30,
-                        //               decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
-                        //               child: Padding(
-                        //                 padding: const EdgeInsets.all(0),
-                        //                 child: Center(
-                        //                   child: categoryData[index].mobileBanner.isEmpty
-                        //                       ?
-                        //                       //Text("OK"):
-                        //                       Image.asset("assets/app_logo.png")
-                        //                       : Image.network(
-                        //                           imagePath + categoryData[index].mobileBanner,
-                        //                         ),
-                        //                 ),
-                        //               ),
-                        //             ),
-                        //             sized5,
-                        //             Text(
-                        //               categoryData[index].name,
-                        //               style: TextStyle(color: Color(0xFF515151), fontSize: block * 4, fontWeight: FontWeight.w700),
-                        //               textAlign: TextAlign.center,
-                        //             ),
-                        //           ],
-                        //         )),
-                        //   ),
-                        );
+                        ));
                   },
                 ),
               ),
@@ -3468,25 +3684,18 @@ class _CategoryContainerState extends State<CategoryContainer> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(15, 0, 8, 0),
                 child: Container(
-                  height: height * 0.32,
-                  width: width,
-                  child: valueOne.toString() == 'all' || initPage
-                      ? PagedListView<int, Product>(
-                          pagingController: _controller,
-                          scrollDirection: Axis.horizontal,
-                          builderDelegate: PagedChildBuilderDelegate<Product>(
-                            firstPageErrorIndicatorBuilder: (ctx) => Container(),
-                            newPageErrorIndicatorBuilder: (ctx) => Container(),
-                            noItemsFoundIndicatorBuilder: (ctx) => Center(
-                              child: Text('No item'),
-                            ),
-                            noMoreItemsIndicatorBuilder: (ctx) => Center(
-                              child: Text('No more item'),
-                            ),
-                            itemBuilder: (context, item, index) {
+                    height: height * 0.35,
+                    width: width,
+                    child: initPage
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: allCategoryProducts.length,
+                            itemBuilder: (_, index) {
                               return Padding(
                                 padding: const EdgeInsets.only(right: 8.0),
                                 child: Container(
+                                  width: MediaQuery.of(context).size.width / 2.1,
                                   decoration: BoxDecoration(color: Color(0xFFF4F1F5), borderRadius: BorderRadius.circular(15.0)),
                                   //height: MediaQuery.of(context).size.height/3.2,width: MediaQuery.of(context).size.width / 2.34,
                                   child: Column(
@@ -3501,7 +3710,7 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                           height: MediaQuery.of(context).size.height / 41,
                                           margin: EdgeInsets.only(top: 10),
                                           decoration: BoxDecoration(
-                                            color: item.has_discount == true ? Color(0xFF10AA2A) : Color(0xFFF4F1F5),
+                                            color: allCategoryProducts[index].hasDiscount == true ? Color(0xFF10AA2A) : Color(0xFFF4F1F5),
                                             borderRadius:
                                                 BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
                                           ),
@@ -3509,12 +3718,12 @@ class _CategoryContainerState extends State<CategoryContainer> {
 
                                           child: Align(
                                             alignment: Alignment.centerLeft,
-                                            child: item.has_discount == true
+                                            child: allCategoryProducts[index].hasDiscount == true
                                                 ? Padding(
                                                     padding: const EdgeInsets.only(left: 3.0),
                                                     child: Text(
                                                       //"15% OFF",
-                                                      "${item.discount.toString()}TK OFF",
+                                                      "${allCategoryProducts[index].discount.toString()}TK OFF",
                                                       style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
                                                     ),
                                                   )
@@ -3530,19 +3739,20 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                       ///
                                       GestureDetector(
                                         onTap: () {
-                                          log("details ${item.links!.details}");
+                                          log("details ${allCategoryProducts[index].links!.details}");
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => ProductDetails(
-                                                  detailsLink: item.links!.details!, relatedProductLink: relatedProductsLink),
+                                                  detailsLink: allCategoryProducts[index].links!.details!,
+                                                  relatedProductLink: relatedProductsLink),
                                             ),
                                           );
                                         },
                                         child: Container(
-                                          child: Image.network(imagePath + item.thumbnail_image.toString()),
-                                          height: MediaQuery.of(context).size.height / 8,
-                                          width: MediaQuery.of(context).size.width / 2.34,
+                                          child: Image.network(imagePath + allCategoryProducts[index].thumbnailImage.toString()),
+                                          height: MediaQuery.of(context).size.height / 7.9,
+                                          width: MediaQuery.of(context).size.width / 2,
                                         ),
                                       ),
 
@@ -3550,32 +3760,37 @@ class _CategoryContainerState extends State<CategoryContainer> {
 
                                       InkWell(
                                         onTap: () {
-                                          log("details ${item.links!.details}");
+                                          log("details ${allCategoryProducts[index].links!.details}");
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => ProductDetails(
-                                                  detailsLink: item.links!.details!, relatedProductLink: relatedProductsLink),
+                                                  detailsLink: allCategoryProducts[index].links!.details!,
+                                                  relatedProductLink: relatedProductsLink),
                                             ),
                                           );
                                         },
                                         child: FittedBox(
                                           child: Container(
                                             ///height: height! * 0.08,
-                                            width: MediaQuery.of(context).size.width / 2.36,
-                                            height: MediaQuery.of(context).size.height / 18,
+                                            width: MediaQuery.of(context).size.width / 2,
+                                            height: MediaQuery.of(context).size.height / 14.2,
                                             child: Padding(
                                               padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-                                              child: Text(
-                                                item.name.toString(),
-                                                style: TextStyle(
-                                                  color: Color(0xFF515151),
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontFamily: "CeraProBold",
+                                              child: Center(
+                                                child: Text(
+                                                  allCategoryProducts[index].name.toString(),
+                                                  style: TextStyle(
+                                                    color: Color(0xFF515151),
+                                                    fontSize: 15.3111,
+                                                    //fontWeight: FontWeight.w300,
+                                                    fontFamily: "CeraProMedium",
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle: FontStyle.normal,
+                                                  ),
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
                                                 ),
-                                                maxLines: 2,
-                                                textAlign: TextAlign.center,
                                               ),
                                             ),
                                           ),
@@ -3585,12 +3800,17 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                       Align(
                                         alignment: Alignment.center,
                                         child: Container(
-                                          height: MediaQuery.of(context).size.height / 38,
-                                          width: MediaQuery.of(context).size.width / 2.5,
+                                          height: MediaQuery.of(context).size.height / 36,
+                                          width: MediaQuery.of(context).size.width / 2,
                                           child: Center(
                                             child: Text(
-                                              item.unit.toString(),
-                                              style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                              allCategoryProducts[index].unit.toString(),
+                                              style: TextStyle(
+                                                color: Colors.grey.withOpacity(0.9),
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'CeraProMedium',
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -3600,32 +3820,44 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         child: Center(
                                           child: Container(
-                                            height: MediaQuery.of(context).size.height / 24,
-                                            width: MediaQuery.of(context).size.width / 2.34,
+                                            height: MediaQuery.of(context).size.height / 22,
+
+                                            ///width: MediaQuery.of(context).size.width / 2.34,
+                                            width: MediaQuery.of(context).size.width / 2.0,
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 Container(
-                                                  child: Image.asset("assets/p.png"),
-                                                  height: 20,
+                                                  child: Image.asset(
+                                                    "assets/p.png",
+                                                    height: 22,
+                                                    width: 22,
+                                                  ),
+                                                  height: 22,
                                                   width: 22,
                                                 ),
-                                                Text(item.base_discounted_price.toString(),
-                                                    style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
-                                                item.base_discounted_price == item.base_price
-                                                    ? Text("")
-                                                    : Text(item.base_price.toString(),
+                                                Text(allCategoryProducts[index].baseDiscountedPrice.toString(),
+                                                    style: TextStyle(
+                                                      color: Color(0xFF515151),
+                                                      fontSize: 19,
+                                                      fontFamily: 'CeraProMedium',
+                                                      fontWeight: FontWeight.w700,
+                                                    )),
+                                                allCategoryProducts[index].baseDiscountedPrice == allCategoryProducts[index].basePrice
+                                                    ? Container(width: 20, child: Text(""))
+                                                    : Text(allCategoryProducts[index].basePrice.toString(),
                                                         style: TextStyle(
                                                             color: Color(0xFFA299A8),
-                                                            fontSize: 12,
+                                                            fontSize: 13,
                                                             fontWeight: FontWeight.w400,
+                                                            fontFamily: 'CeraProMedium',
                                                             decoration: TextDecoration.lineThrough)),
                                                 Padding(
-                                                  padding: const EdgeInsets.only(left: 10),
+                                                  padding: const EdgeInsets.only(left: 12),
                                                 ),
                                                 InkWell(
                                                   onTap: () {
-                                                    addToCart(item.id, box.read(userID), 1);
+                                                    addToCart(allCategoryProducts[index].id, box.read(userID), 1);
 
                                                     ///
                                                     //box.write(list_of_products, listOfProducts[index].id);
@@ -3652,16 +3884,20 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                         ),
                                       ),
 
+                                      SizedBox(
+                                        height: 4.2,
+                                      ),
                                       Container(
                                         //height: height! * 0.03,
-                                        height: MediaQuery.of(context).size.height / 30,
-                                        width: MediaQuery.of(context).size.width / 2.34,
+                                        height: MediaQuery.of(context).size.height / 28,
+                                        //width: MediaQuery.of(context).size.width / 2.34,
+                                        width: MediaQuery.of(context).size.width / 2.0,
                                         decoration: BoxDecoration(
                                             color: Color(0xFFDDEAE1),
                                             borderRadius:
                                                 BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
                                         child: Padding(
-                                          padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
+                                          padding: const EdgeInsets.fromLTRB(1, 0, 1, 5),
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -3675,7 +3911,12 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                                 padding: const EdgeInsets.fromLTRB(5, 3, 0, 0),
                                                 child: Text(
                                                   "  Earning  +৳18",
-                                                  style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'CeraProMedium',
+                                                  ),
                                                 ),
                                               ),
                                             ],
@@ -3686,175 +3927,238 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                   ),
                                 ),
                               );
-                            },
-                          ),
-                        )
-                      : ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: listOfProducts.length,
-                          itemBuilder: (_, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Container(
-                                decoration: BoxDecoration(color: Color(0xFFF4F1F5), borderRadius: BorderRadius.circular(15.0)),
-                                //height: MediaQuery.of(context).size.height/3.2,width: MediaQuery.of(context).size.width / 2.34,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Container(
-                                        width: MediaQuery.of(context).size.width / 5,
-
-                                        height: MediaQuery.of(context).size.height / 41,
-                                        margin: EdgeInsets.only(top: 10),
-                                        decoration: BoxDecoration(
-                                          color: listOfProducts[index].has_discount == true ? Color(0xFF10AA2A) : Color(0xFFF4F1F5),
-                                          borderRadius:
-                                              BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
-                                        ),
-                                        //
-
-                                        child: Align(
-                                          alignment: Alignment.centerLeft,
-                                          child: listOfProducts[index].has_discount == true
-                                              ? Padding(
-                                                  padding: const EdgeInsets.only(left: 3.0),
-                                                  child: Text(
-                                                    //"15% OFF",
-                                                    "${listOfProducts[index].discount.toString()}TK OFF",
-                                                    style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
-                                                  ),
-                                                )
-                                              : Text(
-                                                  //"15% OFF",
-                                                  "",
-                                                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
-                                                ),
-                                        ),
-                                      ),
-                                    ),
-
-                                    ///
-                                    GestureDetector(
-                                      onTap: () {
-                                        log("details ${listOfProducts[index].links!.details}");
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ProductDetails(
-                                                detailsLink: listOfProducts[index].links!.details!,
-                                                relatedProductLink: relatedProductsLink),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        child: Image.network(imagePath + listOfProducts[index].thumbnail_image.toString()),
-                                        height: MediaQuery.of(context).size.height / 8,
-                                        width: MediaQuery.of(context).size.width / 2.34,
-                                      ),
-                                    ),
-
-                                    ///
-
-                                    InkWell(
-                                      onTap: () {
-                                        log("details ${listOfProducts[index].links!.details}");
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ProductDetails(
-                                                detailsLink: listOfProducts[index].links!.details!,
-                                                relatedProductLink: relatedProductsLink),
-                                          ),
-                                        );
-                                      },
-                                      child: FittedBox(
+                            })
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: listOfProducts.length,
+                            itemBuilder: (_, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width / 2.1,
+                                  decoration: BoxDecoration(color: Color(0xFFF4F1F5), borderRadius: BorderRadius.circular(15.0)),
+                                  //height: MediaQuery.of(context).size.height/3.2,width: MediaQuery.of(context).size.width / 2.34,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerLeft,
                                         child: Container(
-                                          ///height: height! * 0.08,
-                                          width: MediaQuery.of(context).size.width / 2.36,
-                                          height: MediaQuery.of(context).size.height / 18,
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
-                                            child: Text(
-                                              listOfProducts[index].name.toString(),
-                                              style: TextStyle(
-                                                color: Color(0xFF515151),
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600,
-                                                fontFamily: "CeraProBold",
+                                          width: MediaQuery.of(context).size.width / 5,
+
+                                          height: MediaQuery.of(context).size.height / 41,
+                                          margin: EdgeInsets.only(top: 10),
+                                          decoration: BoxDecoration(
+                                            color: listOfProducts[index].has_discount == true ? Color(0xFF10AA2A) : Color(0xFFF4F1F5),
+                                            borderRadius:
+                                                BorderRadius.only(topRight: Radius.circular(4.0), bottomRight: Radius.circular(4.0)),
+                                          ),
+                                          //
+
+                                          child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: listOfProducts[index].has_discount == true
+                                                ? Padding(
+                                                    padding: const EdgeInsets.only(left: 3.0),
+                                                    child: Text(
+                                                      //"15% OFF",
+                                                      "${listOfProducts[index].discount.toString()}TK OFF",
+                                                      style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w700),
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    //"15% OFF",
+                                                    "",
+                                                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                                                  ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      ///
+                                      GestureDetector(
+                                        onTap: () {
+                                          log("details ${listOfProducts[index].links!.details}");
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ProductDetails(
+                                                  detailsLink: listOfProducts[index].links!.details!,
+                                                  relatedProductLink: relatedProductsLink),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          child: Image.network(imagePath + listOfProducts[index].thumbnail_image.toString()),
+                                          height: MediaQuery.of(context).size.height / 7.8,
+                                          width: MediaQuery.of(context).size.width / 2,
+                                        ),
+                                      ),
+
+                                      ///
+
+                                      InkWell(
+                                        onTap: () {
+                                          log("details ${listOfProducts[index].links!.details}");
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => ProductDetails(
+                                                  detailsLink: listOfProducts[index].links!.details!,
+                                                  relatedProductLink: relatedProductsLink),
+                                            ),
+                                          );
+                                        },
+                                        child: FittedBox(
+                                          child: Container(
+                                            ///height: height! * 0.08,
+                                            width: MediaQuery.of(context).size.width / 2,
+                                            height: MediaQuery.of(context).size.height / 14.5,
+                                            child: Padding(
+                                              padding: const EdgeInsets.fromLTRB(5, 5, 5, 0),
+                                              child: Center(
+                                                child: Text(
+                                                  listOfProducts[index].name.toString(),
+                                                  style: TextStyle(
+                                                    color: Color(0xFF515151),
+                                                    fontSize: 15.3111,
+                                                    //fontWeight: FontWeight.w300,
+                                                    fontFamily: "CeraProMedium",
+                                                    fontWeight: FontWeight.w500,
+                                                    fontStyle: FontStyle.normal,
+                                                  ),
+                                                  maxLines: 2,
+                                                  textAlign: TextAlign.center,
+                                                ),
                                               ),
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
 
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        height: MediaQuery.of(context).size.height / 38,
-                                        width: MediaQuery.of(context).size.width / 2.5,
-                                        child: Center(
-                                          child: Text(
-                                            listOfProducts[index].unit.toString(),
-                                            style: TextStyle(color: Colors.grey.withOpacity(0.9)),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          height: MediaQuery.of(context).size.height / 36,
+                                          width: MediaQuery.of(context).size.width / 2,
+                                          child: Center(
+                                            child: Text(
+                                              listOfProducts[index].unit.toString(),
+                                              style: TextStyle(
+                                                color: Colors.grey.withOpacity(0.9),
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w400,
+                                                fontFamily: 'CeraProMedium',
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
 
-                                    Padding(
-                                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                      child: Center(
-                                        child: Container(
-                                          height: MediaQuery.of(context).size.height / 24,
-                                          width: MediaQuery.of(context).size.width / 2.34,
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                        child: Center(
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.height / 22,
+
+                                            ///width: MediaQuery.of(context).size.width / 2.34,
+                                            width: MediaQuery.of(context).size.width / 2.0,
+                                            child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Container(
+                                                  child: Image.asset(
+                                                    "assets/p.png",
+                                                    height: 22,
+                                                    width: 22,
+                                                  ),
+                                                  height: 22,
+                                                  width: 22,
+                                                ),
+                                                Text(listOfProducts[index].base_discounted_price.toString(),
+                                                    style: TextStyle(
+                                                      color: Color(0xFF515151),
+                                                      fontSize: 19,
+                                                      fontFamily: 'CeraProMedium',
+                                                      fontWeight: FontWeight.w700,
+                                                    )),
+                                                listOfProducts[index].base_discounted_price == listOfProducts[index].base_price
+                                                    ? Container(width: 20, child: Text(""))
+                                                    : Text(
+                                                        listOfProducts[index].base_price.toString(),
+                                                        style: TextStyle(
+                                                            color: Color(0xFFA299A8),
+                                                            fontSize: 13,
+                                                            fontWeight: FontWeight.w400,
+                                                            fontFamily: 'CeraProMedium',
+                                                            decoration: TextDecoration.lineThrough),
+                                                      ),
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 11.4),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    addToCart(listOfProducts[index].id, box.read(userID), 1);
+
+                                                    ///
+                                                    //box.write(list_of_products, listOfProducts[index].id);
+
+                                                    ///
+                                                    //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+                                                  },
+                                                  child: Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
+                                                    child: Center(
+                                                      child: Image.asset(
+                                                        "assets/pi.png",
+                                                        height: 40,
+                                                        width: 40,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      SizedBox(
+                                        height: 4.2,
+                                      ),
+                                      Container(
+                                        //height: height! * 0.03,
+                                        height: MediaQuery.of(context).size.height / 28,
+                                        //width: MediaQuery.of(context).size.width / 2.34,
+                                        width: MediaQuery.of(context).size.width / 2.0,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xFFDDEAE1),
+                                            borderRadius:
+                                                BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(1, 0, 1, 5),
                                           child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
                                               Container(
-                                                child: Image.asset("assets/p.png"),
-                                                height: 20,
-                                                width: 22,
+                                                child: Image.asset("assets/img_42.png"),
+                                                height: 17,
+                                                width: 15,
                                               ),
-                                              Text(listOfProducts[index].base_discounted_price.toString(),
-                                                  style: TextStyle(color: Color(0xFF515151), fontSize: 16, fontWeight: FontWeight.w700)),
-                                              listOfProducts[index].base_discounted_price == listOfProducts[index].base_price
-                                                  ? Text("")
-                                                  : Text(listOfProducts[index].base_price.toString(),
-                                                      style: TextStyle(
-                                                          color: Color(0xFFA299A8),
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.w400,
-                                                          decoration: TextDecoration.lineThrough)),
                                               Padding(
-                                                padding: const EdgeInsets.only(left: 10),
-                                              ),
-                                              InkWell(
-                                                onTap: () {
-                                                  addToCart(listOfProducts[index].id, box.read(userID), 1);
-
-                                                  ///
-                                                  //box.write(list_of_products, listOfProducts[index].id);
-
-                                                  ///
-                                                  //Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
-                                                },
-                                                child: Container(
-                                                  height: 40,
-                                                  width: 40,
-                                                  decoration: BoxDecoration(color: kPrimaryColor, shape: BoxShape.circle),
-                                                  child: Center(
-                                                    child: Image.asset(
-                                                      "assets/pi.png",
-                                                      height: 40,
-                                                      width: 40,
-                                                    ),
+                                                padding: const EdgeInsets.fromLTRB(5, 3, 0, 0),
+                                                child: Text(
+                                                  "  Earning  +৳18",
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    color: Colors.green,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontFamily: 'CeraProMedium',
                                                   ),
                                                 ),
                                               ),
@@ -3862,44 +4166,11 @@ class _CategoryContainerState extends State<CategoryContainer> {
                                           ),
                                         ),
                                       ),
-                                    ),
-
-                                    Container(
-                                      //height: height! * 0.03,
-                                      height: MediaQuery.of(context).size.height / 30,
-                                      width: MediaQuery.of(context).size.width / 2.34,
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFFDDEAE1),
-                                          borderRadius:
-                                              BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(1, 3, 1, 3),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Container(
-                                              child: Image.asset("assets/img_42.png"),
-                                              height: 17,
-                                              width: 15,
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.fromLTRB(5, 3, 0, 0),
-                                              child: Text(
-                                                "  Earning  +৳18",
-                                                style: TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          }),
-                ),
+                              );
+                            })),
               ),
 
               SizedBox(

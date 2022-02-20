@@ -38,9 +38,9 @@ class _Payment_ScreenState extends State<Payment_Screen> {
 
   void initState() {
     Future.delayed(Duration(seconds: 3), () {
-      controller.getCartName().then((value) {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
-      });
+      // controller.getCartName().then((value) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
+      // });
     });
     super.initState();
     // TODO: implement initState

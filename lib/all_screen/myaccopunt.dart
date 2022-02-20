@@ -148,27 +148,36 @@ class _MyAccountPageState extends State<MyAccountPage> {
           Center(
             child: Stack(
               children: [
-                Container(
-                  //color: Colors.white,
-                  height: 120,
-                  width: 120,
+                _selectedFile != null
+                    ? Container(
+                        //color: Colors.white,
+                        height: 120,
+                        width: 120,
 
-                  decoration: _selectedFile != null
-                      ? BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: FileImage(_selectedFile!),
-                          ),
-                        )
-                      : BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(box.read(userAvatar) != null ? imagePath + box.read(userAvatar).toString() : ""),
-                          ),
+                        decoration: _selectedFile != null
+                            ? BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(_selectedFile!),
+                                ),
+                              )
+                            : BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(box.read(userAvatar) != null ? imagePath + box.read(userAvatar) : ""),
+                                ),
+                              ),
+                      )
+                    : Container(
+                        //color: Colors.white,
+                        height: 120,
+                        width: 120,
+                        child: Image.asset(
+                          "assets/img_141.png",
                         ),
-                ),
+                      ),
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -307,17 +316,31 @@ class _MyAccountPageState extends State<MyAccountPage> {
                                     ),
                                   ),
                                 ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    box.read(account_userAddress) ?? "No address",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
+                                box.read(account_userAddress) == null
+                                    ? Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          //box.read(account_userAddress) ?? "No address",
+                                          "No address",
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      )
+                                    : Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          //box.read(account_userAddress) ?? "No address",
+                                          box.read(account_userAddress),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
                               ],
                             ),
                           ),

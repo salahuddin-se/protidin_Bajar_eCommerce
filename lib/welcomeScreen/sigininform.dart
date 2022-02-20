@@ -349,20 +349,28 @@ class _MyHomePageState extends State<SignInPage> {
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:customer_ui/all_screen/cart_detailspage.dart';
 import 'package:customer_ui/all_screen/home_screen.dart';
 import 'package:customer_ui/components/apis.dart';
 import 'package:customer_ui/components/button_widget.dart';
 import 'package:customer_ui/components/size_config.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
+import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:customer_ui/dataModel/login_user_model.dart';
+import 'package:customer_ui/dataModel/order_product_model.dart';
+import 'package:customer_ui/preferences/user_preferance.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/extension_instance.dart';
 import 'package:http/http.dart' as http;
 
 import 'signupform.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key? key}) : super(key: key);
+  const SignInPage({Key? key, this.isFromCart = false, this.orderList}) : super(key: key);
+  final bool isFromCart;
+  final orderList;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -371,6 +379,7 @@ class _MyHomePageState extends State<SignInPage> {
   var userEmailController = TextEditingController();
   var userPassController = TextEditingController();
   var formKey = GlobalKey<FormState>();
+  var controller = Get.put(CartItemsController());
 
   //User Log in API
   Future userSignIn(email, password) async {
@@ -391,10 +400,42 @@ class _MyHomePageState extends State<SignInPage> {
       log("User AVATAR: ${userDataModel.user.avatarOriginal}");
       box.write(userAvatar, userDataModel.user.avatarOriginal);
       box.write(userPhone, userDataModel.user.phone);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
-
-      ///print(box.read('userName'));
-      ///log(userDataModel.user.name);
+      await UserPreference.setBool(UserPreference.isLoggedIn, true);
+      if (widget.isFromCart) {
+        if (widget.orderList != null) {
+          for (var cartItem in widget.orderList) {
+            controller.addToCart(
+              OrderItemModel(
+                discount: cartItem.discount,
+                discountType: cartItem.discountType,
+                price: cartItem.price,
+                productThumbnailImage: cartItem.productThumbnailImage,
+                productName: cartItem.productName,
+                quantity: cartItem.quantity,
+                userId: cartItem.userId,
+                variant: cartItem.variant,
+                productId: cartItem.productId,
+              ),
+              context,
+            );
+          }
+        }
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CartDetails(),
+            ),
+          );
+        });
+      } else {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryHomeScreen(),
+          ),
+        );
+      }
 
       setState(() {});
     }
@@ -414,6 +455,11 @@ class _MyHomePageState extends State<SignInPage> {
 
     setState(() {});
     //log("demo length "+demo.length.toString());
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override

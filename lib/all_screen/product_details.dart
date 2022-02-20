@@ -7,11 +7,10 @@ import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:customer_ui/dataModel/breat_biscuit.dart';
+import 'package:customer_ui/dataModel/order_product_model.dart';
 import 'package:customer_ui/dataModel/product_details_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class ProductDetails extends StatefulWidget {
@@ -30,35 +29,6 @@ class _ProductDetailsState extends State<ProductDetails> {
   var productsData = [];
   var scaffoldKey = GlobalKey<ScaffoldState>();
   var controller = Get.put(CartItemsController());
-
-  Future<void> addToCart(
-    id,
-    userId,
-    quantity,
-  ) async {
-    log("user id $userId");
-    var res = await http.post(Uri.parse("http://test.protidin.com.bd:88/api/v2/carts/add"),
-        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8', 'Authorization': 'Bearer ${box.read(userToken)}'},
-        body: jsonEncode(<String, dynamic>{
-          "id": id.toString(),
-          "variant": "",
-          "user_id": userId,
-          "quantity": quantity,
-        }));
-
-    if (res.statusCode == 200 || res.statusCode == 201) {
-      showToast("Cart Added Successfully", context: context);
-
-      ///await updateAddressInCart(userId);
-      await controller.getCartName();
-
-      //box.write(key, controller);
-
-      //await getCartSummary();
-    } else {
-      showToast("Something went wrong", context: context);
-    }
-  }
 
   Future<void> getProductsDetails() async {
     final response = await get(Uri.parse(widget.detailsLink), headers: {"Accept": "application/json"});
@@ -317,7 +287,18 @@ class _ProductDetailsState extends State<ProductDetails> {
                             padding: const EdgeInsets.symmetric(horizontal: 100),
                             child: InkWell(
                               onTap: () {
-                                addToCart(productsData[index].id, box.read(userID), 1);
+                                controller.addToCart(
+                                    OrderItemModel(
+                                        productId: productsData[index].id,
+                                        price: int.tryParse(productsData[index].basePrice!.toString().replaceAll('৳', '')),
+                                        productThumbnailImage: productsData[index].thumbnailImage,
+                                        productName: productsData[index].name,
+                                        quantity: 1,
+                                        userId: box.read(userID),
+                                        variant: '',
+                                        discount: productsData[index].discount,
+                                        discountType: productsData[index].discountType),
+                                    context);
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -370,12 +351,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                     SizedBox(
                                       height: 15,
                                     ),
-                                    Flexible(
+                                    Expanded(
                                       child: ListView.builder(
                                           shrinkWrap: true,
                                           scrollDirection: Axis.vertical,
                                           itemCount: relatedData.length,
-                                          physics: NeverScrollableScrollPhysics(),
+                                          //physics: NeverScrollableScrollPhysics(),
+                                          physics: ScrollPhysics(),
                                           itemBuilder: (_, index) {
                                             return FittedBox(
                                               child: Column(
@@ -405,6 +387,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                               child: Image.network(
                                                                 imagePath + relatedData[index].thumbnailImage,
                                                                 fit: BoxFit.cover,
+                                                                //height: height * 0.2,
                                                                 height: height * 0.2,
                                                               ),
                                                             ),
@@ -476,7 +459,22 @@ class _ProductDetailsState extends State<ProductDetails> {
                                                                     Expanded(child: Container()),
                                                                     InkWell(
                                                                       onTap: () {
-                                                                        addToCart(relatedData[index].id, box.read(userID), 1);
+                                                                        controller.addToCart(
+                                                                            OrderItemModel(
+                                                                              productId: relatedData[index].id,
+                                                                              price: int.tryParse(relatedData[index]
+                                                                                  .basePrice!
+                                                                                  .toString()
+                                                                                  .replaceAll('৳', '')),
+                                                                              productThumbnailImage: relatedData[index].thumbnailImage,
+                                                                              productName: relatedData[index].name,
+                                                                              quantity: 1,
+                                                                              userId: box.read(userID),
+                                                                              variant: '',
+                                                                              discount: relatedData[index].discount,
+                                                                              discountType: relatedData[index].discountType,
+                                                                            ),
+                                                                            context);
                                                                       },
                                                                       child: Container(
                                                                         padding: EdgeInsets.symmetric(horizontal: 7.0, vertical: 3.0),

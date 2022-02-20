@@ -4,6 +4,8 @@ class UserPreference {
   static SharedPreferences? instance;
   static const String showAreaDialogue = 'areaDialog';
   static const String selectedArea = 'selectedArea';
+  static const String isLoggedIn = 'insLoggedin';
+
   static Future<void> setPreference() async {
     instance = await SharedPreferences.getInstance();
   }
@@ -34,5 +36,9 @@ class UserPreference {
 
   static Future<bool> setString(String key, String value) {
     return instance!.setString(key, value);
+  }
+
+  static Future<bool> removePreferance(String key) {
+    return instance!.remove(key);
   }
 }
