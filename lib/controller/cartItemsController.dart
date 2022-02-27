@@ -21,6 +21,7 @@ class CartItemsController extends GetxController {
   Future<void> addToCart(OrderItemModel orderItemModel, BuildContext context) async {
     var res;
     bool isLocal = false;
+    bool isFromCart = false;
     List<OrderItemModel> _orderList = [];
     final jsonData = {
       "id": orderItemModel.productId,
@@ -44,9 +45,9 @@ class CartItemsController extends GetxController {
       box.write(cart_item, jsonEncode(_orderList));
       isLocal = true;
     }
-
     if (isLocal) {
-      showToast("Cart Added Successfully", context: context);
+      //showToast("Cart Added Successfully", context: context);
+      //showToast("Cart Added Successfully", context: context);
       print(box.read(cart_item));
 
       ///await updateAddressInCart(userId);
@@ -54,10 +55,7 @@ class CartItemsController extends GetxController {
     } else {
       if (res.statusCode == 200 || res.statusCode == 201) {
         showToast("Cart Added Successfully", context: context);
-
-        ///await updateAddressInCart(userId);
         await getCartName();
-
         //await getCartSummary();
       } else {
         showToast("Something went wrong", context: context);
@@ -83,7 +81,7 @@ class CartItemsController extends GetxController {
       localData = box.read(cart_item);
       print('CARTDATA: $localData');
     }
-    // log("Response code ${res.statusCode}");
+
     if (localData != null && localData != '') {
       var dataMap = jsonDecode(localData);
       print('CARTDATA: $dataMap');
@@ -93,12 +91,16 @@ class CartItemsController extends GetxController {
         (element) {
           cartItemsList.add(
             CartItems(
-                quantity: element.quantity,
-                productName: element.productName,
-                productThumbnailImage: element.productThumbnailImage,
-                price: element.price,
-                currencySymbol: '৳',
-                discount: element.discount),
+              quantity: element.quantity,
+              productName: element.productName,
+              productThumbnailImage: element.productThumbnailImage,
+              price: element.price,
+              currencySymbol: '৳',
+              discount: element.discount,
+              unit: element.unit,
+              userId: element.userId,
+              ownerId: element.ownerId,
+            ),
           );
         },
       );

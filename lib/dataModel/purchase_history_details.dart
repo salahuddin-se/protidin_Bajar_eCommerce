@@ -1,14 +1,15 @@
-class PurchaseHistoryModel {
-  PurchaseHistoryModel({
+class PurchaseHistoryDetails {
+  PurchaseHistoryDetails({
     required this.data,
     required this.success,
     required this.status,
   });
+
   late final List<Data> data;
   late final bool success;
   late final int status;
 
-  PurchaseHistoryModel.fromJson(Map<String, dynamic> json) {
+  PurchaseHistoryDetails.fromJson(Map<String, dynamic> json) {
     data = List.from(json['data']).map((e) => Data.fromJson(e)).toList();
     success = json['success'];
     status = json['status'];
@@ -27,6 +28,7 @@ class Data {
   Data({
     required this.id,
     required this.code,
+    required this.parentId,
     required this.userId,
     required this.shippingAddress,
     required this.paymentType,
@@ -45,12 +47,14 @@ class Data {
     required this.cancelRequest,
     required this.links,
   });
+
   late final int id;
   late final String code;
+  late final int parentId;
   late final int userId;
-  late final ShippingAddress? shippingAddress;
+  late final ShippingAddress shippingAddress;
   late final String paymentType;
-  late final Null? shippingType;
+  late final Null shippingType;
   late final String shippingTypeString;
   late final String paymentStatus;
   late final String paymentStatusString;
@@ -68,8 +72,17 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     code = json['code'];
+    parentId = json['parent_id'];
     userId = json['user_id'];
-    shippingAddress = ShippingAddress.fromJson(json['shipping_address']);
+    try {
+      shippingAddress = ShippingAddress.fromJson(json['shipping_address']);
+    } catch (err) {
+      shippingAddress = ShippingAddress.fromJson({
+        'address': 'No Address',
+        'country': '',
+        'city': '',
+      });
+    }
     paymentType = json['payment_type'];
     shippingType = null;
     shippingTypeString = json['shipping_type_string'];
@@ -91,8 +104,9 @@ class Data {
     final _data = <String, dynamic>{};
     _data['id'] = id;
     _data['code'] = code;
+    _data['parent_id'] = parentId;
     _data['user_id'] = userId;
-    _data['shipping_address'] = shippingAddress!.toJson();
+    _data['shipping_address'] = shippingAddress.toJson();
     _data['payment_type'] = paymentType;
     _data['shipping_type'] = shippingType;
     _data['shipping_type_string'] = shippingTypeString;
@@ -127,18 +141,19 @@ class ShippingAddress {
     required this.name,
     required this.email,
   });
-  late final int? id;
-  late final int? userId;
-  late final String? address;
-  late final String? country;
-  late final String? city;
-  late final String? postalCode;
-  late final String? phone;
-  late final int? setDefault;
-  late final String? createdAt;
-  late final String? updatedAt;
-  late final String? name;
-  late final String? email;
+
+  late final int id;
+  late final int userId;
+  late final String address;
+  late final String country;
+  late final String city;
+  late final String postalCode;
+  late final String phone;
+  late final int setDefault;
+  late final String createdAt;
+  late final String updatedAt;
+  late final String name;
+  late final String email;
 
   ShippingAddress.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -177,6 +192,7 @@ class Links {
   Links({
     required this.details,
   });
+
   late final String details;
 
   Links.fromJson(Map<String, dynamic> json) {

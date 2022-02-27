@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'history_order.dart';
 import 'order_canceled.dart';
+import 'partial_order.dart';
 
 class MyOrderTabBar extends StatefulWidget {
   const MyOrderTabBar({Key? key}) : super(key: key);
@@ -19,7 +20,7 @@ class _MyOrderTabBarState extends State<MyOrderTabBar> with SingleTickerProvider
   @override
   void initState() {
     // TODO: implement initState
-    controller = TabController(length: 3, vsync: this);
+    controller = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -45,15 +46,34 @@ class _MyOrderTabBarState extends State<MyOrderTabBar> with SingleTickerProvider
         ),
         iconTheme: IconThemeData(color: kBlackColor),
       ),
-      body: SizedBox(
+      body: Container(
         height: height,
         width: width,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: Column(
             children: [
-              SizedBox(
-                height: 50,
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 0.150,
+                    color: Colors.grey,
+                  ),
+                  color: Colors.white,
+                  //borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                        // color: Colors.grey.withOpacity(0.1),
+                        // spreadRadius: 5, //spread radius
+                        // blurRadius: 5, // blur radius
+                        // offset: Offset(0, 2),
+
+                        color: Colors.grey,
+                        //blurRadius: 15.0,
+                        offset: Offset(0.0, 0.75)),
+                  ],
+                ),
+                height: 52,
                 child: TabBar(
                   isScrollable: true,
                   indicatorColor: kPrimaryColor,
@@ -72,6 +92,10 @@ class _MyOrderTabBarState extends State<MyOrderTabBar> with SingleTickerProvider
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 25.0),
+                      child: Text("Partial", style: TextStyle(color: kBlackColor)),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 25.0),
                       child: Text("Canceled", style: TextStyle(color: kBlackColor)),
                     ),
                   ],
@@ -86,6 +110,7 @@ class _MyOrderTabBarState extends State<MyOrderTabBar> with SingleTickerProvider
                   children: const [
                     OngoingOrder(),
                     HistoryOrder(),
+                    PartialOrder(),
                     OrderCanceled(),
                   ],
                 ),

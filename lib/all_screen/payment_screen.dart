@@ -33,15 +33,24 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                               CurrentBookingDetails(request: booking)),
                     ).then((value) => setState(() {}));
                     print("refresh done ");
-                  });
-   */
+                  }
+  );
+  */
 
   void initState() {
-    Future.delayed(Duration(seconds: 3), () {
-      // controller.getCartName().then((value) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => CategoryHomeScreen()));
-      // });
-    });
+    Future.delayed(
+      Duration(seconds: 3),
+      () {
+        // controller.getCartName().then((value) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryHomeScreen(),
+          ),
+        );
+        // });
+      },
+    );
     super.initState();
     // TODO: implement initState
     log("order no ${widget.orderNo} grand total ${widget.grandTotal} address ${widget.address}");
@@ -80,9 +89,6 @@ class _Payment_ScreenState extends State<Payment_Screen> {
               SizedBox(
                 height: 25,
               ),
-
-              //SizedBox(height: 25,),
-
               Center(
                 child: Container(
                   //color: Colors.white,
@@ -94,7 +100,6 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                   ),
                 ),
               ),
-
               Container(
                 child: Center(
                   child: Text(
@@ -108,11 +113,9 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                   ),
                 ),
               ),
-
               SizedBox(
                 height: 10,
               ),
-
               Container(
                 child: Center(
                   child: Text(
@@ -126,11 +129,9 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                   ),
                 ),
               ),
-
               SizedBox(
                 height: 20,
               ),
-
               Align(
                 alignment: Alignment.center,
                 child: InkWell(
@@ -163,11 +164,9 @@ class _Payment_ScreenState extends State<Payment_Screen> {
                   ),
                 ),
               ),
-
               SizedBox(
                 height: 20,
               ),
-
               FittedBox(
                 child: Container(
                   width: MediaQuery.of(context).size.width / 1,

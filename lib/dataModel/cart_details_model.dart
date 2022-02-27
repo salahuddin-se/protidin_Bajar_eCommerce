@@ -45,6 +45,7 @@ class CartItems {
     this.lowerLimit,
     this.upperLimit,
     this.discount,
+    this.unit,
   });
   late final int? id;
   late final int? ownerId;
@@ -61,6 +62,7 @@ class CartItems {
   late final int? lowerLimit;
   late final int? upperLimit;
   int? discount;
+  dynamic unit;
 
   CartItems.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -77,6 +79,8 @@ class CartItems {
     quantity = json['quantity'];
     lowerLimit = json['lower_limit'];
     upperLimit = json['upper_limit'];
+    discount = json['discount'];
+    unit = json['unit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,6 +99,9 @@ class CartItems {
     _data['quantity'] = quantity;
     _data['lower_limit'] = lowerLimit;
     _data['upper_limit'] = upperLimit;
+    _data['discount'] = discount;
+    _data['unit'] = unit;
+
     return _data;
   }
 }

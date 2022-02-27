@@ -12,13 +12,14 @@ class CartSummaryModel {
   late final String subTotal;
   late final String tax;
   late final String shippingCost;
+  //late final String discount;
   late final String discount;
   late final String grandTotal;
   late final dynamic grandTotalValue;
   late final String couponCode;
   late final bool couponApplied;
 
-  CartSummaryModel.fromJson(Map<String, dynamic> json){
+  CartSummaryModel.fromJson(Map<String, dynamic> json) {
     subTotal = json['sub_total'];
     tax = json['tax'];
     shippingCost = json['shipping_cost'];

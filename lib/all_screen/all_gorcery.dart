@@ -86,6 +86,7 @@ class _AllGroceryState extends State<AllGrocery> {
                       discountPrice: listOfProducts[index].base_price,
                       actualPrice: listOfProducts[index].base_discounted_price,
                       id: listOfProducts[index].id,
+                      unit: listOfProducts[index].unit,
                       off: listOfProducts[index].discount.toString(),
                     );
                   },

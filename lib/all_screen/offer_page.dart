@@ -129,7 +129,7 @@ class _OfferPageState extends State<OfferPage> with SingleTickerProviderStateMix
                 Center(
                   child: InkWell(
                     onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetailsPage()));
                     },
                     child: Container(
                       height: 60,

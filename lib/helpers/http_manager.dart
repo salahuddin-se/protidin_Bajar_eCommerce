@@ -35,6 +35,7 @@ class HttpManager {
         }
       });
       res = response;
+      print('UPLOAD_RESPONE: ${response.data}');
     } catch (err) {
       print(err.toString());
     }

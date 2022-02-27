@@ -22,9 +22,12 @@ const userEmail = "USER_EMAIL";
 const userType = "USER_TYPE";
 const add_carts = "ADD_CARTS";
 const userAvatar = "USER_AVATAR";
+const avatarBytes = "AVATAR_BYTE";
 const userID = "USER_ID";
 const cartList = "CART_LIST";
 const category_name = "CART_LIST";
 const cart_item = "CART_ITEM";
+
+const physical_product = "PHYSICAL_PRODUCT";
 
 const bool checkPayments = false;

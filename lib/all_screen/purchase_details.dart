@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:customer_ui/components/utils.dart';
-import 'package:customer_ui/dataModel/purchase_details.dart';
+import 'package:customer_ui/dataModel/purchase_history_items.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
@@ -53,7 +53,7 @@ Future<void> getrelatedData() async {
 
     if (response6.statusCode == 200) {
       var dataMap = jsonDecode(response6.body);
-      var purchaseData = PurchaseDetails.fromJson(dataMap);
+      var purchaseData = PurchaseHistoryItems.fromJson(dataMap);
       purchaseDetails = purchaseData.data;
 
       ///log("last data ${purchaseData.last.code}");
@@ -90,7 +90,7 @@ Future<void> getrelatedData() async {
                       width: MediaQuery.of(context).size.width / 2.34,
                       child: Column(
                         children: [
-                          Text(purchaseDetails[index].product),
+                          Text(purchaseDetails[index].productName),
                           Text(purchaseDetails[index].tax.toString()),
                         ],
                       ),

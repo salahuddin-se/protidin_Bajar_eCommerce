@@ -1,3 +1,4 @@
+import 'package:customer_ui/all_screen/all_category.dart';
 import 'package:customer_ui/all_screen/my_order_tab.dart';
 import 'package:customer_ui/all_screen/myaccopunt.dart';
 import 'package:customer_ui/all_screen/request_product.dart';
@@ -441,14 +442,20 @@ class _UserDrawerState extends State<UserDrawer> {
                   Row(
                     //mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
+                      // CircleAvatar(
+                      //   radius: 30,
+                      //   backgroundColor: Color(0xFF515151),
+                      // ),
+
                       Container(
                         //color: Colors.white,
                         //height: 60,
                         width: 60,
                         child: Image.asset(
-                          "assets/img_142.png",
+                          "assets/app_logo.png",
                         ),
                       ),
+
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
                       ),
@@ -582,25 +589,35 @@ class _UserDrawerState extends State<UserDrawer> {
             child: ListTile(
               title: Row(
                 children: [
-                  Container(
-                    //color: Colors.white,
-                    height: 20,
-                    width: 20,
-                    child: Image.asset(
-                      "assets/img_151.png",
-                      color: Colors.black,
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AllCategory()));
+                    },
+                    child: Container(
+                      //color: Colors.white,
+                      height: 20,
+                      width: 20,
+                      child: Image.asset(
+                        "assets/img_151.png",
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
                   ),
-                  Text(
-                    'Categories',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "CeraProBold",
-                      color: Color(0xFF515151),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AllCategory()));
+                    },
+                    child: Text(
+                      'Categories',
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        fontFamily: "CeraProBold",
+                        color: Color(0xFF515151),
+                      ),
                     ),
                   ),
                 ],

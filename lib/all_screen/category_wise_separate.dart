@@ -111,6 +111,13 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
                 ///
                 Container(
                   decoration: BoxDecoration(
+                    border: Border(
+                      //top: BorderSide(width: 4.0, color: Colors.lightBlue.shade600),
+                      bottom: BorderSide(
+                        width: 2.0,
+                        color: Colors.grey,
+                      ),
+                    ),
                     // borderRadius: BorderRadius.circular(5.0),
                     //color: Colors.white,
                     boxShadow: [
@@ -143,9 +150,12 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
                   ),
                 ),
 
-                Divider(
-                  color: kBlackColor,
-                  thickness: 0.5,
+                // Divider(
+                //   color: kBlackColor,
+                //   thickness: 0.5,
+                // ),
+                SizedBox(
+                  height: 12,
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(10, 0, 7, 0),
@@ -257,7 +267,7 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
             ),
             backgroundColor: Color(0xFF9900FF),
             onPressed: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetails()));
+              Navigator.push(context, MaterialPageRoute(builder: (context) => CartDetailsPage()));
             }),
       ),
     );
