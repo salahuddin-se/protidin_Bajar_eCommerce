@@ -10,6 +10,7 @@ class OrderItemModel {
   final int? discount;
   final int? unit;
   final String? discountType;
+  final int? shippingCost;
 
   OrderItemModel({
     required this.discount,
@@ -23,6 +24,7 @@ class OrderItemModel {
     this.productName,
     this.productThumbnailImage,
     this.price,
+    this.shippingCost,
   });
 
   factory OrderItemModel.fromJson(Map<String, dynamic> jsonData) {
@@ -36,6 +38,7 @@ class OrderItemModel {
         price: jsonData['price'],
         productThumbnailImage: jsonData['product_thumbnail'],
         discount: jsonData['discount'],
+        shippingCost: jsonData['shippingCost'],
         unit: jsonData['unit'],
         discountType: jsonData['discount_type']);
   }
@@ -50,6 +53,7 @@ class OrderItemModel {
       "price": price,
       "product_thumbnail": productThumbnailImage,
       'discount': discount,
+      'shippingCost': shippingCost,
       'unit': unit,
       'discount_type': discountType,
     };

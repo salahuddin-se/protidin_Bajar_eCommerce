@@ -134,7 +134,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
   Widget build(BuildContext context) {
     print("MYACC AVATAR ${baseUrl + box.read(userAvatar).toString()}");
     final avarByteData = box.read(avatarBytes);
-    log(avarByteData);
+    //log(avarByteData);
     File? imageAvatar;
     if (avarByteData != null) {
       final bytes = base64Decode(avarByteData);

@@ -235,16 +235,18 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
     int _subTotal = 0;
     int discountTotal = 0;
     int _grandTotal = 0;
+    //int _shipCost = 0;
 
     for (var cartItem in cartItems) {
       _subTotal += cartItem.price as int;
       discountTotal += cartItem.discount as int;
+      //_shipCost += cartItem.shipCost as int;
     }
     _grandTotal = _subTotal - discountTotal;
 
     subTotal = _subTotal.toString() + 'TK';
     tax = '0TK';
-    shipCost = 'free';
+    //shipCost = _shipCost as String;
     discount = '${discountTotal}TK';
     grand_Total = _grandTotal.toString() + 'TK';
     setState(() {});
@@ -445,32 +447,34 @@ class _CartDetailsPageState extends State<CartDetailsPage> {
                                               child: controller.cartItemsList[index].discount != null
                                                   ? Align(
                                                       alignment: Alignment.centerLeft,
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                          //color: Colors.indigo[100],
-                                                          borderRadius: BorderRadius.circular(5),
+                                                      child: controller.cartItemsList[index].discount == 0
+                                                          ? Text("")
+                                                          : Container(
+                                                              decoration: BoxDecoration(
+                                                                //color: Colors.indigo[100],
+                                                                borderRadius: BorderRadius.circular(5),
 
-                                                          boxShadow: const [
-                                                            BoxShadow(
-                                                              color: Colors.green,
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                    color: Colors.green,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              //color: Colors.green,
+                                                              height: 25,
+                                                              width: 75,
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.all(0),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    "${controller.cartItemsList[index].discount.toString()}TK OFF",
+                                                                    // "15% OFF",
+                                                                    style: TextStyle(
+                                                                        color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
+                                                                  ),
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ],
-                                                        ),
-                                                        //color: Colors.green,
-                                                        height: 25,
-                                                        width: 75,
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.all(0),
-                                                          child: Center(
-                                                            child: Text(
-                                                              "${controller.cartItemsList[index].discount.toString()}TK OFF",
-                                                              // "15% OFF",
-                                                              style:
-                                                                  TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w900),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
                                                     )
                                                   : Align(
                                                       alignment: Alignment.centerLeft,

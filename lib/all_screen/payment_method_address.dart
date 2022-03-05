@@ -234,11 +234,12 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
 
   @override
   void initState() {
-    // TODO: implement initState
+    /// TODO: implement initState
     log("Grand Total ${widget.grandTotal} and owner Id ${widget.ownerId}");
     getUserInfo(box.read(userID));
     getUserAddress(box.read(userID));
-    // updateAddressInCart(11);
+
+    /// updateAddressInCart(11);
     getPaymentTypes();
     controller2 = TabController(length: 2, vsync: this);
   }
@@ -370,142 +371,203 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                         itemCount: userAddressData.length,
                         itemBuilder: (_, index) {
                           return addressValue == index.toString()
-                              ? Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10.0),
-                                      ),
-                                      Container(
-                                        height: 15,
-                                        width: 15,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: kPrimaryColor),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10.0),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Container(
-                                          child: Text(
-                                            "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
-                                            style: TextStyle(fontWeight: FontWeight.w500),
-                                          ),
-                                          width: MediaQuery.of(context).size.width / 1.8,
+                              ? Container(
+                                  height: 55,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10.0),
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          userAddressController.text = userAddressData[index].address!;
-                                          userCityController.text = userAddressData[index].city!;
-                                          userPostalCodeController.text = userAddressData[index].postalCode!;
-                                          userCountryController.text = userAddressData[index].country!;
-                                          userPhoneController.text = userAddressData[index].phone!;
-                                          //updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                          print("ADDR_ID: ${userAddressData[index].id}");
-                                          _swAddressBottoSheet(true, userAddressData[index].id);
-                                        },
-                                        child: Container(
+                                        Container(
                                           height: 15,
                                           width: 15,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 0),
-                                            child: Image.asset(
-                                              "assets/img_60.png",
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: kPrimaryColor),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10.0),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              height: 45,
+                                              child: Text(
+                                                "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
+                                                style: TextStyle(fontWeight: FontWeight.w500),
+                                              ),
+                                              width: MediaQuery.of(context).size.width / 1.8,
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 20.0),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          addressDeleteAPI(userAddressData[index].userId);
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 20.0),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            userAddressController.text = userAddressData[index].address!;
+                                            userCityController.text = userAddressData[index].city!;
+                                            userPostalCodeController.text = userAddressData[index].postalCode!;
+                                            userCountryController.text = userAddressData[index].country!;
+                                            userPhoneController.text = userAddressData[index].phone!;
+                                            //updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                            print("ADDR_ID: ${userAddressData[index].id}");
+                                            _swAddressBottoSheet(true, userAddressData[index].id);
+                                          },
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              height: 45,
+                                              width: 45,
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  height: 25,
+                                                  width: 25,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: 0),
+                                                    child: Image.asset(
+                                                      "assets/img_60.png",
+                                                      height: 15,
+                                                      width: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
 
-                                          ///updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                        },
-                                        child: Container(
-                                          height: 25,
-                                          width: 25,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 0),
-                                            child: Image.asset(
-                                              "assets/img_106.png",
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                        // GestureDetector(
+                                        //   onTap: () {
+                                        //     addressDeleteAPI(userAddressData[index].userId);
+                                        //
+                                        //     ///updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                        //   },
+                                        //   child: Container(
+                                        //     height: 45,
+                                        //     width: 45,
+                                        //     child: Align(
+                                        //       alignment: Alignment.center,
+                                        //       child: Container(
+                                        //         height: 35,
+                                        //         width: 35,
+                                        //         child: Padding(
+                                        //           padding: const EdgeInsets.only(left: 0),
+                                        //           child: Image.asset(
+                                        //             "assets/img_106.png",
+                                        //             height: 25,
+                                        //             width: 25,
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
                                   ),
                                 )
-                              : GestureDetector(
-                                  onTap: () {
-                                    ///updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                    selectedAddress =
-                                        ("${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone}");
-                                    log(selectedAddress);
-                                    box.write(account_userAddress, selectedAddress);
-                                    setState(() {
-                                      addressValue = index.toString();
-                                    });
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10.0),
-                                      ),
-                                      Container(
-                                        height: 15,
-                                        width: 15,
-                                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10.0),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Container(
-                                          child: Text(
-                                            "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
-                                            style: TextStyle(fontWeight: FontWeight.w500),
-                                          ),
-                                          width: MediaQuery.of(context).size.width / 1.8,
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 15,
-                                        width: 15,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 0),
-                                          child: Image.asset(
-                                            "assets/img_60.png",
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 20.0),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          addressDeleteAPI(userAddressData[index].userId);
-
-                                          ///updateAddressInCart(box.read(userID), userAddressData[index].id);
+                              : Container(
+                                  height: 55,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      ///updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                      selectedAddress =
+                                          ("${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone}");
+                                      log(selectedAddress);
+                                      box.write(account_userAddress, selectedAddress);
+                                      setState(
+                                        () {
+                                          addressValue = index.toString();
                                         },
-                                        child: Container(
-                                          height: 25,
-                                          width: 25,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 0),
-                                            child: Image.asset(
-                                              "assets/img_106.png",
+                                      );
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10.0),
+                                        ),
+                                        Container(
+                                          height: 15,
+                                          width: 15,
+                                          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 10.0),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(6.0),
+                                          child: Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              height: 45,
+                                              child: Text(
+                                                "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
+                                                style: TextStyle(fontWeight: FontWeight.w500),
+                                              ),
+                                              width: MediaQuery.of(context).size.width / 1.8,
                                             ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                        Padding(
+                                          padding: const EdgeInsets.only(left: 20.0),
+                                        ),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Container(
+                                            height: 45,
+                                            width: 45,
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                height: 25,
+                                                width: 25,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 0),
+                                                  child: Image.asset(
+                                                    "assets/img_60.png",
+                                                    height: 15,
+                                                    width: 15,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+
+                                        // GestureDetector(
+                                        //   onTap: () {
+                                        //     addressDeleteAPI(userAddressData[index].userId);
+                                        //
+                                        //     ///updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                        //   },
+                                        //   child: Container(
+                                        //     height: 45,
+                                        //     width: 45,
+                                        //     child: Align(
+                                        //       alignment: Alignment.center,
+                                        //       child: Container(
+                                        //         //25
+                                        //         height: 35,
+                                        //         width: 35,
+                                        //         child: Padding(
+                                        //           padding: const EdgeInsets.only(left: 0),
+                                        //           child: Image.asset(
+                                        //             "assets/img_106.png",
+                                        //             height: 25,
+                                        //             width: 25,
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
                                   ),
                                 );
                         },
@@ -1572,7 +1634,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                     style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    "3 items",
+                    "${physicalProducts.length.toString()} items",
                     style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w700),
                   ),
                 ],
@@ -1585,10 +1647,11 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                 children: [
                   Text(
                     "3 p.m Thursday, Dec 15",
-                    style: TextStyle(fontSize: 12, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
+                    style: TextStyle(fontSize: 16, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    totalPrice(physicalProducts).toString(),
+                    "${totalPrice(physicalProducts).toString()} TK",
+                    //"${totalPrice(cloudProducts).toString()} TK",
                     style: TextStyle(fontSize: 24, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w700),
                   ),
                 ],
@@ -1706,7 +1769,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                   style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  cloudProducts.length.toString(),
+                  "${cloudProducts.length.toString()} items",
                   style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w700),
                 ),
               ],
@@ -1719,10 +1782,10 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
               children: [
                 Text(
                   "3 p.m Thursday, Dec 15",
-                  style: TextStyle(fontSize: 12, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 16, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
                 ),
                 Text(
-                  totalPrice(cloudProducts).toString(),
+                  "${totalPrice(cloudProducts).toString()} TK",
                   style: TextStyle(fontSize: 24, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w700),
                 ),
               ],
