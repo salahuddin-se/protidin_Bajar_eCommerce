@@ -27,6 +27,7 @@ const userID = "USER_ID";
 const cartList = "CART_LIST";
 const category_name = "CART_LIST";
 const cart_item = "CART_ITEM";
+const daTe = "date";
 
 const physical_product = "PHYSICAL_PRODUCT";
 

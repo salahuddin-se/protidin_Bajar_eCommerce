@@ -102,7 +102,7 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
                         // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
                       },
                       child: Container(
-                        width: MediaQuery.of(context).size.width / 3,
+                        width: MediaQuery.of(context).size.width / 3.2,
                         child: Image.network(widget.image!),
                       ),
                     ),
@@ -290,6 +290,10 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
           color: kBlackColor,
           thickness: 0.2,
         ),
+
+        SizedBox(
+          height: 15,
+        )
       ],
     );
   }

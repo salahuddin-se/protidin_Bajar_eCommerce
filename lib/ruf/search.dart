@@ -18,7 +18,7 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-//Step 3
+  //Step 3
   late ScrollController _scrollController;
 
   _SearchScreenState() {
@@ -106,7 +106,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   MaterialPageRoute(
                     builder: (context) => ProductDetails(
                       detailsLink: item.links!.details!,
-                      relatedProductLink: "",
+                      relatedProductLink: "item.links!.toString()",
                     ),
                   ),
                 );
@@ -141,9 +141,14 @@ class _SearchScreenState extends State<SearchScreen> {
               MaterialPageRoute(
                 builder: (context) => GroceryOfferPage(
                   //categoryLink: categoryItemData,
+
                   receiveCategoryName: filteredCategories[index].name.toString(),
                   receiveLargeBanner: filteredCategories[index].largeBanner,
                   categoryData: filteredCategories,
+
+                  /*receiveCategoryName: filteredCategories[index].name.toString(),
+                  receiveLargeBanner: filteredCategories[index].largeBanner,
+                  categoryData: filteredCategories,*/
                 ),
               ),
             );
@@ -224,7 +229,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   ),
                 ),
                 Container(
-                  height: filteredNames.length >= 5 ? 400 : 400,
+                  height: filteredNames.length >= 5 ? 420 : 420,
                   //height: filteredNames.length >= 5 ? 400 : 300,
                   child: _buildList(),
                 )

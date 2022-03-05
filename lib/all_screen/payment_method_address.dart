@@ -7,6 +7,7 @@ import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/controller/cartItemsController.dart';
 import 'package:customer_ui/dataModel/payment_method.dart';
+import 'package:customer_ui/dataModel/purchase_history.dart ' as purHistory;
 import 'package:customer_ui/dataModel/show_user_model.dart';
 import 'package:customer_ui/dataModel/user_info.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,8 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
       setState(() {});
     }
   }
+
+  List<purHistory.Data> purchaseData = [];
 
   Future<void> getUserInfo(userID) async {
     var res = await get(Uri.parse("$userInfoAPI$userID"),
@@ -234,11 +237,12 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
 
   @override
   void initState() {
-    // TODO: implement initState
+    /// TODO: implement initState
     log("Grand Total ${widget.grandTotal} and owner Id ${widget.ownerId}");
     getUserInfo(box.read(userID));
     getUserAddress(box.read(userID));
-    // updateAddressInCart(11);
+
+    /// updateAddressInCart(11);
     getPaymentTypes();
     controller2 = TabController(length: 2, vsync: this);
   }
@@ -273,243 +277,648 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
       ),
       backgroundColor: Colors.grey[100],
       //backgroundColor: Colors.indigo[50],
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              color: Colors.white,
-              //height: 480 ,
-              height: 500,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 20,
-                  ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          setState(() {});
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                color: Colors.white,
+                //height: 480 ,
+                height: 330,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Align(
-                          alignment: Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 10.0),
-                            child: const Text(
-                              "Delivered to",
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
-                            ),
-                          )),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 80.0),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            //primary: Color(0xFF9900FF),
-                            primary: Colors.white,
-                            //side: BorderSide(width:3, color:Colors.brown), //border width and color
-                            elevation: 1.5, //elevation of button
-
-                            padding: EdgeInsets.all(10) //content padding inside button
-                            ),
-                        onPressed: () {
-                          _swAddressBottoSheet(false, -1);
-                        },
-                        child: Container(
-                            height: 20,
-                            width: 20,
-                            //height: 190,
-                            //width: 200,
-                            child: Image.asset(
-                              "assets/img_47.png",
-                              fit: BoxFit.cover,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 10.0),
+                              child: const Text(
+                                "Delivered to",
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+                              ),
                             )),
-                      ),
-                    ],
-                  ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 80.0),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              //primary: Color(0xFF9900FF),
+                              primary: Colors.white,
+                              //side: BorderSide(width:3, color:Colors.brown), //border width and color
+                              elevation: 1.5, //elevation of button
 
-                  SizedBox(
-                    height: 20,
-                  ),
-
-                  ///map
-                  Container(
-                    height: 140,
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          spreadRadius: 5, //spread radius
-                          blurRadius: 5, // blur radius
-                          offset: Offset(0, 3),
+                              padding: EdgeInsets.all(10) //content padding inside button
+                              ),
+                          onPressed: () {
+                            _swAddressBottoSheet(false, -1);
+                          },
+                          child: Container(
+                              height: 20,
+                              width: 20,
+                              //height: 190,
+                              //width: 200,
+                              child: Image.asset(
+                                "assets/img_47.png",
+                                fit: BoxFit.cover,
+                              )),
                         ),
                       ],
                     ),
-                    child: Container(
-                        //height: 190,
-                        //width: 200,
-                        child: Image.asset(
-                      "assets/img_116.png",
-                      fit: BoxFit.cover,
-                    )),
+
+                    SizedBox(
+                      height: 20,
+                    ),
+
+                    ///map
+                    // Container(
+                    //   height: 140,
+                    //   width: MediaQuery.of(context).size.width / 1.1,
+                    //   decoration: BoxDecoration(
+                    //     borderRadius: BorderRadius.circular(5),
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: Colors.grey.withOpacity(0.15),
+                    //         spreadRadius: 5, //spread radius
+                    //         blurRadius: 5, // blur radius
+                    //         offset: Offset(0, 3),
+                    //       ),
+                    //     ],
+                    //   ),
+                    //   child: Container(
+                    //       //height: 190,
+                    //       //width: 200,
+                    //       child: Image.asset(
+                    //     "assets/img_116.png",
+                    //     fit: BoxFit.cover,
+                    //   )),
+                    // ),
+
+                    SizedBox(
+                      height: 30,
+                    ),
+
+                    ///address list
+                    Container(
+                      //height: 120,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 0, 0, 10),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemCount: userAddressData.length,
+                          itemBuilder: (_, index) {
+                            return addressValue == index.toString()
+                                ? Container(
+                                    height: 75,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 10.0),
+                                          ),
+                                          Container(
+                                            height: 15,
+                                            width: 15,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: kPrimaryColor),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 10.0),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(6.0),
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                height: 45,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 5.0),
+                                                  child: Text(
+                                                    "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
+                                                    style: TextStyle(fontWeight: FontWeight.w500),
+                                                  ),
+                                                ),
+                                                width: MediaQuery.of(context).size.width / 1.8,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 20.0),
+                                          ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              userAddressController.text = userAddressData[index].address!;
+                                              userCityController.text = userAddressData[index].city!;
+                                              userPostalCodeController.text = userAddressData[index].postalCode!;
+                                              userCountryController.text = userAddressData[index].country!;
+                                              userPhoneController.text = userAddressData[index].phone!;
+                                              //updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                              print("ADDR_ID: ${userAddressData[index].id}");
+                                              _swAddressBottoSheet(true, userAddressData[index].id);
+                                            },
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                height: 45,
+                                                width: 45,
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Container(
+                                                    height: 25,
+                                                    width: 25,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 0),
+                                                      child: Image.asset(
+                                                        "assets/img_60.png",
+                                                        height: 15,
+                                                        width: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          // GestureDetector(
+                                          //   onTap: () {
+                                          //     addressDeleteAPI(userAddressData[index].userId);
+                                          //
+                                          //     ///updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                          //   },
+                                          //   child: Container(
+                                          //     height: 45,
+                                          //     width: 45,
+                                          //     child: Align(
+                                          //       alignment: Alignment.center,
+                                          //       child: Container(
+                                          //         height: 35,
+                                          //         width: 35,
+                                          //         child: Padding(
+                                          //           padding: const EdgeInsets.only(left: 0),
+                                          //           child: Image.asset(
+                                          //             "assets/img_106.png",
+                                          //             height: 25,
+                                          //             width: 25,
+                                          //           ),
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    height: 75,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        ///updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                        selectedAddress =
+                                            ("${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone}");
+                                        log(selectedAddress);
+                                        box.write(account_userAddress, selectedAddress);
+                                        setState(
+                                          () {
+                                            addressValue = index.toString();
+                                          },
+                                        );
+                                      },
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 10.0),
+                                          ),
+                                          Container(
+                                            height: 15,
+                                            width: 15,
+                                            decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 10.0),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(6.0),
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                height: 45,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 5.0),
+                                                  child: Text(
+                                                    "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
+                                                    style: TextStyle(fontWeight: FontWeight.w500),
+                                                  ),
+                                                ),
+                                                width: MediaQuery.of(context).size.width / 1.8,
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(left: 20.0),
+                                          ),
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              height: 45,
+                                              width: 45,
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  height: 25,
+                                                  width: 25,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(top: 0),
+                                                    child: Image.asset(
+                                                      "assets/img_60.png",
+                                                      height: 15,
+                                                      width: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          // GestureDetector(
+                                          //   onTap: () {
+                                          //     addressDeleteAPI(userAddressData[index].userId);
+                                          //
+                                          //     ///updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                          //   },
+                                          //   child: Container(
+                                          //     height: 45,
+                                          //     width: 45,
+                                          //     child: Align(
+                                          //       alignment: Alignment.center,
+                                          //       child: Container(
+                                          //         //25
+                                          //         height: 35,
+                                          //         width: 35,
+                                          //         child: Padding(
+                                          //           padding: const EdgeInsets.only(left: 0),
+                                          //           child: Image.asset(
+                                          //             "assets/img_106.png",
+                                          //             height: 25,
+                                          //             width: 25,
+                                          //           ),
+                                          //         ),
+                                          //       ),
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                          },
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: 10,
+                    ),
+
+                    ///add address button
+                    // SizedBox(
+                    //   height: 60,
+                    // ),
+                    //
+                    // Align(
+                    //   alignment: Alignment.center,
+                    //   child: Padding(
+                    //     padding: const EdgeInsets.fromLTRB(60, 0, 0, 0),
+                    //     child: Container(
+                    //       width: MediaQuery.of(context).size.width / 1.5,
+                    //       child: const Text(
+                    //         "+ Add delivery instruction",
+                    //         style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.green),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
+
+              SizedBox(
+                height: 30,
+              ),
+
+              ///Preferred delivery slot
+              // Container(
+              //   decoration: BoxDecoration(
+              //     color: Colors.white,
+              //     borderRadius: BorderRadius.circular(15),
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Colors.grey.withOpacity(0.15),
+              //         spreadRadius: 5, //spread radius
+              //         blurRadius: 5, // blur radius
+              //         offset: Offset(0, 3),
+              //       ),
+              //     ],
+              //   ),
+              //   width: MediaQuery.of(context).size.width / 1.1,
+              //   height: 130,
+              //   child: Column(
+              //     children: [
+              //       Padding(
+              //         padding: const EdgeInsets.only(top: 15),
+              //       ),
+              //       Align(
+              //           alignment: Alignment.centerLeft,
+              //           child: Padding(
+              //             padding: const EdgeInsets.only(left: 15.0),
+              //             child: const Text(
+              //               "Preferred delivery slot",
+              //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+              //             ),
+              //           )),
+              //       Row(
+              //         mainAxisAlignment: MainAxisAlignment.spaceAround,
+              //         children: [
+              //           Padding(
+              //             padding: const EdgeInsets.only(left: 10.0),
+              //             child: Align(
+              //                 alignment: Alignment.centerLeft,
+              //                 child: Container(
+              //                   width: MediaQuery.of(context).size.width / 2.5,
+              //                   child: const Text(
+              //                     "Delivered date :",
+              //                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+              //                   ),
+              //                 )),
+              //           ),
+              //           Padding(
+              //             padding: const EdgeInsets.only(left: 10.0),
+              //             child: Align(
+              //                 alignment: Alignment.centerRight,
+              //                 child: Container(
+              //                     width: MediaQuery.of(context).size.width / 2.5,
+              //                     child: const Text(
+              //                       "Time slot :",
+              //                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+              //                     ))),
+              //           ),
+              //         ],
+              //       ),
+              //       SizedBox(
+              //         height: 10,
+              //       ),
+              //       Container(
+              //         child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+              //           Padding(
+              //             padding: const EdgeInsets.only(left: 8.0),
+              //             child: Container(
+              //               width: MediaQuery.of(context).size.width / 2.5,
+              //               height: 40,
+              //               decoration: BoxDecoration(
+              //                   color: Colors.white,
+              //                   // Red border with the width is equal to 5
+              //                   border: Border.all(width: 1, color: Colors.black)),
+              //               child: Row(
+              //                 children: [
+              //                   Container(
+              //                     height: 20,
+              //                     //width: 200,
+              //                     child: Padding(
+              //                       padding: const EdgeInsets.fromLTRB(4, 0, 7, 0),
+              //                       child: Text(
+              //                         "Today, 23 Sep ",
+              //                         style: TextStyle(
+              //                           color: Colors.black,
+              //                           fontSize: 14,
+              //                           fontWeight: FontWeight.w600,
+              //                         ),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                   Container(
+              //                     height: 15,
+              //                     width: 15,
+              //                     child: Padding(
+              //                       padding: const EdgeInsets.only(left: 0),
+              //                       child: Image.asset(
+              //                         "assets/ca.png",
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             ),
+              //           ),
+              //           Container(
+              //             width: MediaQuery.of(context).size.width / 2.5,
+              //             height: 40,
+              //             decoration: BoxDecoration(
+              //                 color: Colors.white,
+              //                 // Red border with the width is equal to 5
+              //                 border: Border.all(width: 1, color: Colors.black)),
+              //             child: Row(
+              //               children: [
+              //                 Padding(
+              //                   padding: const EdgeInsets.fromLTRB(5, 0, 8, 0),
+              //                   //width: 200,
+              //                   child: Text(
+              //                     "Tap to choose",
+              //                     style: TextStyle(
+              //                       color: Colors.black,
+              //                       fontSize: 14,
+              //                       fontWeight: FontWeight.w600,
+              //                     ),
+              //                   ),
+              //                 ),
+              //                 Container(
+              //                   height: 15,
+              //                   width: 15,
+              //                   child: Padding(
+              //                     padding: const EdgeInsets.only(top: 0),
+              //                     child: Image.asset(
+              //                       "assets/dr.png",
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ]),
+              //       )
+              //     ],
+              //   ),
+              // ),
+
+              SizedBox(
+                height: 20,
+              ),
+
+              ///package information
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.15),
+                      spreadRadius: 5, //spread radius
+                      blurRadius: 5, // blur radius
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                width: MediaQuery.of(context).size.width / 1.1,
+
+                ///height: 785,
+                height: 400,
+                child: Column(children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                  ),
+
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: const Text(
+                        "Package Information",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF515151), fontFamily: "ceraProMedium"),
+                      ),
+                    ),
                   ),
 
                   SizedBox(
-                    height: 30,
+                    height: 15,
                   ),
 
-                  ///address list
-                  Container(
-                    //height: 120,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(12, 0, 0, 10),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: userAddressData.length,
-                        itemBuilder: (_, index) {
-                          return addressValue == index.toString()
-                              ? Padding(
-                                  padding: const EdgeInsets.only(bottom: 8.0),
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10.0),
-                                      ),
-                                      Container(
-                                        height: 15,
-                                        width: 15,
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: kPrimaryColor),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10.0),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Container(
-                                          child: Text(
-                                            "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
-                                            style: TextStyle(fontWeight: FontWeight.w500),
-                                          ),
-                                          width: MediaQuery.of(context).size.width / 1.8,
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          userAddressController.text = userAddressData[index].address!;
-                                          userCityController.text = userAddressData[index].city!;
-                                          userPostalCodeController.text = userAddressData[index].postalCode!;
-                                          userCountryController.text = userAddressData[index].country!;
-                                          userPhoneController.text = userAddressData[index].phone!;
-                                          //updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                          print("ADDR_ID: ${userAddressData[index].id}");
-                                          _swAddressBottoSheet(true, userAddressData[index].id);
-                                        },
-                                        child: Container(
-                                          height: 15,
-                                          width: 15,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 0),
-                                            child: Image.asset(
-                                              "assets/img_60.png",
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 20.0),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          addressDeleteAPI(userAddressData[index].userId);
-
-                                          ///updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                        },
-                                        child: Container(
-                                          height: 25,
-                                          width: 25,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 0),
-                                            child: Image.asset(
-                                              "assets/img_106.png",
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    ///updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                    selectedAddress =
-                                        ("${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone}");
-                                    log(selectedAddress);
-                                    box.write(account_userAddress, selectedAddress);
-                                    setState(() {
-                                      addressValue = index.toString();
-                                    });
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10.0),
-                                      ),
-                                      Container(
-                                        height: 15,
-                                        width: 15,
-                                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 10.0),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(6.0),
-                                        child: Container(
-                                          child: Text(
-                                            "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
-                                            style: TextStyle(fontWeight: FontWeight.w500),
-                                          ),
-                                          width: MediaQuery.of(context).size.width / 1.8,
-                                        ),
-                                      ),
-                                      Container(
-                                        height: 15,
-                                        width: 15,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 0),
-                                          child: Image.asset(
-                                            "assets/img_60.png",
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 20.0),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          addressDeleteAPI(userAddressData[index].userId);
-
-                                          ///updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                        },
-                                        child: Container(
-                                          height: 25,
-                                          width: 25,
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(left: 0),
-                                            child: Image.asset(
-                                              "assets/img_106.png",
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                        },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            //                   <--- left side
+                            color: Colors.grey,
+                            width: 1.5,
+                          ),
+                        ),
                       ),
+                      //height: 300,
+                      height: 44,
+                      width: MediaQuery.of(context).size.width / 1,
+                      child: TabBar(
+                        isScrollable: true,
+                        indicatorWeight: 4,
+                        indicatorColor: kPrimaryColor,
+                        controller: controller2,
+                        tabs: [
+                          Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 0.0),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 5.0),
+                                    child: Image.asset(
+                                      "assets/img_213.png",
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Store Package",
+                                          style: TextStyle(
+                                              color: Color(0xFF515151),
+                                              fontSize: 14,
+                                              fontFamily: "ceraProMedium",
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        Text(
+                                          "1 hr Delivery",
+                                          style: TextStyle(
+                                              color: Color(0xFFA299A8),
+                                              fontSize: 12,
+                                              fontFamily: "ceraProMedium",
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            width: 152,
+                          ),
+                          Container(
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 0.0),
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(bottom: 5.0),
+                                    child: Image.asset(
+                                      "assets/img_214.png",
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Cloud Package",
+                                          style: TextStyle(
+                                              color: Color(0xFF515151),
+                                              fontSize: 14,
+                                              fontFamily: "ceraProMedium",
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        Text(
+                                          "Next Day Delivery",
+                                          style: TextStyle(
+                                              color: Color(0xFFA299A8),
+                                              fontSize: 12,
+                                              fontFamily: "ceraProMedium",
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            width: 152,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                  Expanded(
+                    child: TabBarView(
+                      controller: controller2,
+                      children: [
+                        physical(physicalProducts),
+                        cloud(cloudProducts),
+                      ],
                     ),
                   ),
 
@@ -517,600 +926,227 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                     height: 10,
                   ),
 
-                  ///add address button
-                  SizedBox(
-                    height: 60,
-                  ),
-
-                  Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(60, 0, 0, 0),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width / 1.5,
-                        child: const Text(
-                          "+ Add delivery instruction",
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800, color: Colors.green),
+                  ///card image
+                  /*
+                                  Center(
+                    child: Container(
+                      height: 190,
+                      width: MediaQuery.of(context).size.width / 1.1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 0),
+                        child: Image.asset(
+                          "assets/img_124.png",
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
 
-            SizedBox(
-              height: 30,
-            ),
+                   */
+                  SizedBox(height: 20),
 
-            ///Preferred delivery slot
-            // Container(
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //     borderRadius: BorderRadius.circular(15),
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Colors.grey.withOpacity(0.15),
-            //         spreadRadius: 5, //spread radius
-            //         blurRadius: 5, // blur radius
-            //         offset: Offset(0, 3),
-            //       ),
-            //     ],
-            //   ),
-            //   width: MediaQuery.of(context).size.width / 1.1,
-            //   height: 130,
-            //   child: Column(
-            //     children: [
-            //       Padding(
-            //         padding: const EdgeInsets.only(top: 15),
-            //       ),
-            //       Align(
-            //           alignment: Alignment.centerLeft,
-            //           child: Padding(
-            //             padding: const EdgeInsets.only(left: 15.0),
-            //             child: const Text(
-            //               "Preferred delivery slot",
-            //               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
-            //             ),
-            //           )),
-            //       Row(
-            //         mainAxisAlignment: MainAxisAlignment.spaceAround,
-            //         children: [
-            //           Padding(
-            //             padding: const EdgeInsets.only(left: 10.0),
-            //             child: Align(
-            //                 alignment: Alignment.centerLeft,
-            //                 child: Container(
-            //                   width: MediaQuery.of(context).size.width / 2.5,
-            //                   child: const Text(
-            //                     "Delivered date :",
-            //                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-            //                   ),
-            //                 )),
-            //           ),
-            //           Padding(
-            //             padding: const EdgeInsets.only(left: 10.0),
-            //             child: Align(
-            //                 alignment: Alignment.centerRight,
-            //                 child: Container(
-            //                     width: MediaQuery.of(context).size.width / 2.5,
-            //                     child: const Text(
-            //                       "Time slot :",
-            //                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-            //                     ))),
-            //           ),
-            //         ],
-            //       ),
-            //       SizedBox(
-            //         height: 10,
-            //       ),
-            //       Container(
-            //         child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            //           Padding(
-            //             padding: const EdgeInsets.only(left: 8.0),
-            //             child: Container(
-            //               width: MediaQuery.of(context).size.width / 2.5,
-            //               height: 40,
-            //               decoration: BoxDecoration(
-            //                   color: Colors.white,
-            //                   // Red border with the width is equal to 5
-            //                   border: Border.all(width: 1, color: Colors.black)),
-            //               child: Row(
-            //                 children: [
-            //                   Container(
-            //                     height: 20,
-            //                     //width: 200,
-            //                     child: Padding(
-            //                       padding: const EdgeInsets.fromLTRB(4, 0, 7, 0),
-            //                       child: Text(
-            //                         "Today, 23 Sep ",
-            //                         style: TextStyle(
-            //                           color: Colors.black,
-            //                           fontSize: 14,
-            //                           fontWeight: FontWeight.w600,
-            //                         ),
-            //                       ),
-            //                     ),
-            //                   ),
-            //                   Container(
-            //                     height: 15,
-            //                     width: 15,
-            //                     child: Padding(
-            //                       padding: const EdgeInsets.only(left: 0),
-            //                       child: Image.asset(
-            //                         "assets/ca.png",
-            //                       ),
-            //                     ),
-            //                   ),
-            //                 ],
-            //               ),
-            //             ),
-            //           ),
-            //           Container(
-            //             width: MediaQuery.of(context).size.width / 2.5,
-            //             height: 40,
-            //             decoration: BoxDecoration(
-            //                 color: Colors.white,
-            //                 // Red border with the width is equal to 5
-            //                 border: Border.all(width: 1, color: Colors.black)),
-            //             child: Row(
-            //               children: [
-            //                 Padding(
-            //                   padding: const EdgeInsets.fromLTRB(5, 0, 8, 0),
-            //                   //width: 200,
-            //                   child: Text(
-            //                     "Tap to choose",
-            //                     style: TextStyle(
-            //                       color: Colors.black,
-            //                       fontSize: 14,
-            //                       fontWeight: FontWeight.w600,
-            //                     ),
-            //                   ),
-            //                 ),
-            //                 Container(
-            //                   height: 15,
-            //                   width: 15,
-            //                   child: Padding(
-            //                     padding: const EdgeInsets.only(top: 0),
-            //                     child: Image.asset(
-            //                       "assets/dr.png",
-            //                     ),
-            //                   ),
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //         ]),
-            //       )
-            //     ],
-            //   ),
-            // ),
-
-            SizedBox(
-              height: 20,
-            ),
-
-            ///package information
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.15),
-                    spreadRadius: 5, //spread radius
-                    blurRadius: 5, // blur radius
-                    offset: Offset(0, 3),
-                  ),
-                ],
-              ),
-              width: MediaQuery.of(context).size.width / 1.1,
-
-              ///height: 785,
-              height: 390,
-              child: Column(children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 40),
-                ),
-
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: const Text(
-                      "Package Information",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700, color: Color(0xFF515151), fontFamily: "ceraProMedium"),
-                    ),
-                  ),
-                ),
-
-                SizedBox(
-                  height: 15,
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Container(
+                  ///card number
+                  /*
+                  Container(
+                    height: 200,
                     decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          //                   <--- left side
-                          color: Colors.grey,
-                          width: 1.5,
-                        ),
-                      ),
+                      border: Border.all(width: 0.5, color: Colors.black),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    //height: 300,
-                    height: 44,
-                    width: MediaQuery.of(context).size.width / 1,
-                    child: TabBar(
-                      isScrollable: true,
-                      indicatorWeight: 4,
-                      indicatorColor: kPrimaryColor,
-                      controller: controller2,
-                      tabs: [
-                        Container(
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 0.0),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 5.0),
-                                  child: Image.asset(
-                                    "assets/img_213.png",
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Store Package",
-                                        style: TextStyle(
-                                            color: Color(0xFF515151),
-                                            fontSize: 14,
-                                            fontFamily: "ceraProMedium",
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      Text(
-                                        "1 hr Delivery",
-                                        style: TextStyle(
-                                            color: Color(0xFFA299A8),
-                                            fontSize: 12,
-                                            fontFamily: "ceraProMedium",
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          width: 152,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
                         ),
-                        Container(
-                          child: Padding(
-                            padding: EdgeInsets.only(right: 0.0),
-                            child: Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 5.0),
-                                  child: Image.asset(
-                                    "assets/img_214.png",
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Cloud Package",
-                                        style: TextStyle(
-                                            color: Color(0xFF515151),
-                                            fontSize: 14,
-                                            fontFamily: "ceraProMedium",
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                      Text(
-                                        "Next Day Delivery",
-                                        style: TextStyle(
-                                            color: Color(0xFFA299A8),
-                                            fontSize: 12,
-                                            fontFamily: "ceraProMedium",
-                                            fontWeight: FontWeight.w500),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          width: 152,
+                        Row(
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.only(left: 22),
+                              child: Text(
+                                "Card Number",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+                              ),
+                            )
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                Expanded(
-                  child: TabBarView(
-                    controller: controller2,
-                    children: [
-                      physical(physicalProducts),
-                      cloud(cloudProducts),
-                    ],
-                  ),
-                ),
-
-                SizedBox(
-                  height: 10,
-                ),
-
-                ///card image
-                /*
-                                Center(
-                  child: Container(
-                    height: 190,
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 0),
-                      child: Image.asset(
-                        "assets/img_124.png",
-                      ),
-                    ),
-                  ),
-                ),
-
-                 */
-                SizedBox(height: 20),
-
-                ///card number
-                /*
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 0.5, color: Colors.black),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(left: 22),
-                            child: Text(
-                              "Card Number",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 0.8, color: Colors.black),
+                              borderRadius: BorderRadius.circular(5),
                             ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 0.8, color: Colors.black),
-                            borderRadius: BorderRadius.circular(5),
+                            height: 45,
+                            width: MediaQuery.of(context).size.width / 1.3,
                           ),
-                          height: 45,
-                          width: MediaQuery.of(context).size.width / 1.3,
                         ),
-                      ),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 15.0),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Container(
+                                        width: MediaQuery.of(context).size.width / 2.5,
+                                        child: const Text(
+                                          "Exdpery date",
+                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+                                        )),
+                                  )),
+
+                              /*Padding(
+                                    padding: const EdgeInsets.fromLTRB(40,0,40,0),
+                                  ),*/
+
+                              Align(
+                                  alignment: Alignment.centerRight,
                                   child: Container(
                                       width: MediaQuery.of(context).size.width / 2.5,
                                       child: const Text(
-                                        "Exdpery date",
+                                        "CV code",
                                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-                                      )),
-                                )),
-
-                            /*Padding(
-                                  padding: const EdgeInsets.fromLTRB(40,0,40,0),
-                                ),*/
-
-                            Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                    width: MediaQuery.of(context).size.width / 2.5,
-                                    child: const Text(
-                                      "CV code",
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-                                    ))),
-                          ],
+                                      ))),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Container(
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 6,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  // Red border with the width is equal to 5
+                                  border: Border.all(width: 1, color: Colors.black)),
+                              child: Center(
+                                child: Text(
+                                  "MM",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
                             width: MediaQuery.of(context).size.width / 6,
                             height: 40,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 // Red border with the width is equal to 5
                                 border: Border.all(width: 1, color: Colors.black)),
-                            child: Center(
-                              child: Text(
-                                "MM",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 6,
-                          height: 40,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              // Red border with the width is equal to 5
-                              border: Border.all(width: 1, color: Colors.black)),
-                          child: Container(
-                            height: 20,
-                            //width: 200,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Center(
-                                child: Text(
-                                  "YY",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
+                            child: Container(
+                              height: 20,
+                              //width: 200,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Center(
+                                  child: Text(
+                                    "YY",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 25.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 3,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                // Red border with the width is equal to 5
-                                border: Border.all(width: 1, color: Colors.black)),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Center(
-                                child: Text(
-                                  "CV",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 25.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  // Red border with the width is equal to 5
+                                  border: Border.all(width: 1, color: Colors.black)),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: Center(
+                                  child: Text(
+                                    "CV",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ])
-                    ],
-                  ),
-                )
-                 */
-              ]),
-            ),
-
-            SizedBox(
-              height: 35,
-            ),
-
-            ///Payment Method
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.15),
-                    spreadRadius: 5, //spread radius
-                    blurRadius: 5, // blur radius
-                    offset: Offset(0, 3),
-                  ),
-                ],
+                        ])
+                      ],
+                    ),
+                  )
+                   */
+                ]),
               ),
-              width: MediaQuery.of(context).size.width / 1.1,
 
-              ///height: 785,
-              height: 350,
-              child: Column(children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 40),
+              SizedBox(
+                height: 35,
+              ),
+
+              ///Payment Method
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.15),
+                      spreadRadius: 5, //spread radius
+                      blurRadius: 5, // blur radius
+                      offset: Offset(0, 3),
+                    ),
+                  ],
                 ),
+                width: MediaQuery.of(context).size.width / 1.1,
 
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20.0),
-                    child: const Text(
-                      "Payment Method",
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+                ///height: 785,
+                height: 350,
+                child: Column(children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                  ),
+
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 20.0),
+                      child: const Text(
+                        "Payment Method",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.black),
+                      ),
                     ),
                   ),
-                ),
 
-                SizedBox(
-                  height: 15,
-                ),
+                  SizedBox(
+                    height: 15,
+                  ),
 
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0),
-                  child: Container(
-                    //height: 300,
-                    height: 210,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: paymentData.length,
-                        itemBuilder: (_, index) {
-                          return value == index.toString()
-                              ? Row(
-                                  children: [
-                                    Container(
-                                      height: 40,
-                                      width: MediaQuery.of(context).size.width / 7,
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(left: 0),
-                                        child: Image.network(
-                                          paymentData[index].image,
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      width: MediaQuery.of(context).size.width * 3 / 5,
-                                      child: ListTile(
-                                        title: Padding(
-                                          padding: const EdgeInsets.only(left: 15.0),
-                                          child: Text(
-                                            paymentData[index].payment_type_key,
-                                            style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Container(
-                                      height: 15,
-                                      width: 15,
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: Colors.black),
-                                    ),
-                                  ],
-                                )
-                              : GestureDetector(
-                                  onTap: () {
-                                    paymentType = paymentData[index].payment_type_key;
-                                    setState(() {
-                                      value = index.toString();
-                                    });
-                                  },
-                                  child: Row(
+                  Padding(
+                    padding: const EdgeInsets.only(left: 15.0),
+                    child: Container(
+                      //height: 300,
+                      height: 210,
+                      child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          itemCount: paymentData.length,
+                          itemBuilder: (_, index) {
+                            return value == index.toString()
+                                ? Row(
                                     children: [
                                       Container(
                                         height: 40,
@@ -1128,7 +1164,6 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                                           title: Padding(
                                             padding: const EdgeInsets.only(left: 15.0),
                                             child: Text(
-                                              ///payment_type_key
                                               paymentData[index].payment_type_key,
                                               style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
                                             ),
@@ -1138,316 +1173,357 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                                       Container(
                                         height: 15,
                                         width: 15,
-                                        decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: Colors.black),
                                       ),
                                     ],
-                                  ),
-                                );
-                        }),
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      paymentType = paymentData[index].payment_type_key;
+                                      setState(() {
+                                        value = index.toString();
+                                      });
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          width: MediaQuery.of(context).size.width / 7,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(left: 0),
+                                            child: Image.network(
+                                              paymentData[index].image,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          width: MediaQuery.of(context).size.width * 3 / 5,
+                                          child: ListTile(
+                                            title: Padding(
+                                              padding: const EdgeInsets.only(left: 15.0),
+                                              child: Text(
+                                                ///payment_type_key
+                                                paymentData[index].payment_type_key,
+                                                style: TextStyle(fontSize: 17, fontWeight: FontWeight.w800, color: Colors.black),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          height: 15,
+                                          width: 15,
+                                          decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                          }),
+                    ),
                   ),
-                ),
 
-                SizedBox(
-                  height: 10,
-                ),
+                  SizedBox(
+                    height: 10,
+                  ),
 
-                ///card image
-                /*
-                                Center(
-                  child: Container(
-                    height: 190,
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 0),
-                      child: Image.asset(
-                        "assets/img_124.png",
+                  ///card image
+                  /*
+                                  Center(
+                    child: Container(
+                      height: 190,
+                      width: MediaQuery.of(context).size.width / 1.1,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 0),
+                        child: Image.asset(
+                          "assets/img_124.png",
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                 */
-                SizedBox(height: 20),
+                   */
+                  SizedBox(height: 20),
 
-                ///card number
-                /*
-                Container(
-                  height: 200,
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 0.5, color: Colors.black),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        children: const [
-                          Padding(
-                            padding: EdgeInsets.only(left: 22),
-                            child: Text(
-                              "Card Number",
-                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-                            ),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 0.8, color: Colors.black),
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          height: 45,
-                          width: MediaQuery.of(context).size.width / 1.3,
+                  ///card number
+                  /*
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 0.5, color: Colors.black),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
                         ),
-                      ),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 15.0),
+                        Row(
+                          children: const [
+                            Padding(
+                              padding: EdgeInsets.only(left: 22),
+                              child: Text(
+                                "Card Number",
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+                              ),
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(5, 10, 10, 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 0.8, color: Colors.black),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            height: 45,
+                            width: MediaQuery.of(context).size.width / 1.3,
+                          ),
+                        ),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 15.0),
+                                    child: Container(
+                                        width: MediaQuery.of(context).size.width / 2.5,
+                                        child: const Text(
+                                          "Exdpery date",
+                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
+                                        )),
+                                  )),
+
+                              /*Padding(
+                                    padding: const EdgeInsets.fromLTRB(40,0,40,0),
+                                  ),*/
+
+                              Align(
+                                  alignment: Alignment.centerRight,
                                   child: Container(
                                       width: MediaQuery.of(context).size.width / 2.5,
                                       child: const Text(
-                                        "Exdpery date",
+                                        "CV code",
                                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-                                      )),
-                                )),
-
-                            /*Padding(
-                                  padding: const EdgeInsets.fromLTRB(40,0,40,0),
-                                ),*/
-
-                            Align(
-                                alignment: Alignment.centerRight,
-                                child: Container(
-                                    width: MediaQuery.of(context).size.width / 2.5,
-                                    child: const Text(
-                                      "CV code",
-                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.black),
-                                    ))),
-                          ],
+                                      ))),
+                            ],
+                          ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: Container(
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 6,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  // Red border with the width is equal to 5
+                                  border: Border.all(width: 1, color: Colors.black)),
+                              child: Center(
+                                child: Text(
+                                  "MM",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
                             width: MediaQuery.of(context).size.width / 6,
                             height: 40,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 // Red border with the width is equal to 5
                                 border: Border.all(width: 1, color: Colors.black)),
-                            child: Center(
-                              child: Text(
-                                "MM",
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.of(context).size.width / 6,
-                          height: 40,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              // Red border with the width is equal to 5
-                              border: Border.all(width: 1, color: Colors.black)),
-                          child: Container(
-                            height: 20,
-                            //width: 200,
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Center(
-                                child: Text(
-                                  "YY",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
+                            child: Container(
+                              height: 20,
+                              //width: 200,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                child: Center(
+                                  child: Text(
+                                    "YY",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 25.0),
-                          child: Container(
-                            width: MediaQuery.of(context).size.width / 3,
-                            height: 40,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                // Red border with the width is equal to 5
-                                border: Border.all(width: 1, color: Colors.black)),
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-                              child: Center(
-                                child: Text(
-                                  "CV",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
+                          Padding(
+                            padding: const EdgeInsets.only(right: 25.0),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  // Red border with the width is equal to 5
+                                  border: Border.all(width: 1, color: Colors.black)),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+                                child: Center(
+                                  child: Text(
+                                    "CV",
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ])
-                    ],
-                  ),
-                )
-                 */
-              ]),
-            ),
-
-            SizedBox(
-              height: 25,
-            ),
-
-            Center(
-              child: Container(
-                height: 40,
-                width: MediaQuery.of(context).size.width / 1,
-                child: Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
-                      child: Column(
-                        children: const [
-                          Text(
-                            "By tapping on 'place order',you agree to our",
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
-                          ),
-                          Text(
-                            "Terms & Conditions",
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.green),
-                          ),
-                        ],
-                      ),
-                    )),
-              ),
-            ),
-
-            SizedBox(
-              height: 25,
-            ),
-
-            GestureDetector(
-              onTap: isLoading
-                  ? () {}
-                  : () {
-                      setState(() {
-                        isLoading = true;
-                      });
-                      orderCreate(
-                        "${box.read(userID)}",
-                        widget.ownerId,
-                        paymentType,
-                        selectedAddress,
-                        widget.grandTotal,
-                      ).then((value) {
-                        setState(() {
-                          isLoading = false;
-                        });
-                      });
-                    },
-              child: Container(
-                width: MediaQuery.of(context).size.width / 1,
-                height: 56,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 0.150,
-                    color: Colors.deepPurpleAccent,
-                  ),
-                  color: Color(0xFF9900FF),
-                  borderRadius: BorderRadius.circular(0),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 5, //spread radius
-                      blurRadius: 5, // blur radius
-                      offset: Offset(0, 2),
+                        ])
+                      ],
                     ),
-                  ],
-                ),
-                child: Center(
-                  child: isLoading
-                      ? CircularProgressIndicator(
-                          color: Colors.white,
-                        )
-                      : Column(
-                          children: [
+                  )
+                   */
+                ]),
+              ),
+
+              SizedBox(
+                height: 25,
+              ),
+
+              Center(
+                child: Container(
+                  height: 40,
+                  width: MediaQuery.of(context).size.width / 1,
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Column(
+                          children: const [
                             Text(
-                              widget.grandTotal,
-                              style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+                              "By tapping on 'place order',you agree to our",
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: Colors.black),
                             ),
                             Text(
-                              "Place Order",
-                              style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+                              "Terms & Conditions",
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Colors.green),
                             ),
                           ],
                         ),
+                      )),
                 ),
               ),
-            ),
 
-            // GestureDetector(
-            //   onTap: () {
-            //     orderCreate("${box.read(userID)}", widget.ownerId, paymentType, selectedAddress, widget.grandTotal);
-            //   },
-            //   child: Container(
-            //     width: MediaQuery.of(context).size.width / 1,
-            //     height: 56,
-            //     decoration: BoxDecoration(
-            //       border: Border.all(
-            //         width: 0.150,
-            //         color: Colors.deepPurpleAccent,
-            //       ),
-            //       color: Color(0xFF9900FF),
-            //       borderRadius: BorderRadius.circular(0),
-            //       boxShadow: [
-            //         BoxShadow(
-            //           color: Colors.grey.withOpacity(0.1),
-            //           spreadRadius: 5, //spread radius
-            //           blurRadius: 5, // blur radius
-            //           offset: Offset(0, 2),
-            //         ),
-            //       ],
-            //     ),
-            //     child: Center(
-            //       child: Column(
-            //         children: [
-            //           Text(
-            //             widget.grandTotal,
-            //             style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
-            //           ),
-            //           Text(
-            //             "place order",
-            //             style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
-          ],
+              SizedBox(
+                height: 25,
+              ),
+
+              GestureDetector(
+                onTap: isLoading
+                    ? () {}
+                    : () {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        orderCreate(
+                          "${box.read(userID)}",
+                          widget.ownerId,
+                          paymentType,
+                          selectedAddress,
+                          widget.grandTotal,
+                        ).then((value) {
+                          setState(() {
+                            isLoading = false;
+                          });
+                        });
+                      },
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 1,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 0.150,
+                      color: Colors.deepPurpleAccent,
+                    ),
+                    color: Color(0xFF9900FF),
+                    borderRadius: BorderRadius.circular(0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 5, //spread radius
+                        blurRadius: 5, // blur radius
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: isLoading
+                        ? CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : Column(
+                            children: [
+                              Text(
+                                widget.grandTotal,
+                                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+                              ),
+                              Text(
+                                "Place Order",
+                                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+                              ),
+                            ],
+                          ),
+                  ),
+                ),
+              ),
+
+              // GestureDetector(
+              //   onTap: () {
+              //     orderCreate("${box.read(userID)}", widget.ownerId, paymentType, selectedAddress, widget.grandTotal);
+              //   },
+              //   child: Container(
+              //     width: MediaQuery.of(context).size.width / 1,
+              //     height: 56,
+              //     decoration: BoxDecoration(
+              //       border: Border.all(
+              //         width: 0.150,
+              //         color: Colors.deepPurpleAccent,
+              //       ),
+              //       color: Color(0xFF9900FF),
+              //       borderRadius: BorderRadius.circular(0),
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: Colors.grey.withOpacity(0.1),
+              //           spreadRadius: 5, //spread radius
+              //           blurRadius: 5, // blur radius
+              //           offset: Offset(0, 2),
+              //         ),
+              //       ],
+              //     ),
+              //     child: Center(
+              //       child: Column(
+              //         children: [
+              //           Text(
+              //             widget.grandTotal,
+              //             style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+              //           ),
+              //           Text(
+              //             "place order",
+              //             style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
+          ),
         ),
       ),
     );
@@ -1565,14 +1641,14 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  // Text(
+                  //   "Estimated Delivery :",
+                  //   style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
+                  // ),
                   Text(
-                    "Estimated Delivery :",
-                    style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    "3 items",
+                    "${physicalProducts.length.toString()} items",
                     style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w700),
                   ),
                 ],
@@ -1581,14 +1657,15 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
             Padding(
               padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  // Text(
+                  //   " 3 P.M",
+                  //   style: TextStyle(fontSize: 16, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
+                  // ),
                   Text(
-                    "3 p.m Thursday, Dec 15",
-                    style: TextStyle(fontSize: 12, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    totalPrice(physicalProducts).toString(),
+                    "${totalPrice(physicalProducts).toString()} TK",
+                    //"${totalPrice(cloudProducts).toString()} TK",
                     style: TextStyle(fontSize: 24, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w700),
                   ),
                 ],
@@ -1699,14 +1776,14 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 5),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // Text(
+                //   "Tomorrow 3 P.M",
+                //   style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
+                // ),
                 Text(
-                  "Estimated Delivery :",
-                  style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  cloudProducts.length.toString(),
+                  "${cloudProducts.length.toString()} items",
                   style: TextStyle(fontSize: 10, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w700),
                 ),
               ],
@@ -1715,14 +1792,14 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
           Padding(
             padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // Text(
+                //   "3 p.m Thursday, Dec 15",
+                //   style: TextStyle(fontSize: 16, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
+                // ),
                 Text(
-                  "3 p.m Thursday, Dec 15",
-                  style: TextStyle(fontSize: 12, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  totalPrice(cloudProducts).toString(),
+                  "${totalPrice(cloudProducts).toString()} TK",
                   style: TextStyle(fontSize: 24, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontWeight: FontWeight.w700),
                 ),
               ],

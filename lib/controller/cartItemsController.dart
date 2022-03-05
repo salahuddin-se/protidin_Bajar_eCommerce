@@ -100,6 +100,7 @@ class CartItemsController extends GetxController {
               unit: element.unit,
               userId: element.userId,
               ownerId: element.ownerId,
+              shippingCost: element.shippingCost,
             ),
           );
         },

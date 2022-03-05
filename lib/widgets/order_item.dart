@@ -14,6 +14,8 @@ class OrderItemWidget extends StatefulWidget {
 class _OrderItemWidgetState extends State<OrderItemWidget> {
   @override
   Widget build(BuildContext context) {
+    var upDate = int.parse(widget.purchaseData.date.substring(0, 2)) + 1;
+    print("Date Change :$upDate");
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
       child: GestureDetector(
@@ -297,7 +299,7 @@ class _OrderItemWidgetState extends State<OrderItemWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      widget.purchaseData.date,
+                                      widget.purchaseData.date.replaceRange((upDate.toString()).length == 1 ? 1 : 0, 2, upDate.toString()),
                                       style: TextStyle(
                                           color: Color(0xFFA299A8), fontSize: 10, fontWeight: FontWeight.w500, fontFamily: "CeraProMedium"),
                                       textAlign: TextAlign.left,

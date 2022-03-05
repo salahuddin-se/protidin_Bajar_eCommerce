@@ -157,62 +157,62 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
                 SizedBox(
                   height: 12,
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 0, 7, 0),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 1,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "1454 item found",
-                          style: TextStyle(
-                            color: kBlackColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'CeraProMedium',
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/img_187.png",
-                            height: 22,
-                            width: 22,
-                          ),
-                          height: 22,
-                          width: 22,
-                        ),
-                        Text(
-                          "Top Deal",
-                          style: TextStyle(
-                            color: kBlackColor,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'CeraProMedium',
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/img_188.png",
-                            height: 15,
-                            width: 15,
-                          ),
-                          height: 15,
-                          width: 15,
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/img_189.png",
-                            height: 22,
-                            width: 22,
-                          ),
-                          height: 22,
-                          width: 22,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(10, 0, 7, 0),
+                //   child: Container(
+                //     width: MediaQuery.of(context).size.width / 1,
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         Text(
+                //           "1454 item found",
+                //           style: TextStyle(
+                //             color: kBlackColor,
+                //             fontSize: 15,
+                //             fontWeight: FontWeight.w400,
+                //             fontFamily: 'CeraProMedium',
+                //           ),
+                //         ),
+                //         Container(
+                //           child: Image.asset(
+                //             "assets/img_187.png",
+                //             height: 22,
+                //             width: 22,
+                //           ),
+                //           height: 22,
+                //           width: 22,
+                //         ),
+                //         Text(
+                //           "Top Deal",
+                //           style: TextStyle(
+                //             color: kBlackColor,
+                //             fontSize: 13,
+                //             fontWeight: FontWeight.w500,
+                //             fontFamily: 'CeraProMedium',
+                //           ),
+                //         ),
+                //         Container(
+                //           child: Image.asset(
+                //             "assets/img_188.png",
+                //             height: 15,
+                //             width: 15,
+                //           ),
+                //           height: 15,
+                //           width: 15,
+                //         ),
+                //         Container(
+                //           child: Image.asset(
+                //             "assets/img_189.png",
+                //             height: 22,
+                //             width: 22,
+                //           ),
+                //           height: 22,
+                //           width: 22,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // ),
                 SizedBox(
                   height: 10,
                 ),

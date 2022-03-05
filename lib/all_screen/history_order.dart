@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:customer_ui/components/apis.dart';
-import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/dataModel/purchase_history.dart' as purHistory;
 import 'package:flutter/material.dart';
@@ -52,88 +51,88 @@ class _HistoryOrderState extends State<HistoryOrder> {
           SizedBox(
             height: 5,
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(10, 0, 7, 0),
-            child: Container(
-              width: MediaQuery.of(context).size.width / 1,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width / 2.6,
-                    height: 42,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color(0xFFF5F2F5),
-                    ),
-                    //color: Color(0xFFF5F2F5),
-                    child: TextFormField(
-                      //textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          contentPadding: EdgeInsets.only(left: 0, bottom: 5, top: 7, right: 5),
-                          hintText: 'Order No',
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Icon(Icons.search),
-                          )),
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Color(0xFFF5F2F5),
-                    ),
-                    height: 39,
-                    width: MediaQuery.of(context).size.width / 2.5,
-                    //color: Color(0xFFF5F2F5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          child: Image.asset(
-                            "assets/img_187.png",
-                            height: 22,
-                            width: 22,
-                          ),
-                          height: 22,
-                          width: 22,
-                        ),
-                        Text(
-                          "Price",
-                          style: TextStyle(
-                            color: kBlackColor,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                            fontFamily: 'CeraProMedium',
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/img_188.png",
-                            height: 15,
-                            width: 15,
-                          ),
-                          height: 15,
-                          width: 15,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    child: Image.asset(
-                      "assets/img_189.png",
-                      height: 22,
-                      width: 22,
-                    ),
-                    height: 22,
-                    width: 22,
-                  ),
-                ],
-              ),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(10, 0, 7, 0),
+          //   child: Container(
+          //     width: MediaQuery.of(context).size.width / 1,
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         Container(
+          //           width: MediaQuery.of(context).size.width / 2.6,
+          //           height: 42,
+          //           decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(10),
+          //             color: Color(0xFFF5F2F5),
+          //           ),
+          //           //color: Color(0xFFF5F2F5),
+          //           child: TextFormField(
+          //             //textAlign: TextAlign.center,
+          //             decoration: InputDecoration(
+          //                 border: InputBorder.none,
+          //                 focusedBorder: InputBorder.none,
+          //                 contentPadding: EdgeInsets.only(left: 0, bottom: 5, top: 7, right: 5),
+          //                 hintText: 'Order No',
+          //                 prefixIcon: Padding(
+          //                   padding: const EdgeInsets.only(left: 5),
+          //                   child: Icon(Icons.search),
+          //                 )),
+          //           ),
+          //         ),
+          //         Container(
+          //           decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(10),
+          //             color: Color(0xFFF5F2F5),
+          //           ),
+          //           height: 39,
+          //           width: MediaQuery.of(context).size.width / 2.5,
+          //           //color: Color(0xFFF5F2F5),
+          //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //             children: [
+          //               Container(
+          //                 child: Image.asset(
+          //                   "assets/img_187.png",
+          //                   height: 22,
+          //                   width: 22,
+          //                 ),
+          //                 height: 22,
+          //                 width: 22,
+          //               ),
+          //               Text(
+          //                 "Price",
+          //                 style: TextStyle(
+          //                   color: kBlackColor,
+          //                   fontSize: 13,
+          //                   fontWeight: FontWeight.w500,
+          //                   fontFamily: 'CeraProMedium',
+          //                 ),
+          //               ),
+          //               Container(
+          //                 child: Image.asset(
+          //                   "assets/img_188.png",
+          //                   height: 15,
+          //                   width: 15,
+          //                 ),
+          //                 height: 15,
+          //                 width: 15,
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //         Container(
+          //           child: Image.asset(
+          //             "assets/img_189.png",
+          //             height: 22,
+          //             width: 22,
+          //           ),
+          //           height: 22,
+          //           width: 22,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           SizedBox(
             height: 10,
           ),

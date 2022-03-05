@@ -1,9 +1,6 @@
 import 'package:customer_ui/all_screen/all_category.dart';
 import 'package:customer_ui/all_screen/my_order_tab.dart';
 import 'package:customer_ui/all_screen/myaccopunt.dart';
-import 'package:customer_ui/all_screen/request_product.dart';
-import 'package:customer_ui/all_screen/tarck_order.dart';
-import 'package:customer_ui/all_screen/wallet.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -518,39 +515,39 @@ class _UserDrawerState extends State<UserDrawer> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
-            child: ListTile(
-              title: Row(
-                children: [
-                  Container(
-                    //color: Colors.white,
-                    height: 20,
-                    width: 20,
-                    child: Image.asset(
-                      "assets/img_149.png",
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                  ),
-                  Text(
-                    'Track Order',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "CeraProBold",
-                      color: Color(0xFF515151),
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TrackOrder()));
-              },
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
+          //   child: ListTile(
+          //     title: Row(
+          //       children: [
+          //         Container(
+          //           //color: Colors.white,
+          //           height: 20,
+          //           width: 20,
+          //           child: Image.asset(
+          //             "assets/img_149.png",
+          //             color: Colors.black,
+          //           ),
+          //         ),
+          //         Padding(
+          //           padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+          //         ),
+          //         Text(
+          //           'Track Order',
+          //           style: TextStyle(
+          //             fontSize: 15,
+          //             fontWeight: FontWeight.w500,
+          //             fontFamily: "CeraProBold",
+          //             color: Color(0xFF515151),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //     onTap: () {
+          //       Navigator.push(context, MaterialPageRoute(builder: (context) => TrackOrder()));
+          //     },
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
             child: ListTile(
@@ -627,105 +624,105 @@ class _UserDrawerState extends State<UserDrawer> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
-            child: ListTile(
-              title: Row(
-                children: [
-                  Container(
-                    //color: Colors.white,
-                    height: 20,
-                    width: 20,
-                    child: Image.asset(
-                      "assets/img_152.png",
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                  ),
-                  Text(
-                    'Wallet',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "CeraProBold",
-                      color: Color(0xFF515151),
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MyWallet()));
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
-            child: ListTile(
-              title: Row(
-                children: [
-                  Container(
-                    //color: Colors.white,
-                    height: 20,
-                    width: 20,
-                    child: Image.asset(
-                      "assets/img_153.png",
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                  ),
-                  Text(
-                    'Request a product',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "CeraProBold",
-                      color: Color(0xFF515151),
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ReqquestPage()));
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
-            child: ListTile(
-              title: Row(
-                children: [
-                  Container(
-                    //color: Colors.white,
-                    height: 20,
-                    width: 20,
-                    child: Image.asset(
-                      "assets/img_149.png",
-                      color: Colors.black,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
-                  ),
-                  Text(
-                    'Call to order',
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: "CeraProBold",
-                      color: Color(0xFF515151),
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => TrackOrder()));
-              },
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
+          //   child: ListTile(
+          //     title: Row(
+          //       children: [
+          //         Container(
+          //           //color: Colors.white,
+          //           height: 20,
+          //           width: 20,
+          //           child: Image.asset(
+          //             "assets/img_152.png",
+          //             color: Colors.black,
+          //           ),
+          //         ),
+          //         Padding(
+          //           padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+          //         ),
+          //         Text(
+          //           'Wallet',
+          //           style: TextStyle(
+          //             fontSize: 15,
+          //             fontWeight: FontWeight.w500,
+          //             fontFamily: "CeraProBold",
+          //             color: Color(0xFF515151),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //     onTap: () {
+          //       Navigator.push(context, MaterialPageRoute(builder: (context) => MyWallet()));
+          //     },
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
+          //   child: ListTile(
+          //     title: Row(
+          //       children: [
+          //         Container(
+          //           //color: Colors.white,
+          //           height: 20,
+          //           width: 20,
+          //           child: Image.asset(
+          //             "assets/img_153.png",
+          //             color: Colors.black,
+          //           ),
+          //         ),
+          //         Padding(
+          //           padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+          //         ),
+          //         Text(
+          //           'Request a product',
+          //           style: TextStyle(
+          //             fontSize: 15,
+          //             fontWeight: FontWeight.w500,
+          //             fontFamily: "CeraProBold",
+          //             color: Color(0xFF515151),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //     onTap: () {
+          //       Navigator.push(context, MaterialPageRoute(builder: (context) => ReqquestPage()));
+          //     },
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
+          //   child: ListTile(
+          //     title: Row(
+          //       children: [
+          //         Container(
+          //           //color: Colors.white,
+          //           height: 20,
+          //           width: 20,
+          //           child: Image.asset(
+          //             "assets/img_149.png",
+          //             color: Colors.black,
+          //           ),
+          //         ),
+          //         Padding(
+          //           padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+          //         ),
+          //         Text(
+          //           'Call to order',
+          //           style: TextStyle(
+          //             fontSize: 15,
+          //             fontWeight: FontWeight.w500,
+          //             fontFamily: "CeraProBold",
+          //             color: Color(0xFF515151),
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //     onTap: () {
+          //       Navigator.push(context, MaterialPageRoute(builder: (context) => TrackOrder()));
+          //     },
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.fromLTRB(20, 0, 0, 5),
             child: ListTile(
@@ -792,13 +789,16 @@ class _UserDrawerState extends State<UserDrawer> {
           //   ),
           // ),
           SizedBox(
-            height: 90,
+            height: 220,
           ),
 
-          Padding(
-            padding: const EdgeInsets.fromLTRB(30, 0, 30, 10),
-            child: Divider(
-              color: Colors.black,
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(30, 0, 30, 10),
+              child: Divider(
+                color: Colors.black,
+              ),
             ),
           ),
 
