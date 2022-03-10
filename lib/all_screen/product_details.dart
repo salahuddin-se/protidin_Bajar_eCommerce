@@ -447,8 +447,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                                           shrinkWrap: true,
                                           scrollDirection: Axis.vertical,
                                           itemCount: relatedData.length,
-                                          //physics: NeverScrollableScrollPhysics(),
-                                          physics: ScrollPhysics(),
+                                          physics: NeverScrollableScrollPhysics(),
+                                          //physics: ScrollPhysics(),
                                           itemBuilder: (_, index) {
                                             return FittedBox(
                                               child: Stack(children: [

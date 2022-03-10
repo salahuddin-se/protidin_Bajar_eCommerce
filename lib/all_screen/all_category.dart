@@ -406,8 +406,8 @@ class _MyHomePageState extends State<AllCategory> {
         List<String> areaList = areaJson != null ? List.from(areaJson) : [];
         for (String area in areaList) {
           if (areaName == area) {
-            _webStoreId = seller.webStoreId!;
-            _userId = seller.userId!;
+            _webStoreId = seller.webStoreId! as int;
+            _userId = seller.userId! as int;
 
             log("webstore ID $_webStoreId");
             log("user ID $_userId");

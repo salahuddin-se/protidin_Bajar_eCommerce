@@ -25,8 +25,6 @@ class _OrderDetailsState extends State<OrderDetails> with SingleTickerProviderSt
   TabController? controller2;
   //var controller = Get.put(CartItemsController());
 
-  ///widget.purchaseData.date
-
   @override
   void initState() {
     // TODO: implement initState
@@ -55,8 +53,6 @@ class _OrderDetailsState extends State<OrderDetails> with SingleTickerProviderSt
     log("Get purchase history: " + response3.body);
 
     var purchaseHistoryDataMap = jsonDecode(response3.body);
-
-    box.write(daTe, widget.purchaseData.date);
 
     if (purchaseHistoryDataMap["success"] == true) {
       var purchaseHistory = purHistDetails.PurchaseHistoryDetails.fromJson(purchaseHistoryDataMap);
@@ -163,7 +159,7 @@ class _OrderDetailsState extends State<OrderDetails> with SingleTickerProviderSt
 
                 ///height: 785,
                 //height: 390,
-                height: 565,
+                height: 550,
                 child: Padding(
                   padding: const EdgeInsets.all(0.0),
                   child: Column(children: [
@@ -307,7 +303,7 @@ class _OrderDetailsState extends State<OrderDetails> with SingleTickerProviderSt
                           ],
                         ),
                       ),
-                      height: 135,
+                      height: 110,
                       //height: 105,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -408,7 +404,7 @@ class _OrderDetailsState extends State<OrderDetails> with SingleTickerProviderSt
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "09-03-2022",
+                                            widget.purchaseData.date,
                                             style: TextStyle(
                                                 color: Color(0xFFA299A8),
                                                 fontSize: 12,
@@ -1595,12 +1591,11 @@ class _OrderDetailsState extends State<OrderDetails> with SingleTickerProviderSt
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    )),
                 child: Padding(
                   padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                   child: Column(
@@ -1638,14 +1633,13 @@ class _OrderDetailsState extends State<OrderDetails> with SingleTickerProviderSt
                                         Text(
                                           "Estimated Delivery :",
                                           style: TextStyle(
-                                            fontSize: 10,
-                                            color: Color(0xFF515151),
-                                            fontFamily: "ceraProMedium",
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                              fontSize: 10,
+                                              color: Color(0xFF515151),
+                                              fontFamily: "ceraProMedium",
+                                              fontWeight: FontWeight.w500),
                                         ),
                                         Text(
-                                          "09-03-2022",
+                                          "Tomorrow",
                                           style: TextStyle(
                                             color: Color(0xFF515151),
                                             fontWeight: FontWeight.w500,
@@ -1664,7 +1658,6 @@ class _OrderDetailsState extends State<OrderDetails> with SingleTickerProviderSt
                           Column(
                             children: [
                               //Text("${box.read(cart_length) ?? 0} Items"),
-
                               Text(
                                 "${cloudList.length} items",
                                 style: TextStyle(
