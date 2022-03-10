@@ -406,8 +406,8 @@ class _MyHomePageState extends State<AllCategory> {
         List<String> areaList = areaJson != null ? List.from(areaJson) : [];
         for (String area in areaList) {
           if (areaName == area) {
-            _webStoreId = seller.webStoreId!;
-            _userId = seller.userId!;
+            _webStoreId = seller.webStoreId! as int;
+            _userId = seller.userId! as int;
 
             log("webstore ID $_webStoreId");
             log("user ID $_userId");
@@ -621,8 +621,6 @@ class _MyHomePageState extends State<AllCategory> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  ///var scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -630,6 +628,10 @@ class _MyHomePageState extends State<AllCategory> {
 
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
+        endDrawer: SelectDrawer(
+          callback: getLogoutResponse,
+        ),
         appBar: AppBar(
           elevation: 0.0,
           backgroundColor: Colors.white,
@@ -653,10 +655,9 @@ class _MyHomePageState extends State<AllCategory> {
               ),
               GestureDetector(
                 onTap: () {
-                  // if (!scaffoldKey.currentState!.isEndDrawerOpen) {
-                  //   //check if drawer is closed
-                  //   scaffoldKey.currentState!.openEndDrawer(); //open drawer
-                  // }
+                  if (!_scaffoldKey.currentState!.isEndDrawerOpen) {
+                    _scaffoldKey.currentState!.openEndDrawer(); //open drawer
+                  }
                 },
                 child: Center(
                   child: Icon(
@@ -674,11 +675,8 @@ class _MyHomePageState extends State<AllCategory> {
             )
           ],
         ),
-        key: _scaffoldKey,
+
         backgroundColor: Colors.white,
-        endDrawer: SelectDrawer(
-          callback: getLogoutResponse,
-        ),
         body: SingleChildScrollView(
             child: Padding(
           //padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 15.0),

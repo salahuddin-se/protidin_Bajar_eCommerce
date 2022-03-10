@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:customer_ui/components/size_config.dart';
-import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/dataModel/product_response.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +9,10 @@ import 'package:http/http.dart';
 import 'grocery.dart';
 
 class AllGrocery extends StatefulWidget {
-  const AllGrocery({Key? key, required this.link}) : super(key: key);
+  const AllGrocery({Key? key, required this.link, required this.related}) : super(key: key);
 
   final String link;
+  final String related;
 
   @override
   _AllGroceryState createState() => _AllGroceryState();
@@ -64,38 +64,35 @@ class _AllGroceryState extends State<AllGrocery> {
     var width = SizeConfig.screenWidth;
     var height = SizeConfig.screenHeight;
     var block = SizeConfig.block;
-    return Scaffold(
-      body: SizedBox(
-        height: height,
-        width: width,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              sized20,
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    return TabProductItemWidget(
-                      width: width,
-                      block: block,
-                      height: height,
-                      //Image.network(imagePath + listOfProducts[index].thumbnail_image.toString()),
-                      image: imagePath + listOfProducts[index].thumbnail_image.toString(),
-                      productName: listOfProducts[index].name.toString(),
-                      discountPrice: listOfProducts[index].base_price,
-                      actualPrice: listOfProducts[index].base_discounted_price,
-                      id: listOfProducts[index].id,
-                      unit: listOfProducts[index].unit,
-                      off: listOfProducts[index].discount.toString(),
-                    );
-                  },
-                  itemCount: listOfProducts.length,
-                ),
-              ),
-            ],
-          ),
-        ),
+    return Container(
+      height: 500,
+      // child: Column(
+      //   children: [
+      //     for(int i=0; i<listOfProducts.length; i++)
+      //
+      //   ],
+      // ),
+      child: ListView.builder(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemBuilder: (BuildContext context, int index) {
+          return TabProductItemWidget(
+            width: width,
+            block: block,
+            height: height,
+            //Image.network(imagePath + listOfProducts[index].thumbnail_image.toString()),
+            image: imagePath + listOfProducts[index].thumbnail_image.toString(),
+            productName: listOfProducts[index].name.toString(),
+            discountPrice: listOfProducts[index].base_price,
+            actualPrice: listOfProducts[index].base_discounted_price,
+            id: listOfProducts[index].id,
+            unit: listOfProducts[index].unit,
+            off: listOfProducts[index].discount.toString(),
+            product: listOfProducts[index],
+            related: widget.related,
+          );
+        },
+        itemCount: listOfProducts.length,
       ),
     );
   }

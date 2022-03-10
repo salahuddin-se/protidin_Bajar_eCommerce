@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:customer_ui/all_screen/payment_screen.dart';
 import 'package:customer_ui/components/apis.dart';
+import 'package:customer_ui/components/drawers/drawer.dart';
 import 'package:customer_ui/components/styles.dart';
 import 'package:customer_ui/components/utils.dart';
 import 'package:customer_ui/controller/cartItemsController.dart';
@@ -10,11 +11,14 @@ import 'package:customer_ui/dataModel/payment_method.dart';
 import 'package:customer_ui/dataModel/purchase_history.dart ' as purHistory;
 import 'package:customer_ui/dataModel/show_user_model.dart';
 import 'package:customer_ui/dataModel/user_info.dart';
+import 'package:customer_ui/preferences/user_preferance.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+
+import 'home_screen.dart';
 
 class PaymentAddress1stPage extends StatefulWidget {
   String grandTotal = "";
@@ -137,6 +141,9 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
 
   var selectedAddress = "";
 
+  bool isSelected = false;
+  bool isSelectedAdd = false;
+
   Future<void> getUserAddress(userID) async {
     var res = await get(Uri.parse("$showAddressAPI/$userID"),
         headers: {"Accept": "application/json", 'Authorization': 'Bearer ${box.read(userToken)}'});
@@ -235,6 +242,35 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
     setState(() {});
   }
 
+  Future<void> getLogoutResponse() async {
+    log("Log out response calling");
+    final response = await http.get(
+      Uri.parse("http://test.protidin.com.bd:88/api/v2/auth/logout"),
+      headers: {"Authorization": "Bearer ${box.read(userToken)}"},
+    );
+
+    //
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // UserPreference.setBool(UserPreference.isLoggedIn, false);
+      //box.write(userToken, '');
+      // box.remove(userToken);
+      UserPreference.setBool(UserPreference.isLoggedIn, false);
+      await controller.getCartName();
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx) => CategoryHomeScreen()));
+      setState(() {});
+      // box.erase();
+      // Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
+
+      ///print(box.read('userName'));
+      ///log(userDataModel.user.name);
+
+      log("Response from log out ${response.body}");
+      // setState(() {});
+    }
+    //
+    ///return logoutResponseFromJson(response.body);
+  }
+
   @override
   void initState() {
     /// TODO: implement initState
@@ -247,6 +283,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
     controller2 = TabController(length: 2, vsync: this);
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     // print("ITEM_UID: ${controller.cartItemsList[1].ownerId}");
@@ -254,6 +291,10 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
     var physicalProducts = controller.cartItemsList.where((item) => item.ownerId.toString() == box.read(user_Id).toString()).toList();
     var cloudProducts = controller.cartItemsList.where((item) => item.ownerId.toString() == box.read(webStoreId).toString()).toList();
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer: SelectDrawer(
+        callback: getLogoutResponse,
+      ),
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: kWhiteColor,
@@ -263,11 +304,18 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
           style: TextStyle(color: kBlackColor, fontSize: 14),
         ),
         iconTheme: IconThemeData(color: kBlackColor),
-        actions: const [
-          Center(
-            child: Icon(
-              Icons.menu,
-              color: kBlackColor,
+        actions: [
+          InkWell(
+            onTap: () {
+              if (!_scaffoldKey.currentState!.isEndDrawerOpen) {
+                _scaffoldKey.currentState!.openEndDrawer(); //open drawer
+              }
+            },
+            child: Center(
+              child: Icon(
+                Icons.menu,
+                color: kBlackColor,
+              ),
             ),
           ),
           SizedBox(
@@ -287,7 +335,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
               Container(
                 color: Colors.white,
                 //height: 480 ,
-                height: 330,
+                height: 350,
                 child: Column(
                   children: [
                     SizedBox(
@@ -379,70 +427,79 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                           itemBuilder: (_, index) {
                             return addressValue == index.toString()
                                 ? Container(
-                                    height: 75,
+                                    height: 70,
                                     child: Padding(
                                       padding: const EdgeInsets.only(bottom: 8.0),
                                       child: Row(
+                                        //crossAxisAlignment: CrossAxisAlignment.center,
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.only(left: 10.0),
                                           ),
-                                          Container(
-                                            height: 15,
-                                            width: 15,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: kPrimaryColor),
+                                          Center(
+                                            child: Container(
+                                              height: 15,
+                                              width: 15,
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle, border: Border.all(color: kBlackColor), color: kPrimaryColor),
+                                            ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 10.0),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6.0),
-                                            child: Align(
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                height: 45,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(top: 5.0),
-                                                  child: Text(
-                                                    "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
-                                                    style: TextStyle(fontWeight: FontWeight.w500),
+                                          Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(6.0),
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  height: 65,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(top: 5.0),
+                                                    child: Text(
+                                                      "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
+                                                      style: TextStyle(fontWeight: FontWeight.w500),
+                                                    ),
                                                   ),
+                                                  width: MediaQuery.of(context).size.width / 1.8,
                                                 ),
-                                                width: MediaQuery.of(context).size.width / 1.8,
                                               ),
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 20.0),
                                           ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              userAddressController.text = userAddressData[index].address!;
-                                              userCityController.text = userAddressData[index].city!;
-                                              userPostalCodeController.text = userAddressData[index].postalCode!;
-                                              userCountryController.text = userAddressData[index].country!;
-                                              userPhoneController.text = userAddressData[index].phone!;
-                                              //updateAddressInCart(box.read(userID), userAddressData[index].id);
-                                              print("ADDR_ID: ${userAddressData[index].id}");
-                                              _swAddressBottoSheet(true, userAddressData[index].id);
-                                            },
-                                            child: Align(
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                height: 45,
-                                                width: 45,
-                                                child: Align(
-                                                  alignment: Alignment.center,
+                                          Center(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                userAddressController.text = userAddressData[index].address!;
+                                                userCityController.text = userAddressData[index].city!;
+                                                userPostalCodeController.text = userAddressData[index].postalCode!;
+                                                userCountryController.text = userAddressData[index].country!;
+                                                userPhoneController.text = userAddressData[index].phone!;
+                                                //updateAddressInCart(box.read(userID), userAddressData[index].id);
+                                                print("ADDR_ID: ${userAddressData[index].id}");
+                                                _swAddressBottoSheet(true, userAddressData[index].id);
+                                              },
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Center(
                                                   child: Container(
-                                                    height: 25,
-                                                    width: 25,
-                                                    child: Padding(
-                                                      padding: const EdgeInsets.only(left: 0),
-                                                      child: Image.asset(
-                                                        "assets/img_60.png",
-                                                        height: 15,
-                                                        width: 15,
+                                                    height: 45,
+                                                    width: 45,
+                                                    child: Align(
+                                                      alignment: Alignment.center,
+                                                      child: Container(
+                                                        height: 25,
+                                                        width: 25,
+                                                        child: Padding(
+                                                          padding: const EdgeInsets.only(left: 0),
+                                                          child: Image.asset(
+                                                            "assets/img_60.png",
+                                                            height: 15,
+                                                            width: 15,
+                                                          ),
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
@@ -482,9 +539,11 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                                     ),
                                   )
                                 : Container(
-                                    height: 75,
+                                    height: 70,
                                     child: GestureDetector(
                                       onTap: () {
+                                        isSelectedAdd = true;
+
                                         ///updateAddressInCart(box.read(userID), userAddressData[index].id);
                                         selectedAddress =
                                             ("${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone}");
@@ -501,50 +560,56 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                                           Padding(
                                             padding: const EdgeInsets.only(left: 10.0),
                                           ),
-                                          Container(
-                                            height: 15,
-                                            width: 15,
-                                            decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
+                                          Center(
+                                            child: Container(
+                                              height: 15,
+                                              width: 15,
+                                              decoration: BoxDecoration(shape: BoxShape.circle, border: Border.all(color: kBlackColor)),
+                                            ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 10.0),
                                           ),
-                                          Padding(
-                                            padding: const EdgeInsets.all(6.0),
-                                            child: Align(
-                                              alignment: Alignment.center,
-                                              child: Container(
-                                                height: 45,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(top: 5.0),
-                                                  child: Text(
-                                                    "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
-                                                    style: TextStyle(fontWeight: FontWeight.w500),
+                                          Center(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(6.0),
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Container(
+                                                  height: 65,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(top: 5.0),
+                                                    child: Text(
+                                                      "${userAddressData[index].address},${userAddressData[index].city},${userAddressData[index].postalCode},${userAddressData[index].country},${userAddressData[index].phone},",
+                                                      style: TextStyle(fontWeight: FontWeight.w500),
+                                                    ),
                                                   ),
+                                                  width: MediaQuery.of(context).size.width / 1.8,
                                                 ),
-                                                width: MediaQuery.of(context).size.width / 1.8,
                                               ),
                                             ),
                                           ),
                                           Padding(
                                             padding: const EdgeInsets.only(left: 20.0),
                                           ),
-                                          Align(
-                                            alignment: Alignment.center,
-                                            child: Container(
-                                              height: 45,
-                                              width: 45,
-                                              child: Align(
-                                                alignment: Alignment.center,
-                                                child: Container(
-                                                  height: 25,
-                                                  width: 25,
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(top: 0),
-                                                    child: Image.asset(
-                                                      "assets/img_60.png",
-                                                      height: 15,
-                                                      width: 15,
+                                          Center(
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Container(
+                                                height: 45,
+                                                width: 45,
+                                                child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Container(
+                                                    height: 25,
+                                                    width: 25,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(top: 0),
+                                                      child: Image.asset(
+                                                        "assets/img_60.png",
+                                                        height: 15,
+                                                        width: 15,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -1141,7 +1206,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                       height: 210,
                       child: ListView.builder(
                           shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
+                          physics: NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemCount: paymentData.length,
                           itemBuilder: (_, index) {
@@ -1180,6 +1245,7 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                                   )
                                 : GestureDetector(
                                     onTap: () {
+                                      isSelected = true;
                                       paymentType = paymentData[index].payment_type_key;
                                       setState(() {
                                         value = index.toString();
@@ -1424,64 +1490,103 @@ class _PaymentAddress1stPageState extends State<PaymentAddress1stPage> with Sing
                 height: 25,
               ),
 
-              GestureDetector(
-                onTap: isLoading
-                    ? () {}
-                    : () {
-                        setState(() {
-                          isLoading = true;
-                        });
-                        orderCreate(
-                          "${box.read(userID)}",
-                          widget.ownerId,
-                          paymentType,
-                          selectedAddress,
-                          widget.grandTotal,
-                        ).then((value) {
-                          setState(() {
-                            isLoading = false;
-                          });
-                        });
-                      },
-                child: Container(
-                  width: MediaQuery.of(context).size.width / 1,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 0.150,
-                      color: Colors.deepPurpleAccent,
-                    ),
-                    color: Color(0xFF9900FF),
-                    borderRadius: BorderRadius.circular(0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 5, //spread radius
-                        blurRadius: 5, // blur radius
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Center(
-                    child: isLoading
-                        ? CircularProgressIndicator(
-                            color: Colors.white,
-                          )
-                        : Column(
-                            children: [
-                              Text(
+              isSelected && isSelectedAdd
+                  ? GestureDetector(
+                      onTap: isLoading
+                          ? () {}
+                          : () {
+                              setState(() {
+                                isLoading = true;
+                              });
+                              orderCreate(
+                                "${box.read(userID)}",
+                                widget.ownerId,
+                                paymentType,
+                                selectedAddress,
                                 widget.grandTotal,
-                                style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
-                              ),
-                              Text(
-                                "Place Order",
-                                style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
-                              ),
-                            ],
+                              ).then((value) {
+                                setState(() {
+                                  isLoading = false;
+                                });
+                              });
+                            },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 1,
+                        height: 56,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 0.150,
+                            color: Colors.deepPurpleAccent,
                           ),
-                  ),
-                ),
-              ),
+                          color: Color(0xFF9900FF),
+                          borderRadius: BorderRadius.circular(0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.1),
+                              spreadRadius: 5, //spread radius
+                              blurRadius: 5, // blur radius
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: isLoading
+                              ? CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Column(
+                                  children: [
+                                    Text(
+                                      widget.grandTotal,
+                                      style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+                                    ),
+                                    Text(
+                                      "Place Order",
+                                      style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width / 1,
+                      height: 56,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 0.150,
+                          color: Colors.deepPurpleAccent,
+                        ),
+                        color: Color(0xFF9900FF),
+                        borderRadius: BorderRadius.circular(0),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.1),
+                            spreadRadius: 5, //spread radius
+                            blurRadius: 5, // blur radius
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: isLoading
+                            ? CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                            : Column(
+                                children: [
+                                  Text(
+                                    widget.grandTotal,
+                                    style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800),
+                                  ),
+                                  Text(
+                                    "Place Order",
+                                    style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w800),
+                                  ),
+                                ],
+                              ),
+                      ),
+                    )
 
               // GestureDetector(
               //   onTap: () {

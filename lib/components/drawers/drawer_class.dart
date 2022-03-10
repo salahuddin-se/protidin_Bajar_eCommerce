@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:customer_ui/all_screen/all_category.dart';
 import 'package:customer_ui/all_screen/my_order_tab.dart';
 import 'package:customer_ui/all_screen/myaccopunt.dart';
@@ -421,13 +423,21 @@ class UserDrawer extends StatefulWidget {
 class _UserDrawerState extends State<UserDrawer> {
   @override
   Widget build(BuildContext context) {
+    final avarByteData = box.read(avatarBytes);
+    //log(avarByteData);
+    File? imageAvatar;
+    if (avarByteData != null) {
+      //final bytes = base64Decode(avarByteData);
+      imageAvatar = File(avarByteData);
+    }
+
     return Drawer(
       child: ListView(
         // Important: Remove any padding from the ListView.
         padding: EdgeInsets.zero,
         children: <Widget>[
           Container(
-            height: 130,
+            height: 160,
             child: DrawerHeader(
               child: Container(
                 //height: 50,
@@ -446,12 +456,36 @@ class _UserDrawerState extends State<UserDrawer> {
 
                       Container(
                         //color: Colors.white,
-                        //height: 60,
-                        width: 60,
-                        child: Image.asset(
-                          "assets/app_logo.png",
-                        ),
+                        height: 75,
+                        width: 75,
+
+                        decoration: imageAvatar != null
+                            ? BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: FileImage(imageAvatar),
+                                ),
+                              )
+                            : BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    imagePath + box.read(userAvatar),
+                                  ),
+                                ),
+                              ),
                       ),
+
+                      // Container(
+                      //   //color: Colors.white,
+                      //   //height: 60,
+                      //   width: 60,
+                      //   child: Image.asset(
+                      //     "assets/app_logo.png",
+                      //   ),
+                      // ),
 
                       Padding(
                         padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
@@ -490,7 +524,7 @@ class _UserDrawerState extends State<UserDrawer> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 40.0),
+                        padding: const EdgeInsets.only(left: 35.0),
                         child: InkWell(
                           onTap: () {
                             Navigator.pop(context);

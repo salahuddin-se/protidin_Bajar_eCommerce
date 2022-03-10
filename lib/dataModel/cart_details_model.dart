@@ -57,7 +57,7 @@ class CartItems {
   late final int? price;
   late final String? currencySymbol;
   late final int? tax;
-  late final int? shippingCost;
+  late final double? shippingCost;
   late int? quantity;
   late final int? lowerLimit;
   late final int? upperLimit;
@@ -75,7 +75,16 @@ class CartItems {
     price = json['price'];
     currencySymbol = json['currency_symbol'];
     tax = json['tax'];
-    shippingCost = json['shipping_cost'];
+    try {
+      if (json['shipping_cost'] is int)
+        shippingCost = (json['shipping_cost'] as int).toDouble();
+      else if (json['shipping_cost'] is String) {
+        shippingCost = double.parse(json['shipping_cost'].toString().replaceAll("৳", ""));
+      } else {
+        shippingCost = json['shipping_cost'];
+      }
+    } catch (e) {}
+
     quantity = json['quantity'];
     lowerLimit = json['lower_limit'];
     upperLimit = json['upper_limit'];

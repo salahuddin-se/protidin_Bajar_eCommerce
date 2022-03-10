@@ -290,6 +290,7 @@ class _LogoutDrawerState extends State<LogoutDrawer> {
                 ),
                 InkWell(
                   onTap: () {
+                    Navigator.pop(context);
                     Navigator.push(context, MaterialPageRoute(builder: (context) => SignInPage()));
                   },
                   child: Container(

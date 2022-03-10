@@ -8,15 +8,15 @@ class CityModel {
   late final bool success;
   late final int status;
 
-  CityModel.fromJson(Map<String, dynamic> json){
-    data = List.from(json['data']).map((e)=>City.fromJson(e)).toList();
+  CityModel.fromJson(Map<String, dynamic> json) {
+    data = List.from(json['data']).map((e) => City.fromJson(e)).toList();
     success = json['success'];
     status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['data'] = data.map((e)=>e.toJson()).toList();
+    _data['data'] = data.map((e) => e.toJson()).toList();
     _data['success'] = success;
     _data['status'] = status;
     return _data;
@@ -39,7 +39,7 @@ class City {
   late final String area;
   late final int cost;
 
-  City.fromJson(Map<String, dynamic> json){
+  City.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     countryId = json['country_id'];
     name = json['name'];

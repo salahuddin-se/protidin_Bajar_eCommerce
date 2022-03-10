@@ -1,52 +1,52 @@
 class BreadBiscuit {
   BreadBiscuit({
-    required this.data,
+    //required this.data,
     required this.links,
     required this.meta,
-    required this.success,
+    //required this.success,
     required this.status,
   });
   late final List<ProductsData> data;
   late final Links links;
   late final Meta meta;
-  late final bool success;
+  //late final bool success;
   late final int status;
 
   BreadBiscuit.fromJson(Map<String, dynamic> json) {
-    data = List.from(json['data']).map((e) => ProductsData.fromJson(e)).toList();
-    links = Links.fromJson(json['links']);
-    meta = Meta.fromJson(json['meta']);
-    success = json['success'];
-    status = json['status'];
+    // data = List.from(json['data']).map((e) => ProductsData.fromJson(e)).toList();
+    // links = Links.fromJson(json['links']);
+    // meta = Meta.fromJson(json['meta']);
+    // success = json['success'];
+    // status = json['status'];
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['data'] = data.map((e) => e.toJson()).toList();
-    _data['links'] = links.toJson();
-    _data['meta'] = meta.toJson();
-    _data['success'] = success;
-    _data['status'] = status;
+    // _data['data'] = data.map((e) => e.toJson()).toList();
+    // _data['links'] = links.toJson();
+    // _data['meta'] = meta.toJson();
+    // _data['success'] = success;
+    // _data['status'] = status;
     return _data;
   }
 }
 
 class ProductsData {
   ProductsData({
-    this.id,
-    this.name,
-    this.shopName,
-    this.userId,
-    this.erpId,
-    this.thumbnailImage,
-    this.hasDiscount,
-    this.basePrice,
-    this.baseDiscountedPrice,
-    this.discount,
-    this.discountType,
-    this.rating,
-    this.sales,
-    this.unit,
+    // this.id,
+    // this.name,
+    // this.shopName,
+    // this.userId,
+    // this.erpId,
+    // this.thumbnailImage,
+    // this.hasDiscount,
+    // this.basePrice,
+    // this.baseDiscountedPrice,
+    // this.discount,
+    // this.discountType,
+    // this.rating,
+    // this.sales,
+    // this.unit,
     this.links,
   });
   late final int? id;
@@ -66,40 +66,40 @@ class ProductsData {
   late final Links? links;
 
   ProductsData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    shopName = json['shop_name'];
-    userId = json['user_id'];
-    erpId = json['erp_id'];
-    thumbnailImage = json['thumbnail_image'];
-    hasDiscount = json['has_discount'];
-    basePrice = json['base_price'];
-    baseDiscountedPrice = json['base_discounted_price'];
-    discount = json['discount'];
-    discountType = json['discount_type'];
-    rating = json['rating'];
-    sales = json['sales'];
-    unit = json['unit'];
-    links = Links.fromJson(json['links']);
+    // id = json['id'];
+    // name = json['name'];
+    // shopName = json['shop_name'];
+    // userId = json['user_id'];
+    // erpId = json['erp_id'];
+    // thumbnailImage = json['thumbnail_image'];
+    // hasDiscount = json['has_discount'];
+    // basePrice = json['base_price'];
+    // baseDiscountedPrice = json['base_discounted_price'];
+    // discount = json['discount'];
+    // discountType = json['discount_type'];
+    // rating = json['rating'];
+    // sales = json['sales'];
+    // unit = json['unit'];
+    // links = Links.fromJson(json['links']);
   }
 
   Map<String, dynamic> toJson() {
     final _data = <String, dynamic>{};
-    _data['id'] = id;
-    _data['user-id'] = userId;
-    _data['name'] = name;
-    _data['shop_name'] = shopName;
-    _data['erp_id'] = erpId;
-    _data['thumbnail_image'] = thumbnailImage;
-    _data['has_discount'] = hasDiscount;
-    _data['base_price'] = basePrice;
-    _data['base_discounted_price'] = baseDiscountedPrice;
-    _data['discount'] = discount;
-    _data['discount_type'] = discountType;
-    _data['rating'] = rating;
-    _data['sales'] = sales;
-    _data['unit'] = unit;
-    _data['links'] = links?.toJson();
+    // _data['id'] = id;
+    // _data['user-id'] = userId;
+    // _data['name'] = name;
+    // _data['shop_name'] = shopName;
+    // _data['erp_id'] = erpId;
+    // _data['thumbnail_image'] = thumbnailImage;
+    // _data['has_discount'] = hasDiscount;
+    // _data['base_price'] = basePrice;
+    // _data['base_discounted_price'] = baseDiscountedPrice;
+    // _data['discount'] = discount;
+    // _data['discount_type'] = discountType;
+    // _data['rating'] = rating;
+    // _data['sales'] = sales;
+    // _data['unit'] = unit;
+    // _data['links'] = links?.toJson();
     return _data;
   }
 }

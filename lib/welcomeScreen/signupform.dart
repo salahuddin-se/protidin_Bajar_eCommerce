@@ -91,7 +91,9 @@ class _MyHomePageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-
+    var width = SizeConfig.screenWidth;
+    var height = SizeConfig.screenHeight;
+    var block = SizeConfig.block;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -104,11 +106,26 @@ class _MyHomePageState extends State<SignUpPage> {
               SizedBox(
                 height: 20,
               ),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                  child: SizedBox(
+                    height: height * 0.06,
+                    child: Image.asset(
+                      "assets/img_20.png",
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 45,
+              ),
               Align(
                 alignment: Alignment.center,
                 child: Text(
                   "Create Your Account",
-                  style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.w500),
+                  style: TextStyle(color: Color(0xFF515151), fontSize: 18, fontWeight: FontWeight.w700),
                 ),
               ),
               SizedBox(
@@ -118,7 +135,7 @@ class _MyHomePageState extends State<SignUpPage> {
                 padding: const EdgeInsets.only(bottom: 4.0),
                 child: Text(
                   "Name",
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontSize: 14),
                 ),
               ),
               Padding(
@@ -150,11 +167,11 @@ class _MyHomePageState extends State<SignUpPage> {
                 child: isEmail == true
                     ? Text(
                         "Email",
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontSize: 14),
                       )
                     : Text(
                         "Phone",
-                        style: TextStyle(fontWeight: FontWeight.w600),
+                        style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontSize: 14),
                       ),
               ),
               Padding(
@@ -202,7 +219,8 @@ class _MyHomePageState extends State<SignUpPage> {
                           child: Center(
                             child: Text(
                               "Use Phone",
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontSize: 14),
                             ),
                           ),
                         ),
@@ -228,7 +246,8 @@ class _MyHomePageState extends State<SignUpPage> {
                           child: Center(
                             child: Text(
                               "Use Email",
-                              style: TextStyle(fontWeight: FontWeight.w600),
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontSize: 14),
                             ),
                           ),
                         ),
@@ -241,7 +260,7 @@ class _MyHomePageState extends State<SignUpPage> {
                 padding: const EdgeInsets.only(bottom: 4.0),
                 child: Text(
                   "Password",
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontSize: 14),
                 ),
               ),
               Padding(
@@ -281,7 +300,7 @@ class _MyHomePageState extends State<SignUpPage> {
                 padding: const EdgeInsets.only(bottom: 4.0),
                 child: Text(
                   "Retype Password",
-                  style: TextStyle(fontWeight: FontWeight.w600),
+                  style: TextStyle(fontWeight: FontWeight.w600, color: Color(0xFF515151), fontFamily: "ceraProMedium", fontSize: 14),
                 ),
               ),
               Padding(
@@ -315,16 +334,15 @@ class _MyHomePageState extends State<SignUpPage> {
                 child: Container(
                   height: 47,
                   decoration: BoxDecoration(
-                      border: Border.all(color: MyTheme.textfield_grey, width: 1),
-                      borderRadius: const BorderRadius.all(Radius.circular(12.0))),
+                      border: Border.all(color: MyTheme.textfield_grey, width: 1), borderRadius: BorderRadius.all(Radius.circular(30.0))),
                   child: FlatButton(
                     minWidth: MediaQuery.of(context).size.width,
                     //height: 50,
                     color: MyTheme.accent_color,
-                    shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(12.0))),
+                    shape: RoundedRectangleBorder(borderRadius: const BorderRadius.all(Radius.circular(30.0))),
                     child: Text(
                       "Sign Up",
-                      style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w600),
+                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600, fontFamily: "ceraProMedium"),
                     ),
                     onPressed: () {
                       //onPressSignUp();

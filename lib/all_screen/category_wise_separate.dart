@@ -91,142 +91,147 @@ class _GroceryOfferPageState extends State<GroceryOfferPage> with SingleTickerPr
           width: width,
           child: Padding(
             padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    child: Image.network(
-                      imagePath + widget.receiveLargeBanner,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-
-                SizedBox(
-                  height: 10,
-                ),
-
-                ///
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      //top: BorderSide(width: 4.0, color: Colors.lightBlue.shade600),
-                      bottom: BorderSide(
-                        width: 2.0,
-                        color: Colors.grey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 100,
+                    child: Center(
+                      child: Image.network(
+                        imagePath + widget.receiveLargeBanner,
+                        fit: BoxFit.cover,
                       ),
                     ),
-                    // borderRadius: BorderRadius.circular(5.0),
-                    //color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.white,
-                        offset: Offset(
-                          0.0,
-                          01.0,
-                        ), //(x,y)
-                        blurRadius: 6.0,
-                      ),
-                    ],
                   ),
-                  child: SizedBox(
+
+                  SizedBox(
+                    height: 10,
+                  ),
+
+                  ///
+                  Container(
                     height: 50,
-                    child: TabBar(
-                      isScrollable: true,
-                      indicatorColor: Colors.green,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        //top: BorderSide(width: 4.0, color: Colors.lightBlue.shade600),
+                        bottom: BorderSide(
+                          width: 2.0,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      // borderRadius: BorderRadius.circular(5.0),
+                      //color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.white,
+                          offset: Offset(
+                            0.0,
+                            01.0,
+                          ), //(x,y)
+                          blurRadius: 6.0,
+                        ),
+                      ],
+                    ),
+                    child: SizedBox(
+                      height: 50,
+                      child: TabBar(
+                        isScrollable: true,
+                        indicatorColor: Colors.green,
+                        controller: controller,
+                        tabs: widget.categoryData
+                            .map(
+                              (string) => tabBarItems(
+                                block,
+                                string.name,
+                                '1',
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ),
+
+                  // Divider(
+                  //   color: kBlackColor,
+                  //   thickness: 0.5,
+                  // ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(10, 0, 7, 0),
+                  //   child: Container(
+                  //     width: MediaQuery.of(context).size.width / 1,
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //       children: [
+                  //         Text(
+                  //           "1454 item found",
+                  //           style: TextStyle(
+                  //             color: kBlackColor,
+                  //             fontSize: 15,
+                  //             fontWeight: FontWeight.w400,
+                  //             fontFamily: 'CeraProMedium',
+                  //           ),
+                  //         ),
+                  //         Container(
+                  //           child: Image.asset(
+                  //             "assets/img_187.png",
+                  //             height: 22,
+                  //             width: 22,
+                  //           ),
+                  //           height: 22,
+                  //           width: 22,
+                  //         ),
+                  //         Text(
+                  //           "Top Deal",
+                  //           style: TextStyle(
+                  //             color: kBlackColor,
+                  //             fontSize: 13,
+                  //             fontWeight: FontWeight.w500,
+                  //             fontFamily: 'CeraProMedium',
+                  //           ),
+                  //         ),
+                  //         Container(
+                  //           child: Image.asset(
+                  //             "assets/img_188.png",
+                  //             height: 15,
+                  //             width: 15,
+                  //           ),
+                  //           height: 15,
+                  //           width: 15,
+                  //         ),
+                  //         Container(
+                  //           child: Image.asset(
+                  //             "assets/img_189.png",
+                  //             height: 22,
+                  //             width: 22,
+                  //           ),
+                  //           height: 22,
+                  //           width: 22,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    height: 1000,
+                    child: TabBarView(
                       controller: controller,
-                      tabs: widget.categoryData
-                          .map(
-                            (string) => tabBarItems(
-                              block,
-                              string.name,
-                              '1',
-                            ),
-                          )
+                      children: widget.categoryData
+                          .map((category) => AllGrocery(
+                                link: category.links.products,
+                                related: category.links.products,
+                              ))
                           .toList(),
                     ),
                   ),
-                ),
-
-                // Divider(
-                //   color: kBlackColor,
-                //   thickness: 0.5,
-                // ),
-                SizedBox(
-                  height: 12,
-                ),
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(10, 0, 7, 0),
-                //   child: Container(
-                //     width: MediaQuery.of(context).size.width / 1,
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //       children: [
-                //         Text(
-                //           "1454 item found",
-                //           style: TextStyle(
-                //             color: kBlackColor,
-                //             fontSize: 15,
-                //             fontWeight: FontWeight.w400,
-                //             fontFamily: 'CeraProMedium',
-                //           ),
-                //         ),
-                //         Container(
-                //           child: Image.asset(
-                //             "assets/img_187.png",
-                //             height: 22,
-                //             width: 22,
-                //           ),
-                //           height: 22,
-                //           width: 22,
-                //         ),
-                //         Text(
-                //           "Top Deal",
-                //           style: TextStyle(
-                //             color: kBlackColor,
-                //             fontSize: 13,
-                //             fontWeight: FontWeight.w500,
-                //             fontFamily: 'CeraProMedium',
-                //           ),
-                //         ),
-                //         Container(
-                //           child: Image.asset(
-                //             "assets/img_188.png",
-                //             height: 15,
-                //             width: 15,
-                //           ),
-                //           height: 15,
-                //           width: 15,
-                //         ),
-                //         Container(
-                //           child: Image.asset(
-                //             "assets/img_189.png",
-                //             height: 22,
-                //             width: 22,
-                //           ),
-                //           height: 22,
-                //           width: 22,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // ),
-                SizedBox(
-                  height: 10,
-                ),
-                Expanded(
-                  child: TabBarView(
-                    controller: controller,
-                    children: widget.categoryData
-                        .map((string) => AllGrocery(
-                              link: string.links.products,
-                            ))
-                        .toList(),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

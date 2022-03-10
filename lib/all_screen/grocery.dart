@@ -10,6 +10,8 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 
+import 'product_details.dart';
+
 class TabProductItemWidget extends StatefulWidget {
   const TabProductItemWidget({
     Key? key,
@@ -23,6 +25,8 @@ class TabProductItemWidget extends StatefulWidget {
     this.unit,
     this.discountPrice,
     this.id,
+    required this.product,
+    required this.related,
   }) : super(key: key);
 
   final double width;
@@ -35,6 +39,8 @@ class TabProductItemWidget extends StatefulWidget {
   final String? actualPrice;
   final String? discountPrice;
   final int? id;
+  final Product product;
+  final String related;
 
   @override
   State<TabProductItemWidget> createState() => _TabProductItemWidgetState();
@@ -99,30 +105,24 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
                   Stack(children: [
                     InkWell(
                       onTap: () {
-                        // Navigator.push(context, MaterialPageRoute(builder: (context) => GroceryDetails()));
+                        //log("details ${allCategoryProducts[index].links!.details}");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetails(
+                              detailsLink: widget.product.links!.details!,
+                              relatedProductLink: widget.related,
+                            ),
+
+                            ///relatedProductLink: relatedProductsLink
+                          ),
+                        );
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width / 3.2,
                         child: Image.network(widget.image!),
                       ),
                     ),
-                    // widget.discountPrice == widget.actualPrice
-                    //     ? Text("")
-                    //     : Container(
-                    //   height: widget.height * 0.03,
-                    //   margin: EdgeInsets.only(top: 10),
-                    //   width: widget.width * 0.16,
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.green,
-                    //     borderRadius: BorderRadius.circular(3),
-                    //   ),
-                    //   child: Center(
-                    //     child: Text(
-                    //       "${widget.off.toString()}TK OFF",
-                    //       style: TextStyle(color: Colors.white, fontSize: widget.block * 3, fontWeight: FontWeight.bold),
-                    //     ),
-                    //   ),
-                    // ),
                   ]),
                   SizedBox(
                     width: 10,
@@ -194,6 +194,7 @@ class _TabProductItemWidgetState extends State<TabProductItemWidget> {
                                       ),
                                     ),
                                   ),
+
                                   //Padding(padding: const EdgeInsets.only(left: 5)),
                                   widget.discountPrice == widget.actualPrice
                                       ? Container(width: MediaQuery.of(context).size.width / 6.5, child: Text(""))

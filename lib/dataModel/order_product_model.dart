@@ -10,7 +10,7 @@ class OrderItemModel {
   final int? discount;
   final int? unit;
   final String? discountType;
-  final int? shippingCost;
+  final double? shippingCost;
 
   OrderItemModel({
     required this.discount,
@@ -28,6 +28,16 @@ class OrderItemModel {
   });
 
   factory OrderItemModel.fromJson(Map<String, dynamic> jsonData) {
+    double? ship;
+    try {
+      if (jsonData['shipping_cost'] is int) {
+        ship = (jsonData['shipping_cost'] as int).toDouble();
+      } else if (jsonData['shipping_cost'] is String) {
+        ship = double.parse(jsonData['shipping_cost'].toString().replaceAll("৳", ""));
+      } else {
+        ship = jsonData['shipping_cost'];
+      }
+    } catch (e) {}
     return OrderItemModel(
         productId: jsonData['id'],
         variant: jsonData['variant'],
@@ -38,7 +48,7 @@ class OrderItemModel {
         price: jsonData['price'],
         productThumbnailImage: jsonData['product_thumbnail'],
         discount: jsonData['discount'],
-        shippingCost: jsonData['shippingCost'],
+        shippingCost: ship,
         unit: jsonData['unit'],
         discountType: jsonData['discount_type']);
   }

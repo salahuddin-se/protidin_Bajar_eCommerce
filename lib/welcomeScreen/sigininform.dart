@@ -81,7 +81,7 @@ class _MyHomePageState extends State<SignInPage> {
         Future.delayed(
           Duration(seconds: 3),
           () {
-            Navigator.push(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => CartDetailsPage(),
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<SignInPage> {
           },
         );
       } else {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => CategoryHomeScreen(),
@@ -147,11 +147,14 @@ class _MyHomePageState extends State<SignInPage> {
                 ),
               ),
               SizedBox(
-                height: 100,
+                height: 80,
               ),
               Text(
                 "Sign In to Your Account",
-                style: TextStyle(color: kBlackColor, fontSize: block * 5.0, fontWeight: FontWeight.w500),
+                style: TextStyle(color: kBlackColor, fontSize: block * 5.0, fontWeight: FontWeight.w500, fontFamily: "ceraProMedium"),
+              ),
+              SizedBox(
+                height: 20,
               ),
               sized20,
               Padding(
@@ -211,7 +214,7 @@ class _MyHomePageState extends State<SignInPage> {
                 child: ButtonWidget(
                   height: height,
                   width: width,
-                  child: Text("Sign in", style: TextStyle(color: Colors.white)),
+                  child: Text("Sign in", style: TextStyle(color: Colors.white, fontSize: 16, fontFamily: "ceraProMedium")),
                   callback: () {
                     if (formKey.currentState == null || formKey.currentState!.validate()) {
                       userSignIn(userEmailController.text, userPassController.text);
@@ -271,7 +274,7 @@ class _MyHomePageState extends State<SignInPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account? ",
+                      "Don't have an account?  ",
                       style: TextStyle(color: kBlackColor, fontSize: block * 4.0, fontWeight: FontWeight.w400),
                     ),
                     GestureDetector(
@@ -279,8 +282,8 @@ class _MyHomePageState extends State<SignInPage> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => SignUpPage()));
                       },
                       child: Text(
-                        "Sign Up",
-                        style: TextStyle(color: kBlackColor, fontSize: block * 5.0, fontWeight: FontWeight.bold),
+                        " Sign Up",
+                        style: TextStyle(color: kBlackColor, fontSize: 16, fontWeight: FontWeight.bold, fontFamily: "ceraProMedium"),
                       ),
                     ),
                   ],
